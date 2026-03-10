@@ -1,0 +1,56 @@
+================================================================================
+SOUTH RING AUTOS - PRODUCTION DEPLOYMENT CHECKLIST
+(For deployment WITHOUT terminal access)
+================================================================================
+
+✅ PREPARATION
+[ ] Export database from development (SQL file)
+[ ] Have FTP/SFTP credentials ready
+[ ] Confirm production server details
+
+✅ STEP 1: UPLOAD FILES
+[ ] Upload all files to: /home/zhpebukm/public_html/apps/SouthRingAutos
+[ ] Include: vendor/, src/, config/, all PHP files, CSS, JS, images
+[ ] Exclude: .env, .git/, tests/, docs/
+
+✅ STEP 2: CREATE .ENV FILE
+[ ] Create .env file in production root directory
+[ ] Copy content from DEPLOYMENT-GUIDE.md
+[ ] Set permissions to 600 (owner read/write only)
+
+✅ STEP 3: SET PERMISSIONS
+[ ] storage/ → 755
+[ ] storage/logs/ → 755
+[ ] storage/uploads/ → 755
+[ ] .env → 600
+
+✅ STEP 4: IMPORT DATABASE
+[ ] Login to phpMyAdmin on production
+[ ] Select database: zhpebukm_southringautos
+[ ] Import your SQL export file
+[ ] Verify tables were created
+
+✅ STEP 5: RUN DEPLOYMENT SCRIPT
+[ ] Change secret key in deploy-production.php (line 16)
+[ ] Visit: https://okjtech.co.ke/deploy-production.php?key=YOUR_SECRET_KEY
+[ ] Review all checks
+[ ] Click "Run Migrations" if needed
+
+✅ STEP 6: VERIFY
+[ ] Visit: https://okjtech.co.ke/ (homepage works)
+[ ] Visit: https://okjtech.co.ke/admin/login.php (admin works)
+[ ] Visit: https://okjtech.co.ke/client/login.php (client works)
+[ ] Test form submissions
+
+✅ STEP 7: SECURITY
+[ ] DELETE deploy-production.php file
+[ ] Rename .htaccess-production to .htaccess (optional)
+[ ] Verify .env permissions are 600
+[ ] Check DEBUG_MODE=false in .env
+
+================================================================================
+READY FOR PRODUCTION! 🚀
+================================================================================
+
+For detailed instructions, see: DEPLOYMENT-GUIDE.md
+

@@ -1,0 +1,41 @@
+# Composer
+/vendor/
+composer.lock
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Deployment scripts (should be deleted after deployment)
+deploy-production.php
+
+# Storage
+/storage/logs/*.log
+/storage/cache/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+.phpunit.cache/
+/coverage/
+.phpunit.result.cache
+
+# Build
+/node_modules/
+/dist/
+
+# Temporary
+*.tmp
+*.bak
+*.cache
+

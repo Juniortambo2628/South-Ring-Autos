@@ -1,0 +1,845 @@
+/* Dashboard Components Styles */
+
+/* Global dark mode styles for client pages */
+.client-layout .search-container input,
+.client-layout .search-container .form-control,
+.client-content .search-container input,
+.client-content .search-container .form-control,
+.client-content__inner .search-container input,
+.client-content__inner .search-container .form-control {
+    background: var(--client-dark-surface) !important;
+    border: 1px solid var(--client-border) !important;
+    border-radius: 8px !important;
+    color: var(--client-text-primary) !important;
+    padding: 0.75rem 1rem !important;
+    max-width: 400px !important;
+}
+
+.client-layout .search-container input::placeholder,
+.client-layout .search-container .form-control::placeholder,
+.client-content .search-container input::placeholder,
+.client-content .search-container .form-control::placeholder,
+.client-content__inner .search-container input::placeholder,
+.client-content__inner .search-container .form-control::placeholder {
+    color: var(--client-text-muted) !important;
+}
+
+.client-layout .search-container input:focus,
+.client-layout .search-container .form-control:focus,
+.client-content .search-container input:focus,
+.client-content .search-container .form-control:focus,
+.client-content__inner .search-container input:focus,
+.client-content__inner .search-container .form-control:focus {
+    background: var(--client-dark-card) !important;
+    border-color: var(--client-primary) !important;
+    color: var(--client-text-primary) !important;
+    box-shadow: 0 0 0 0.2rem rgba(216, 19, 36, 0.15) !important;
+    outline: none !important;
+}
+
+.client-layout .filter-container select,
+.client-layout .filter-container .form-select,
+.client-content .filter-container select,
+.client-content .filter-container .form-select,
+.client-content__inner .filter-container select,
+.client-content__inner .filter-container .form-select {
+    background: var(--client-dark-surface) !important;
+    border: 1px solid var(--client-border) !important;
+    border-radius: 8px !important;
+    color: var(--client-text-primary) !important;
+    padding: 0.75rem 1rem !important;
+    min-width: 200px !important;
+}
+
+.client-layout .filter-container select:focus,
+.client-layout .filter-container .form-select:focus,
+.client-content .filter-container select:focus,
+.client-content .filter-container .form-select:focus,
+.client-content__inner .filter-container select:focus,
+.client-content__inner .filter-container .form-select:focus {
+    background: var(--client-dark-card) !important;
+    border-color: var(--client-primary) !important;
+    color: var(--client-text-primary) !important;
+    box-shadow: 0 0 0 0.2rem rgba(216, 19, 36, 0.15) !important;
+    outline: none !important;
+}
+
+.client-layout .filter-container select option,
+.client-layout .filter-container .form-select option,
+.client-content .filter-container select option,
+.client-content .filter-container .form-select option,
+.client-content__inner .filter-container select option,
+.client-content__inner .filter-container .form-select option {
+    background: var(--client-dark-card) !important;
+    color: var(--client-text-primary) !important;
+}
+
+/* Grid View Styles */
+.grid-container {
+    background: var(--admin-dark-card);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Client theme grid container */
+.client-layout .grid-container,
+.client-content .grid-container,
+.client-content__inner .grid-container {
+    background: var(--client-dark-card) !important;
+    border-radius: 12px !important;
+    padding: 1.5rem !important;
+    margin-bottom: 2rem !important;
+}
+
+/* Simple Table Styles */
+.table-glass {
+    background: var(--admin-dark-card);
+    border-radius: 8px;
+    overflow: hidden;
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.table-glass thead {
+    background: var(--admin-dark-surface);
+}
+
+.table-glass thead th {
+    color: var(--admin-text-primary);
+    font-weight: 600;
+    padding: 1rem;
+    border-bottom: 1px solid var(--admin-border);
+}
+
+.table-glass tbody td {
+    color: var(--admin-text-primary);
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.table-glass tbody tr:hover {
+    background: var(--admin-dark-hover);
+    cursor: pointer;
+}
+
+.gridjs-wrapper {
+    background: var(--admin-dark-card) !important;
+    border: 1px solid var(--admin-border) !important;
+    border-radius: 8px !important;
+}
+
+.gridjs-table {
+    width: 100% !important;
+    color: var(--admin-text-primary) !important;
+}
+
+.gridjs-thead {
+    background: var(--admin-dark-surface) !important;
+}
+
+.gridjs-th {
+    background: var(--admin-dark-surface) !important;
+    color: var(--admin-text-primary) !important;
+    border: 1px solid var(--admin-border) !important;
+    padding: 1rem !important;
+    font-weight: 600 !important;
+}
+
+.gridjs-td {
+    background: var(--admin-dark-card) !important;
+    color: var(--admin-text-primary) !important;
+    border: 1px solid var(--admin-border) !important;
+    padding: 1rem !important;
+}
+
+.gridjs-tr:hover {
+    background: var(--admin-dark-hover) !important;
+}
+
+/* Client layout GridJS overrides */
+.client-layout .gridjs-wrapper,
+.client-content .gridjs-wrapper,
+.client-content__inner .gridjs-wrapper {
+    background: var(--client-dark-card) !important;
+    border: 1px solid var(--client-border) !important;
+    border-radius: 8px !important;
+}
+
+.client-layout .gridjs-table,
+.client-content .gridjs-table,
+.client-content__inner .gridjs-table {
+    color: var(--client-text-primary) !important;
+}
+
+.client-layout .gridjs-thead,
+.client-content .gridjs-thead,
+.client-content__inner .gridjs-thead {
+    background: var(--client-dark-surface) !important;
+}
+
+.client-layout .gridjs-th,
+.client-content .gridjs-th,
+.client-content__inner .gridjs-th {
+    background: var(--client-dark-surface) !important;
+    color: var(--client-text-primary) !important;
+    border: 1px solid var(--client-border) !important;
+    font-weight: 600 !important;
+}
+
+.client-layout .gridjs-td,
+.client-content .gridjs-td,
+.client-content__inner .gridjs-td {
+    background: var(--client-dark-card) !important;
+    color: var(--client-text-primary) !important;
+    border: 1px solid var(--client-border) !important;
+}
+
+.client-layout .gridjs-tr:hover,
+.client-content .gridjs-tr:hover,
+.client-content__inner .gridjs-tr:hover {
+    background: var(--client-dark-hover) !important;
+}
+
+.client-layout .table-glass,
+.client-content .table-glass,
+.client-content__inner .table-glass {
+    background: var(--client-dark-card) !important;
+    border-radius: 8px !important;
+}
+
+.client-layout .table-glass thead,
+.client-content .table-glass thead,
+.client-content__inner .table-glass thead {
+    background: var(--client-dark-surface) !important;
+}
+
+.client-layout .table-glass thead th,
+.client-content .table-glass thead th,
+.client-content__inner .table-glass thead th {
+    color: var(--client-text-primary) !important;
+    border-bottom: 1px solid var(--client-border) !important;
+}
+
+.client-layout .table-glass tbody td,
+.client-content .table-glass tbody td,
+.client-content__inner .table-glass tbody td {
+    color: var(--client-text-primary) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.client-layout .table-glass tbody tr:hover,
+.client-content .table-glass tbody tr:hover,
+.client-content__inner .table-glass tbody tr:hover {
+    background: var(--client-dark-hover) !important;
+}
+
+/* Search Container */
+.search-container {
+    margin-bottom: 1.5rem;
+}
+
+.search-container input,
+.search-container .form-control {
+    max-width: 400px;
+    background: var(--admin-dark-surface) !important;
+    border: 1px solid var(--admin-border) !important;
+    border-radius: 8px !important;
+    color: var(--admin-text-primary) !important;
+    padding: 0.75rem 1rem !important;
+    font-size: 0.875rem !important;
+}
+
+.search-container input::placeholder,
+.search-container .form-control::placeholder {
+    color: var(--admin-text-muted) !important;
+}
+
+.search-container input:focus,
+.search-container .form-control:focus {
+    background: var(--admin-dark-card) !important;
+    border-color: var(--admin-primary) !important;
+    color: var(--admin-text-primary) !important;
+    box-shadow: 0 0 0 0.2rem rgba(216, 19, 36, 0.15) !important;
+    outline: none !important;
+}
+
+/* Client theme search styles */
+.client-theme .search-container input,
+.client-theme .search-container .form-control {
+    background: var(--client-dark-surface) !important;
+    border-color: var(--client-border) !important;
+    color: var(--client-text-primary) !important;
+}
+
+.client-theme .search-container input::placeholder,
+.client-theme .search-container .form-control::placeholder {
+    color: var(--client-text-muted) !important;
+}
+
+.client-theme .search-container input:focus,
+.client-theme .search-container .form-control:focus {
+    background: var(--client-dark-card) !important;
+    border-color: var(--client-primary) !important;
+    color: var(--client-text-primary) !important;
+    box-shadow: 0 0 0 0.2rem rgba(11, 33, 84, 0.15) !important;
+}
+
+/* Filter Container */
+.filter-container {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.filter-container select,
+.filter-container .form-select {
+    min-width: 200px;
+    background: var(--admin-dark-surface) !important;
+    border: 1px solid var(--admin-border) !important;
+    border-radius: 8px !important;
+    color: var(--admin-text-primary) !important;
+    padding: 0.75rem 1rem !important;
+    font-size: 0.875rem !important;
+}
+
+.filter-container select:focus,
+.filter-container .form-select:focus {
+    background: var(--admin-dark-card) !important;
+    border-color: var(--admin-primary) !important;
+    color: var(--admin-text-primary) !important;
+    box-shadow: 0 0 0 0.2rem rgba(216, 19, 36, 0.15) !important;
+    outline: none !important;
+}
+
+.filter-container select option,
+.filter-container .form-select option {
+    background: var(--admin-dark-card) !important;
+    color: var(--admin-text-primary) !important;
+    padding: 0.5rem !important;
+}
+
+.filter-container select option:hover,
+.filter-container .form-select option:hover {
+    background: var(--admin-dark-hover) !important;
+}
+
+/* Client theme filter styles */
+.client-theme .filter-container select,
+.client-theme .filter-container .form-select {
+    background: var(--client-dark-surface) !important;
+    border-color: var(--client-border) !important;
+    color: var(--client-text-primary) !important;
+}
+
+.client-theme .filter-container select:focus,
+.client-theme .filter-container .form-select:focus {
+    background: var(--client-dark-card) !important;
+    border-color: var(--client-primary) !important;
+    color: var(--client-text-primary) !important;
+    box-shadow: 0 0 0 0.2rem rgba(11, 33, 84, 0.15) !important;
+}
+
+.client-theme .filter-container select option,
+.client-theme .filter-container .form-select option {
+    background: var(--client-dark-card) !important;
+    color: var(--client-text-primary) !important;
+}
+
+.client-theme .filter-container select option:hover,
+.client-theme .filter-container .form-select option:hover {
+    background: var(--client-dark-hover) !important;
+}
+
+/* Pagination Styles */
+/* Pagination Styles - Dark Theme */
+.pagination,
+#pagination-container .pagination,
+.pagination-container .pagination {
+    display: flex !important;
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 1rem 0 0 0 !important;
+    justify-content: center !important;
+    gap: 0.5rem !important;
+    flex-wrap: wrap !important;
+}
+
+.page-item {
+    margin: 0 !important;
+    list-style: none !important;
+}
+
+.page-link,
+.pagination .page-link,
+#pagination-container .pagination .page-link,
+.pagination-container .pagination .page-link {
+    display: block !important;
+    padding: 0.5rem 1rem !important;
+    background: var(--admin-dark-surface) !important;
+    border: 1px solid var(--admin-border) !important;
+    border-radius: 6px !important;
+    color: var(--admin-text-primary) !important;
+    text-decoration: none !important;
+    transition: all 0.2s ease !important;
+    cursor: pointer !important;
+    min-width: 40px !important;
+    text-align: center !important;
+}
+
+.page-link:hover,
+.pagination .page-link:hover,
+#pagination-container .pagination .page-link:hover,
+.pagination-container .pagination .page-link:hover {
+    background: var(--admin-dark-hover) !important;
+    border-color: var(--admin-primary) !important;
+    color: var(--admin-text-primary) !important;
+    text-decoration: none !important;
+}
+
+.page-item.active .page-link,
+.pagination .page-item.active .page-link,
+#pagination-container .pagination .page-item.active .page-link,
+.pagination-container .pagination .page-item.active .page-link {
+    background: var(--admin-primary) !important;
+    border-color: var(--admin-primary) !important;
+    color: #ffffff !important;
+}
+
+.page-item.disabled .page-link,
+.pagination .page-item.disabled .page-link,
+#pagination-container .pagination .page-item.disabled .page-link,
+.pagination-container .pagination .page-item.disabled .page-link {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+    background: var(--admin-dark-surface) !important;
+    border-color: var(--admin-border) !important;
+    color: var(--admin-text-muted) !important;
+}
+
+/* Client layout pagination overrides */
+.client-layout .pagination .page-link,
+.client-content .pagination .page-link,
+.client-content__inner .pagination .page-link,
+#pagination-container .pagination .page-link {
+    background: var(--client-dark-surface) !important;
+    border: 1px solid var(--client-border) !important;
+    border-radius: 6px !important;
+    color: var(--client-text-primary) !important;
+}
+
+.client-layout .pagination .page-link:hover,
+.client-content .pagination .page-link:hover,
+.client-content__inner .pagination .page-link:hover,
+#pagination-container .pagination .page-link:hover {
+    background: var(--client-dark-hover) !important;
+    border-color: var(--client-primary) !important;
+    color: var(--client-text-primary) !important;
+}
+
+.client-layout .pagination .page-item.active .page-link,
+.client-content .pagination .page-item.active .page-link,
+.client-content__inner .pagination .page-item.active .page-link,
+#pagination-container .pagination .page-item.active .page-link {
+    background: var(--client-primary) !important;
+    border-color: var(--client-primary) !important;
+    color: #ffffff !important;
+}
+
+.client-layout .pagination .page-item.disabled .page-link,
+.client-content .pagination .page-item.disabled .page-link,
+.client-content__inner .pagination .page-item.disabled .page-link,
+#pagination-container .pagination .page-item.disabled .page-link {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+}
+
+/* Context Menu Styles */
+.context-menu {
+    position: fixed;
+    background: var(--admin-dark-card);
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    box-shadow: var(--admin-shadow-hover);
+    padding: 0.5rem 0;
+    z-index: 10000;
+    min-width: 200px;
+    display: none;
+}
+
+.context-menu.show {
+    display: block;
+}
+
+.context-menu-item {
+    padding: 0.75rem 1.5rem;
+    color: var(--admin-text-primary);
+    cursor: pointer;
+    transition: background 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.context-menu-item:hover {
+    background: var(--admin-dark-hover);
+}
+
+.context-menu-item i {
+    width: 20px;
+    text-align: center;
+}
+
+.context-menu-item.danger {
+    color: #EF4444;
+}
+
+.context-menu-item.danger:hover {
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.context-menu-divider {
+    height: 1px;
+    background: var(--admin-border);
+    margin: 0.5rem 0;
+}
+
+/* Client Theme Variants */
+.client-theme .gridjs-wrapper,
+.client-theme .gridjs-table,
+.client-theme .gridjs-thead,
+.client-theme .gridjs-th,
+.client-theme .gridjs-td,
+.client-theme .gridjs-tr {
+    background: var(--client-dark-card) !important;
+    border-color: var(--client-border) !important;
+    color: var(--client-text-primary) !important;
+}
+
+.client-theme .gridjs-wrapper {
+    border: 1px solid var(--client-border) !important;
+    border-radius: 8px !important;
+}
+
+.client-theme .gridjs-th {
+    background: var(--client-dark-surface) !important;
+    color: var(--client-text-primary) !important;
+    border: 1px solid var(--client-border) !important;
+    font-weight: 600 !important;
+}
+
+.client-theme .gridjs-td {
+    background: var(--client-dark-card) !important;
+    color: var(--client-text-primary) !important;
+    border: 1px solid var(--client-border) !important;
+}
+
+.client-theme .gridjs-tr:hover {
+    background: var(--client-dark-hover) !important;
+}
+
+.client-theme .table-glass {
+    background: var(--client-dark-card) !important;
+    border-radius: 8px !important;
+}
+
+.client-theme .table-glass thead {
+    background: var(--client-dark-surface) !important;
+}
+
+.client-theme .table-glass thead th {
+    color: var(--client-text-primary) !important;
+    border-bottom: 1px solid var(--client-border) !important;
+}
+
+.client-theme .table-glass tbody td {
+    color: var(--client-text-primary) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.client-theme .table-glass tbody tr:hover {
+    background: var(--client-dark-hover) !important;
+}
+
+.client-theme .page-link {
+    background: var(--client-dark-surface) !important;
+    border-color: var(--client-border) !important;
+    color: var(--client-text-primary) !important;
+}
+
+.client-theme .page-link:hover {
+    background: var(--client-dark-hover) !important;
+    border-color: var(--client-primary) !important;
+    color: var(--client-text-primary) !important;
+}
+
+.client-theme .page-item.active .page-link {
+    background: var(--client-primary) !important;
+    border-color: var(--client-primary) !important;
+    color: #ffffff !important;
+}
+
+.client-theme .page-item.disabled .page-link {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+}
+
+.client-theme .context-menu {
+    background: var(--client-dark-card) !important;
+    border-color: var(--client-border) !important;
+}
+
+/* View Toggle Buttons */
+.btn-group .btn-outline-light {
+    background: var(--admin-dark-surface) !important;
+    border-color: var(--admin-border) !important;
+    color: var(--admin-text-primary) !important;
+}
+
+.btn-group .btn-outline-light:hover {
+    background: var(--admin-dark-hover) !important;
+    border-color: var(--admin-primary) !important;
+    color: var(--admin-text-primary) !important;
+}
+
+.btn-group .btn-outline-light.active {
+    background: var(--admin-primary) !important;
+    border-color: var(--admin-primary) !important;
+    color: #ffffff !important;
+}
+
+/* Booking Item Styles */
+.booking-item {
+    transition: all 0.2s ease;
+}
+
+.booking-item:hover {
+    background: var(--admin-dark-hover) !important;
+    border-color: var(--admin-primary) !important;
+    transform: translateY(-2px);
+}
+
+.client-theme .context-menu-item {
+    color: var(--client-text-primary) !important;
+}
+
+/* Global Scrollbar Styles for Dashboards */
+/* Webkit browsers (Chrome, Safari, Edge) */
+.admin-content-area::-webkit-scrollbar,
+.admin-main-container::-webkit-scrollbar,
+.content-card::-webkit-scrollbar,
+.glass-card::-webkit-scrollbar,
+.modal-body::-webkit-scrollbar,
+#brands-grid::-webkit-scrollbar,
+.brands-grid::-webkit-scrollbar,
+.scrollable-container::-webkit-scrollbar,
+[style*="overflow-y: auto"]::-webkit-scrollbar,
+[style*="overflow-y: scroll"]::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.admin-content-area::-webkit-scrollbar-track,
+.admin-main-container::-webkit-scrollbar-track,
+.content-card::-webkit-scrollbar-track,
+.glass-card::-webkit-scrollbar-track,
+.modal-body::-webkit-scrollbar-track,
+#brands-grid::-webkit-scrollbar-track,
+.brands-grid::-webkit-scrollbar-track,
+.scrollable-container::-webkit-scrollbar-track,
+[style*="overflow-y: auto"]::-webkit-scrollbar-track,
+[style*="overflow-y: scroll"]::-webkit-scrollbar-track {
+    background: var(--admin-dark-bg);
+    border-radius: 4px;
+}
+
+.admin-content-area::-webkit-scrollbar-thumb,
+.admin-main-container::-webkit-scrollbar-thumb,
+.content-card::-webkit-scrollbar-thumb,
+.glass-card::-webkit-scrollbar-thumb,
+.modal-body::-webkit-scrollbar-thumb,
+#brands-grid::-webkit-scrollbar-thumb,
+.brands-grid::-webkit-scrollbar-thumb,
+.scrollable-container::-webkit-scrollbar-thumb,
+[style*="overflow-y: auto"]::-webkit-scrollbar-thumb,
+[style*="overflow-y: scroll"]::-webkit-scrollbar-thumb {
+    background: var(--admin-dark-surface);
+    border-radius: 4px;
+    border: 1px solid var(--admin-border);
+}
+
+.admin-content-area::-webkit-scrollbar-thumb:hover,
+.admin-main-container::-webkit-scrollbar-thumb:hover,
+.content-card::-webkit-scrollbar-thumb:hover,
+.glass-card::-webkit-scrollbar-thumb:hover,
+.modal-body::-webkit-scrollbar-thumb:hover,
+#brands-grid::-webkit-scrollbar-thumb:hover,
+.brands-grid::-webkit-scrollbar-thumb:hover,
+.scrollable-container::-webkit-scrollbar-thumb:hover,
+[style*="overflow-y: auto"]::-webkit-scrollbar-thumb:hover,
+[style*="overflow-y: scroll"]::-webkit-scrollbar-thumb:hover {
+    background: var(--admin-dark-hover);
+    border-color: var(--admin-primary);
+}
+
+/* Firefox */
+.admin-content-area,
+.admin-main-container,
+.content-card,
+.glass-card,
+.modal-body,
+#brands-grid,
+.brands-grid,
+.scrollable-container {
+    scrollbar-width: thin;
+    scrollbar-color: var(--admin-dark-surface) var(--admin-dark-bg);
+}
+
+/* Empty State Styles */
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+}
+
+.empty-state i {
+    color: var(--admin-text-muted);
+    margin-bottom: 1rem;
+}
+
+.empty-state h4 {
+    color: var(--admin-text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+    color: var(--admin-text-muted);
+    margin-bottom: 0;
+}
+
+.empty-state.error i {
+    color: var(--admin-text-danger, #dc3545);
+}
+
+/* Booking Item Styles */
+.booking-item {
+    background: var(--admin-dark-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    padding: 1rem;
+    transition: all 0.2s ease;
+}
+
+.booking-item:hover {
+    background: var(--admin-dark-hover);
+    border-color: var(--admin-primary);
+    transform: translateY(-2px);
+}
+
+.booking-item .item-meta {
+    color: var(--admin-text-secondary);
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+}
+
+.booking-item .item-meta:last-child {
+    margin-bottom: 0;
+}
+
+.booking-item .item-meta strong {
+    color: var(--admin-text-primary);
+}
+
+/* Scrollable Brands Grid */
+.brands-grid-scrollable {
+    max-height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Booking Grid Cards */
+.booking-grid-card {
+    background: var(--admin-dark-card);
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.booking-grid-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    border-color: var(--admin-primary);
+    background: var(--admin-dark-hover);
+}
+
+.booking-grid-card .brand-logo {
+    max-height: 80px;
+    max-width: 120px;
+    object-fit: contain;
+}
+
+/* Blog Grid Cards */
+.blog-grid-card {
+    background: var(--admin-dark-card);
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.blog-grid-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    border-color: var(--admin-primary);
+    background: var(--admin-dark-hover);
+}
+
+.blog-thumbnail-container {
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+    background: var(--admin-dark-surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.blog-thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.blog-grid-card:hover .blog-thumbnail {
+    transform: scale(1.05);
+}
+
+.client-theme .context-menu-item:hover {
+    background: var(--client-dark-hover) !important;
+}
+
+.client-theme .context-menu-divider {
+    background: var(--client-border) !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .filter-container {
+        flex-direction: column;
+    }
+    
+    .filter-container select {
+        width: 100%;
+    }
+    
+    .search-container input {
+        max-width: 100%;
+    }
+}
+

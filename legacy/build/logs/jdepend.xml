@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PDepend>
+  <Packages>
+    <Package name="SouthRingAutos\Config">
+      <Stats>
+        <TotalClasses>1</TotalClasses>
+        <ConcreteClasses>1</ConcreteClasses>
+        <AbstractClasses>0</AbstractClasses>
+        <Ca>0</Ca>
+        <Ce>0</Ce>
+        <A>0</A>
+        <I>0</I>
+        <D>1</D>
+      </Stats>
+      <ConcreteClasses>
+        <Class sourceFile="C:\wamp64\www\South-Ring-Autos\src\Config\Config.php">Config</Class>
+      </ConcreteClasses>
+      <AbstractClasses/>
+      <DependsUpon/>
+      <UsedBy/>
+    </Package>
+    <Package name="SouthRingAutos\Database">
+      <Stats>
+        <TotalClasses>1</TotalClasses>
+        <ConcreteClasses>1</ConcreteClasses>
+        <AbstractClasses>0</AbstractClasses>
+        <Ca>1</Ca>
+        <Ce>3</Ce>
+        <A>0</A>
+        <I>0.75</I>
+        <D>0.25</D>
+      </Stats>
+      <ConcreteClasses>
+        <Class sourceFile="C:\wamp64\www\South-Ring-Autos\src\Database\Database.php">Database</Class>
+      </ConcreteClasses>
+      <AbstractClasses/>
+      <DependsUpon>
+        <Package></Package>
+        <Package>Monolog</Package>
+        <Package>Monolog\Handler</Package>
+      </DependsUpon>
+      <UsedBy>
+        <Package>SouthRingAutos\Services</Package>
+      </UsedBy>
+    </Package>
+    <Package name="SouthRingAutos\Services">
+      <Stats>
+        <TotalClasses>1</TotalClasses>
+        <ConcreteClasses>1</ConcreteClasses>
+        <AbstractClasses>0</AbstractClasses>
+        <Ca>0</Ca>
+        <Ce>3</Ce>
+        <A>0</A>
+        <I>1</I>
+        <D>0</D>
+      </Stats>
+      <ConcreteClasses>
+        <Class sourceFile="C:\wamp64\www\South-Ring-Autos\src\Services\MpesaService.php">MpesaService</Class>
+      </ConcreteClasses>
+      <AbstractClasses/>
+      <DependsUpon>
+        <Package></Package>
+        <Package>Psr\Log</Package>
+        <Package>SouthRingAutos\Database</Package>
+      </DependsUpon>
+      <UsedBy/>
+    </Package>
+    <Package name="SouthRingAutos\Utils">
+      <Stats>
+        <TotalClasses>7</TotalClasses>
+        <ConcreteClasses>7</ConcreteClasses>
+        <AbstractClasses>0</AbstractClasses>
+        <Ca>0</Ca>
+        <Ce>7</Ce>
+        <A>0</A>
+        <I>1</I>
+        <D>0</D>
+      </Stats>
+      <ConcreteClasses>
+        <Class sourceFile="C:\wamp64\www\South-Ring-Autos\src\Utils\Email.php">Email</Class>
+        <Class sourceFile="C:\wamp64\www\South-Ring-Autos\src\Utils\Environment.php">Environment</Class>
+        <Class sourceFile="C:\wamp64\www\South-Ring-Autos\src\Utils\ErrorHandler.php">ErrorHandler</Class>
+        <Class sourceFile="C:\wamp64\www\South-Ring-Autos\src\Utils\Helper.php">Helper</Class>
+        <Class sourceFile="C:\wamp64\www\South-Ring-Autos\src\Utils\ImageUpload.php">ImageUpload</Class>
+        <Class sourceFile="C:\wamp64\www\South-Ring-Autos\src\Utils\Notification.php">Notification</Class>
+        <Class sourceFile="C:\wamp64\www\South-Ring-Autos\src\Utils\Validator.php">Validator</Class>
+      </ConcreteClasses>
+      <AbstractClasses/>
+      <DependsUpon>
+        <Package></Package>
+        <Package>Monolog</Package>
+        <Package>Monolog\Handler</Package>
+        <Package>Respect\Validation</Package>
+        <Package>Respect\Validation\Exceptions</Package>
+        <Package>Symfony\Component\Mailer</Package>
+        <Package>Symfony\Component\Mime</Package>
+      </DependsUpon>
+      <UsedBy/>
+    </Package>
+  </Packages>
+  <Cycles/>
+</PDepend>

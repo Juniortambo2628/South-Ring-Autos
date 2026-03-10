@@ -1,0 +1,15 @@
+parameters:
+    bootstrapFiles:
+        - config/paths.php
+        - config/constants.php
+    level: 5
+    paths:
+        - src
+        - config
+        - api
+        - admin
+    excludePaths:
+        - vendor
+        - tests
+        - storage
+

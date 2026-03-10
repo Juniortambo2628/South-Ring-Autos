@@ -1,0 +1,37 @@
+actor: Tester
+paths:
+    tests: tests
+    output: tests/_output
+    data: tests/Support
+    support: tests/Support
+    envs: tests/_envs
+coverage:
+    enabled: true
+    include:
+        - src/*
+    exclude:
+        - vendor/*
+        - tests/*
+suites:
+    acceptance:
+        actor: AcceptanceTester
+        modules:
+            enabled:
+                - PhpBrowser
+                - \Helper\Acceptance
+            config:
+                PhpBrowser:
+                    url: http://localhost/South-Ring-Autos
+    functional:
+        actor: FunctionalTester
+        modules:
+            enabled:
+                - Filesystem
+                - \Helper\Functional
+    unit:
+        actor: UnitTester
+        modules:
+            enabled:
+                - Asserts
+                - \Helper\Unit
+

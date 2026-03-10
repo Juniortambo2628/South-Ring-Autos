@@ -1,0 +1,46 @@
+/* Vehicle Details Page Styles */
+
+/* Page Background */
+body.vehicle-details-page {
+    background: #f5f5f5;
+}
+
+/* Vehicle Header */
+.vehicle-header {
+    background: linear-gradient(135deg, #D81324 0%, #8B0A13 100%);
+    color: white;
+    border-radius: 15px;
+}
+
+/* Vehicle Logo Image */
+#vehicleLogo {
+    max-height: 300px;
+    width: auto;
+    background: white;
+    padding: 15px;
+}
+
+/* History Items */
+.history-item {
+    border-left: 4px solid #D81324;
+    padding-left: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.history-item.completed {
+    border-color: #28a745;
+}
+
+.history-item.pending {
+    border-color: #ffc107;
+}
+
+/* Progress Bar */
+.history-item .progress {
+    height: 20px;
+}
+
+.history-item .progress-bar {
+    transition: width 0.3s ease;
+}
+

@@ -1,0 +1,63 @@
+{
+    "name": "south-ring-autos/website",
+    "description": "South Ring Autos Website with Admin Dashboard",
+    "type": "project",
+    "require": {
+        "php": ">=8.2",
+        "doctrine/dbal": "^3.5",
+        "guzzlehttp/guzzle": "^7.10",
+        "intervention/image": "^3.11",
+        "league/csv": "^9.27",
+        "monolog/monolog": "^3.9",
+        "phpmailer/phpmailer": "^7.0",
+        "respect/validation": "^2.2",
+        "symfony/console": "^6.0",
+        "symfony/mailer": "^6.0",
+        "vlucas/phpdotenv": "^5.5"
+    },
+    "require-dev": {
+        "codeception/codeception": "^5.0",
+        "codeception/module-asserts": "^3.2",
+        "codeception/module-filesystem": "^3.0",
+        "codeception/module-phpbrowser": "^3.0",
+        "friendsofphp/php-cs-fixer": "^3.48",
+        "phpstan/phpstan": "^1.10",
+        "phpunit/phpunit": "^9.6",
+        "robmorgan/phinx": "^0.15",
+        "pdepend/pdepend": "^2.15"
+    },
+    "autoload": {
+        "psr-4": {
+            "SouthRingAutos\\": "src/",
+            "SouthRingAutos\\Config\\": "config/",
+            "SouthRingAutos\\Database\\": "src/Database/",
+            "SouthRingAutos\\Services\\": "src/Services/",
+            "SouthRingAutos\\Utils\\": "src/Utils/"
+        },
+        "files": [
+            "config/paths.php",
+            "bootstrap.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SouthRingAutos\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "test-e2e": "codecept run",
+        "phpstan": "phpstan analyse src --memory-limit=512M",
+        "cs-fix": "php-cs-fixer fix src --config=.php-cs-fixer.php",
+        "cs-check": "php-cs-fixer fix --dry-run --diff src --config=.php-cs-fixer.php",
+        "duplication": "pdepend --summary-xml=build/logs/pdepend-summary.xml --jdepend-xml=build/logs/jdepend.xml src",
+        "migrate": "php bin/migrate.php",
+        "migrate-status": "phinx status",
+        "migrate-create": "phinx create"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    }
+}

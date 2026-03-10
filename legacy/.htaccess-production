@@ -1,0 +1,37 @@
+# Production .htaccess Security
+# Rename this to .htaccess after deployment
+
+# Protect .env file
+<Files ".env">
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Protect deployment script
+<Files "deploy-production.php">
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Protect config files (optional)
+<FilesMatch "\.(env|log|ini|conf)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Prevent directory listing
+Options -Indexes
+
+# PHP Settings
+<IfModule mod_php7.c>
+    php_value display_errors Off
+    php_value log_errors On
+</IfModule>
+
+# Security Headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+

@@ -1,0 +1,1116 @@
+/* Admin Dashboard Styles - Professional Dark Theme */
+
+:root {
+    --admin-primary: #D81324;
+    --admin-secondary: #0B2154;
+    --admin-dark-bg: #1a1a1a;
+    --admin-dark-surface: #252525;
+    --admin-dark-card: #2d2d2d;
+    --admin-dark-hover: #353535;
+    --admin-text-primary: #ffffff;
+    --admin-text-secondary: rgba(255, 255, 255, 0.8);
+    --admin-text-muted: rgba(255, 255, 255, 0.6);
+    --admin-border: rgba(255, 255, 255, 0.08);
+    --admin-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    --admin-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.4);
+    --card-red: #E63946;
+    --card-purple: #7209B7;
+    --card-teal: #06B6D4;
+    --card-green: #10B981;
+}
+
+/* Body Background - Clean Dark Theme */
+.admin-body {
+    background: var(--admin-dark-bg);
+    height: 100vh;
+    color: var(--admin-text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Glass Card Effect */
+.glass-card {
+    background: var(--admin-dark-card);
+    border-radius: 12px;
+    border: 1px solid var(--admin-border);
+    box-shadow: var(--admin-shadow);
+    transition: all 0.3s ease;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--admin-text-primary);
+}
+
+.glass-card:hover {
+    box-shadow: var(--admin-shadow-hover);
+    transform: translateY(-2px);
+}
+
+/* Modal Glass Card */
+.modal-content.glass-card,
+.modal-content {
+    background: var(--admin-dark-card) !important;
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--admin-border) !important;
+    color: var(--admin-text-primary) !important;
+}
+
+.modal-content .modal-header {
+    background: var(--admin-dark-surface) !important;
+    border-bottom: 1px solid var(--admin-border) !important;
+    color: var(--admin-text-primary) !important;
+}
+
+.modal-content .modal-title {
+    color: var(--admin-text-primary) !important;
+}
+
+.modal-content .modal-body {
+    background: var(--admin-dark-card) !important;
+    color: var(--admin-text-primary) !important;
+}
+
+.modal-content .modal-footer {
+    background: var(--admin-dark-surface) !important;
+    border-top: 1px solid var(--admin-border) !important;
+}
+
+/* Modal brand grid items */
+.modal-content .make-grid-item,
+.modal-content .card.make-grid-item {
+    background: var(--admin-dark-surface) !important;
+    border: 1px solid var(--admin-border) !important;
+    color: var(--admin-text-primary) !important;
+    transition: all 0.2s ease;
+}
+
+.modal-content .make-grid-item:hover,
+.modal-content .card.make-grid-item:hover {
+    background: var(--admin-dark-hover) !important;
+    border-color: var(--admin-primary) !important;
+    transform: translateY(-2px);
+    cursor: pointer;
+}
+
+.modal-content .make-grid-item .card-body,
+.modal-content .card.make-grid-item .card-body {
+    background: transparent !important;
+    color: var(--admin-text-primary) !important;
+}
+
+.modal-content .make-grid-item .text-white,
+.modal-content .card.make-grid-item .text-white {
+    color: var(--admin-text-primary) !important;
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--admin-border);
+}
+
+.modal-header .btn-close {
+    filter: invert(1);
+}
+
+.modal-header .btn-close-white {
+    filter: brightness(0) invert(1);
+    opacity: 0.8;
+}
+
+.modal-header .btn-close-white:hover {
+    opacity: 1;
+}
+
+/* Summary Cards - Solid Professional Design */
+.stats-card {
+    background: var(--admin-dark-card);
+    border-radius: 12px;
+    border: none;
+    box-shadow: var(--admin-shadow);
+    padding: 1.75rem;
+    transition: all 0.3s ease;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.stats-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 60px;
+    height: 60px;
+    opacity: 0.1;
+    background: currentColor;
+    border-radius: 50%;
+    transform: translate(20px, -20px);
+}
+
+.stats-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--admin-shadow-hover);
+}
+
+.stats-card.primary {
+    background: var(--card-red);
+    color: #ffffff;
+}
+
+.stats-card.warning {
+    background: #FFC107;
+    color: #212529;
+}
+
+.stats-card.info {
+    background: var(--card-teal);
+    color: #ffffff;
+}
+
+.stats-card.success {
+    background: var(--card-green);
+    color: #ffffff;
+}
+
+.stats-card.purple {
+    background: var(--card-purple);
+    color: #ffffff;
+}
+
+.stats-card h5 {
+    color: inherit;
+    font-weight: 500;
+    font-size: 0.875rem;
+    text-transform: none;
+    letter-spacing: 0.3px;
+    margin-bottom: 0.75rem;
+    opacity: 0.9;
+}
+
+.stats-card h2 {
+    color: inherit;
+    font-weight: 700;
+    font-size: 2.5rem;
+    margin: 0;
+    line-height: 1.2;
+}
+
+/* Navbar */
+.admin-navbar {
+    background: var(--admin-dark-surface);
+    border-bottom: 1px solid var(--admin-border);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.admin-navbar .navbar-brand {
+    color: var(--admin-text-primary) !important;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.admin-navbar .text-white {
+    color: var(--admin-text-primary) !important;
+    font-weight: 500;
+}
+
+.admin-navbar .fa-bell {
+    color: var(--admin-text-primary);
+    font-size: 1.2rem;
+}
+
+/* Sidebar */
+.admin-sidebar {
+    background: linear-gradient(180deg, #D81324 0%, #a00 100%);
+    border-radius: 12px;
+    border: 1px solid var(--admin-border);
+    padding: 1rem 0;
+    box-shadow: var(--admin-shadow);
+    height: calc(100vh - 100px);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: sticky;
+    top: 80px;
+}
+
+.admin-sidebar .list-group {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow: hidden;
+    padding: 0;
+}
+
+.admin-sidebar .list-group-item {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 500;
+    padding: 0.625rem 1rem;
+    margin: 0.125rem 0.75rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    font-size: 0.8rem;
+    position: relative;
+    overflow: visible;
+}
+
+.admin-sidebar .list-group-item i {
+    font-size: 0.875rem;
+}
+
+.admin-sidebar .list-group-item:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+}
+
+.admin-sidebar .list-group-item.active {
+    background: rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.3);
+}
+
+/* Pill Buttons */
+.btn-pill {
+    border-radius: 50px;
+    padding: 0.5rem 1.5rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.btn-pill:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+.btn-pill.btn-primary {
+    background: var(--admin-primary);
+    border-color: var(--admin-primary);
+    color: #ffffff;
+}
+
+.btn-pill.btn-outline-light {
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: var(--admin-text-primary);
+}
+
+.btn-pill.btn-outline-light:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Status Badges */
+.badge-pill {
+    border-radius: 50px;
+    padding: 0.4rem 0.875rem;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: none;
+    letter-spacing: 0.3px;
+}
+
+.badge-pill.status-pending {
+    background: #FFC107;
+    color: #212529;
+}
+
+/* Notification Badge Style (matches header) */
+.notification-badge,
+.admin-sidebar .badge,
+.quick-action-btn .badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #EF4444;
+    color: #ffffff;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.5);
+    padding: 0;
+    min-width: 20px;
+}
+
+.admin-sidebar .list-group-item .badge {
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
+    background: #EF4444;
+    color: #ffffff;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.5);
+    padding: 0;
+    min-width: 20px;
+    float: none;
+    z-index: 10;
+}
+
+.admin-sidebar .list-group-item.active .badge {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.badge-pill.status-confirmed {
+    background: #10B981;
+    color: #ffffff;
+}
+
+.badge-pill.status-completed {
+    background: #06B6D4;
+    color: #ffffff;
+}
+
+.badge-pill.status-cancelled {
+    background: #EF4444;
+    color: #ffffff;
+}
+
+/* Content Cards */
+.content-card {
+    background: var(--admin-dark-card);
+    border-radius: 12px;
+    border: 1px solid var(--admin-border);
+    box-shadow: var(--admin-shadow);
+    overflow: hidden;
+}
+
+.content-card .card-header {
+    background: var(--admin-dark-surface);
+    border-bottom: 1px solid var(--admin-border);
+    padding: 1.25rem 1.5rem;
+}
+
+.content-card .card-header h5 {
+    color: var(--admin-text-primary);
+    font-weight: 600;
+    font-size: 1rem;
+    margin: 0;
+}
+
+.content-card .card-body {
+    padding: 1.5rem;
+    background: var(--admin-dark-card);
+}
+
+/* Booking/Post Items */
+.booking-item,
+.post-item,
+.user-item,
+.notification-item,
+.delivery-item {
+    background: var(--admin-dark-surface);
+    border-radius: 10px;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--admin-border);
+    transition: all 0.2s ease;
+}
+
+.booking-item:hover,
+.post-item:hover,
+.user-item:hover,
+.notification-item:hover,
+.delivery-item:hover {
+    background: var(--admin-dark-hover);
+    transform: translateX(3px);
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.booking-item .item-title,
+.post-item .item-title,
+.user-item .item-title,
+.notification-item .item-title,
+.delivery-item .item-title {
+    color: var(--admin-text-primary);
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.booking-item .item-meta,
+.post-item .item-meta,
+.user-item .item-meta,
+.notification-item .item-meta,
+.delivery-item .item-meta {
+    color: var(--admin-text-secondary);
+    font-size: 0.875rem;
+    margin-bottom: 0.375rem;
+}
+
+/* Tables */
+.table-glass {
+    background: var(--admin-dark-card);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.table-glass thead {
+    background: var(--admin-dark-surface);
+}
+
+.table-glass thead th {
+    color: var(--admin-text-primary);
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0.3px;
+    font-size: 0.875rem;
+    border-bottom: 1px solid var(--admin-border);
+    padding: 1rem;
+}
+
+.table-glass tbody td {
+    color: var(--admin-text-secondary);
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.table-glass tbody tr:hover {
+    background: var(--admin-dark-surface);
+}
+
+/* Form Elements */
+.form-control-glass,
+.form-select.form-control-glass,
+textarea.form-control-glass,
+input.form-control-glass {
+    background: var(--admin-dark-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 8px;
+    color: var(--admin-text-primary) !important;
+    padding: 0.75rem 1rem;
+}
+
+.form-control-glass::placeholder {
+    color: var(--admin-text-muted);
+}
+
+.form-control-glass:focus {
+    background: var(--admin-dark-card);
+    border-color: var(--admin-primary);
+    color: var(--admin-text-primary) !important;
+    box-shadow: 0 0 0 0.2rem rgba(216, 19, 36, 0.15);
+}
+
+.form-label-glass {
+    color: var(--admin-text-primary);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+}
+
+/* Scrollbar for all input containers - Webkit (Chrome, Safari, Edge) */
+textarea.form-control-glass::-webkit-scrollbar,
+.form-control-glass::-webkit-scrollbar,
+.modal-body textarea::-webkit-scrollbar,
+.modal-body input::-webkit-scrollbar,
+.modal-body select::-webkit-scrollbar,
+.modal-body .form-control::-webkit-scrollbar,
+.modal-body .form-select::-webkit-scrollbar {
+    width: 6px;
+}
+
+textarea.form-control-glass::-webkit-scrollbar-track,
+.form-control-glass::-webkit-scrollbar-track,
+.modal-body textarea::-webkit-scrollbar-track,
+.modal-body input::-webkit-scrollbar-track,
+.modal-body select::-webkit-scrollbar-track,
+.modal-body .form-control::-webkit-scrollbar-track,
+.modal-body .form-select::-webkit-scrollbar-track {
+    background: var(--admin-dark-bg);
+    border-radius: 3px;
+}
+
+textarea.form-control-glass::-webkit-scrollbar-thumb,
+.form-control-glass::-webkit-scrollbar-thumb,
+.modal-body textarea::-webkit-scrollbar-thumb,
+.modal-body input::-webkit-scrollbar-thumb,
+.modal-body select::-webkit-scrollbar-thumb,
+.modal-body .form-control::-webkit-scrollbar-thumb,
+.modal-body .form-select::-webkit-scrollbar-thumb {
+    background: var(--admin-dark-surface);
+    border-radius: 3px;
+}
+
+textarea.form-control-glass::-webkit-scrollbar-thumb:hover,
+.form-control-glass::-webkit-scrollbar-thumb:hover,
+.modal-body textarea::-webkit-scrollbar-thumb:hover,
+.modal-body input::-webkit-scrollbar-thumb:hover,
+.modal-body select::-webkit-scrollbar-thumb:hover,
+.modal-body .form-control::-webkit-scrollbar-thumb:hover,
+.modal-body .form-select::-webkit-scrollbar-thumb:hover {
+    background: var(--admin-dark-hover);
+}
+
+/* Scrollbar for all input containers - Firefox */
+textarea.form-control-glass,
+.form-control-glass,
+.modal-body textarea,
+.modal-body input,
+.modal-body select,
+.modal-body .form-control,
+.modal-body .form-select {
+    scrollbar-width: thin;
+    scrollbar-color: var(--admin-dark-surface) var(--admin-dark-bg);
+}
+
+/* FilePond Dark Theme Styling */
+.filepond--root {
+    background: var(--admin-dark-surface) !important;
+    border: 1px solid var(--admin-border) !important;
+    border-radius: 8px !important;
+    color: var(--admin-text-primary) !important;
+    margin-bottom: 0 !important;
+}
+
+.filepond--root .filepond--panel-root {
+    background: var(--admin-dark-surface) !important;
+    border: 1px dashed var(--admin-border) !important;
+    border-radius: 8px !important;
+}
+
+.filepond--drop-label {
+    color: var(--admin-text-primary) !important;
+}
+
+.filepond--drop-label label {
+    color: var(--admin-text-primary) !important;
+    font-size: 0.875rem !important;
+}
+
+.filepond--label-action {
+    color: var(--admin-primary) !important;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.filepond--label-action:hover {
+    color: #ff3d4d !important;
+}
+
+.filepond--item {
+    background: var(--admin-dark-card) !important;
+    border: 1px solid var(--admin-border) !important;
+    border-radius: 6px !important;
+}
+
+.filepond--file {
+    color: var(--admin-text-primary) !important;
+}
+
+.filepond--file-status {
+    color: var(--admin-text-secondary) !important;
+}
+
+.filepond--file-info-main {
+    color: var(--admin-text-primary) !important;
+    font-weight: 500 !important;
+}
+
+.filepond--file-info-sub {
+    color: var(--admin-text-secondary) !important;
+}
+
+.filepond--file-status-main {
+    color: var(--admin-text-primary) !important;
+}
+
+.filepond--file-status-sub {
+    color: var(--admin-text-secondary) !important;
+}
+
+.filepond--action-button {
+    background: var(--admin-dark-hover) !important;
+    color: var(--admin-text-primary) !important;
+    border-radius: 4px !important;
+}
+
+.filepond--action-button:hover {
+    background: var(--admin-primary) !important;
+    color: #ffffff !important;
+}
+
+.filepond--action-button[data-align*='left'] {
+    background: var(--admin-dark-hover) !important;
+}
+
+.filepond--action-button[data-align*='right'] {
+    background: var(--admin-dark-hover) !important;
+}
+
+.filepond--progress-indicator {
+    background: var(--admin-primary) !important;
+}
+
+.filepond--credits {
+    display: none !important;
+}
+
+.filepond--image-preview-wrapper {
+    background: var(--admin-dark-card) !important;
+}
+
+.filepond--image-preview {
+    background: var(--admin-dark-card) !important;
+}
+
+.filepond--image-preview-overlay {
+    background: rgba(0, 0, 0, 0.5) !important;
+}
+
+.filepond--drip {
+    background: rgba(216, 19, 36, 0.1) !important;
+}
+
+.filepond--drip-blob {
+    background: var(--admin-primary) !important;
+}
+
+/* Ensure all modal inputs have white text */
+.modal-body input,
+.modal-body textarea,
+.modal-body select,
+.modal-body .form-control,
+.modal-body .form-select {
+    color: var(--admin-text-primary) !important;
+    background: var(--admin-dark-surface) !important;
+}
+
+.modal-body input::placeholder,
+.modal-body textarea::placeholder {
+    color: var(--admin-text-muted) !important;
+}
+
+.modal-body input:focus,
+.modal-body textarea:focus,
+.modal-body select:focus {
+    color: var(--admin-text-primary) !important;
+    background: var(--admin-dark-card) !important;
+}
+
+/* Headings */
+.admin-heading {
+    color: var(--admin-text-primary);
+    font-weight: 600;
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: var(--admin-text-secondary);
+}
+
+.empty-state i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.4;
+}
+
+.empty-state h4 {
+    color: var(--admin-text-primary);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+/* Loading Spinner */
+.loading-spinner {
+    text-align: center;
+    padding: 2rem;
+    color: var(--admin-text-secondary);
+}
+
+.spinner-border-custom {
+    width: 3rem;
+    height: 3rem;
+    border-width: 0.3rem;
+    border-color: rgba(255, 255, 255, 0.2);
+    border-top-color: var(--admin-primary);
+}
+
+/* Notification Bell */
+.notification-bell {
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #EF4444;
+    color: #ffffff;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.5);
+    animation: pulse 2s infinite;
+}
+
+.notification-badge.hidden {
+    display: none;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+/* Notifications Panel */
+.notifications-panel {
+    position: fixed;
+    top: 70px;
+    right: 20px;
+    width: 350px;
+    z-index: 1000;
+    max-height: 500px;
+    overflow: hidden;
+    display: none;
+}
+
+.notifications-panel.show {
+    display: block;
+}
+
+/* Notification Panel Scrollbar */
+.notifications-panel .card-body {
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 0.75rem !important;
+}
+
+.notifications-panel .card-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.notifications-panel .card-body::-webkit-scrollbar-track {
+    background: var(--admin-dark-bg);
+    border-radius: 3px;
+}
+
+.notifications-panel .card-body::-webkit-scrollbar-thumb {
+    background: var(--admin-dark-surface);
+    border-radius: 3px;
+}
+
+.notifications-panel .card-body::-webkit-scrollbar-thumb:hover {
+    background: var(--admin-dark-hover);
+}
+
+/* Compact Notification Items */
+.notifications-panel .booking-item {
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    border-radius: 8px;
+}
+
+.notifications-panel .booking-item .item-title {
+    font-size: 0.875rem;
+    margin-bottom: 0.375rem;
+    font-weight: 600;
+}
+
+.notifications-panel .booking-item .item-meta {
+    font-size: 0.75rem;
+    margin-bottom: 0.25rem;
+    color: var(--admin-text-muted);
+}
+
+.notifications-panel .booking-item .btn-sm {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.7rem;
+    margin-top: 0.5rem;
+}
+
+/* Logo Styling */
+.admin-logo {
+    max-height: 45px;
+    width: auto;
+    margin-right: 1rem;
+}
+
+.sidebar-logo {
+    max-width: 120px;
+    width: 100%;
+    margin: 0 auto 1rem;
+    display: block;
+    padding: 0 0.75rem;
+}
+
+/* Settings Card */
+.settings-card {
+    background: var(--admin-dark-card);
+    border-radius: 12px;
+    border: 1px solid var(--admin-border);
+    box-shadow: var(--admin-shadow);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.settings-card h5 {
+    color: var(--admin-text-primary);
+    font-weight: 600;
+}
+
+/* User List */
+.user-item {
+    background: var(--admin-dark-surface);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--admin-border);
+    transition: all 0.2s ease;
+}
+
+.user-item:hover {
+    background: var(--admin-dark-hover);
+    transform: translateX(3px);
+}
+
+/* Error/Success Messages */
+.alert-hidden {
+    display: none;
+}
+
+/* Filter Buttons */
+.filter-btn.active {
+    background: var(--admin-primary) !important;
+    border-color: var(--admin-primary) !important;
+}
+
+/* Quick Action Buttons */
+.quick-action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem 1rem;
+    background: var(--admin-dark-surface);
+    border-radius: 10px;
+    border: 1px solid var(--admin-border);
+    text-decoration: none;
+    color: var(--admin-text-primary);
+    transition: all 0.3s ease;
+    position: relative;
+    min-height: 120px;
+}
+
+.quick-action-btn:hover {
+    background: var(--admin-dark-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--admin-shadow-hover);
+    color: var(--admin-text-primary);
+    text-decoration: none;
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.quick-action-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 0.875rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.quick-action-icon.primary {
+    background: var(--admin-primary);
+    color: #ffffff;
+}
+
+.quick-action-icon.warning {
+    background: #FFC107;
+    color: #212529;
+}
+
+.quick-action-icon.success {
+    background: var(--card-green);
+    color: #ffffff;
+}
+
+.quick-action-icon.info {
+    background: var(--card-teal);
+    color: #ffffff;
+}
+
+.quick-action-btn span {
+    font-weight: 500;
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+.quick-action-btn .badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+/* Admin Main Container */
+.admin-main-container {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 80px);
+}
+
+.admin-content-area {
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 1rem;
+}
+
+.admin-content-area::-webkit-scrollbar {
+    width: 8px;
+}
+
+.admin-content-area::-webkit-scrollbar-track {
+    background: var(--admin-dark-bg);
+}
+
+.admin-content-area::-webkit-scrollbar-thumb {
+    background: var(--admin-dark-surface);
+    border-radius: 4px;
+}
+
+.admin-content-area::-webkit-scrollbar-thumb:hover {
+    background: var(--admin-dark-hover);
+}
+
+/* Action Buttons in Booking Items */
+.booking-item .btn-sm {
+    font-size: 0.75rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: 6px;
+}
+
+.booking-item .btn-outline-primary {
+    border-color: var(--admin-primary);
+    color: var(--admin-primary);
+}
+
+.booking-item .btn-outline-primary:hover {
+    background: var(--admin-primary);
+    color: #ffffff;
+}
+
+.booking-item .btn-outline-warning {
+    border-color: #FFC107;
+    color: #FFC107;
+}
+
+.booking-item .btn-outline-warning:hover {
+    background: #FFC107;
+    color: #212529;
+}
+
+.booking-item .btn-outline-success {
+    border-color: var(--card-green);
+    color: var(--card-green);
+}
+
+.booking-item .btn-outline-success:hover {
+    background: var(--card-green);
+    color: #ffffff;
+}
+
+.booking-item .btn-outline-info {
+    border-color: var(--card-teal);
+    color: var(--card-teal);
+}
+
+.booking-item .btn-outline-info:hover {
+    background: var(--card-teal);
+    color: #ffffff;
+}
+
+.booking-item .btn-outline-danger {
+    border-color: #EF4444;
+    color: #EF4444;
+}
+
+.booking-item .btn-outline-danger:hover {
+    background: #EF4444;
+    color: #ffffff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .stats-card h2 {
+        font-size: 2rem;
+    }
+    
+    .admin-sidebar {
+        margin-bottom: 2rem;
+        height: auto;
+        position: relative;
+        top: 0;
+    }
+    
+    .admin-main-container {
+        height: auto;
+    }
+    
+    .admin-content-area {
+        height: auto;
+        overflow: visible;
+    }
+    
+    .admin-logo {
+        max-height: 35px;
+    }
+    
+    .notifications-panel {
+        width: calc(100% - 40px);
+        right: 20px;
+        left: 20px;
+    }
+    
+    .quick-action-btn {
+        min-height: 100px;
+        padding: 1rem;
+    }
+    
+    .quick-action-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 1.2rem;
+    }
+    
+    .admin-body {
+        height: auto;
+        overflow: visible;
+    }
+}

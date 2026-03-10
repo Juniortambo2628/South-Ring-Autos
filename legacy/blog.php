@@ -1,0 +1,81 @@
+<?php include 'includes/header.php'; ?>
+<script src="js/dist/blog.bundle.js"></script>
+
+
+
+    <!-- Page Header Start -->
+    <div class="container-fluid page-header mb-5 p-0" style="background-image: url(img/stock-images/wheel-hq-bg.jpg);">
+        <div class="container-fluid page-header-inner py-5">
+            <div class="container text-center">
+                <h1 class="display-3 text-white mb-3 animated slideInDown">Our Blog</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center text-uppercase">
+                        <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                        <li class="breadcrumb-item text-white active" aria-current="page">Blog</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- Page Header End -->
+
+
+    <!-- Blog Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row g-5">
+                <!-- Blog List Start -->
+                <div class="col-lg-8">
+                    <div id="blog-list" class="row g-4">
+                        <!-- Blog posts will be loaded here via JavaScript -->
+                    </div>
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center mt-4" id="pagination">
+                            <!-- Pagination will be loaded here -->
+                        </ul>
+                    </nav>
+                </div>
+
+                <!-- Sidebar Start -->
+                <div class="col-lg-4">
+                    <!-- Search Start -->
+                    <div class="mb-5">
+                        <div class="input-group">
+                            <input type="text" class="form-control p-3" placeholder="Keyword" id="search-input">
+                            <button class="btn btn-primary px-4" type="button" id="search-btn"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                    <!-- Search End -->
+
+                    <!-- Categories Start -->
+                    <div class="mb-5">
+                        <h4 class="text-primary mb-4">Categories</h4>
+                        <div class="d-flex flex-column m-0">
+                            <a href="#" class="btn btn-link text-start border-bottom" data-category="all">All Posts</a>
+                            <a href="#" class="btn btn-link text-start border-bottom" data-category="maintenance">Vehicle Maintenance</a>
+                            <a href="#" class="btn btn-link text-start border-bottom" data-category="repair">Repair Tips</a>
+                            <a href="#" class="btn btn-link text-start border-bottom" data-category="news">Company News</a>
+                            <a href="#" class="btn btn-link text-start border-0" data-category="tips">Expert Tips</a>
+                        </div>
+                    </div>
+                    <!-- Categories End -->
+
+                    <!-- Recent Posts Start -->
+                    <div class="mb-5">
+                        <h4 class="text-primary mb-4">Recent Posts</h4>
+                        <div id="recent-posts">
+                            <!-- Recent posts will be loaded here -->
+                        </div>
+                    </div>
+                    <!-- Recent Posts End -->
+                </div>
+                <!-- Sidebar End -->
+            </div>
+        </div>
+    </div>
+    <!-- Blog End -->
+
+
+<?php include 'includes/footer.php'; ?>
+
+

@@ -1,0 +1,35 @@
+/* Admin Login Styles */
+body {
+    background: linear-gradient(135deg, #D81324 0%, #a00 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    padding: 40px;
+    max-width: 400px;
+    width: 100%;
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.logo img {
+    max-width: 200px;
+}
+
+.alert-hidden {
+    display: none !important;
+}
+
+#error-message:empty {
+    display: none !important;
+}
+
