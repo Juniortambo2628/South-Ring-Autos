@@ -62,7 +62,7 @@ export default function AdminSettingsPage() {
     const fetchSettings = async () => {
         setLoading(true);
         try {
-            const res = await api.get('/admin/settings');
+            const res = await api.get('/settings');
             const data = res.data.settings;
             if (data) {
                 setFormData({
@@ -110,7 +110,7 @@ export default function AdminSettingsPage() {
                 nav_links: navLinks
             };
 
-            await api.post("/admin/settings", { settings: settingsPayload });
+            await api.post("/settings", { settings: settingsPayload });
             MySwal.fire('Saved!', 'Settings have been updated successfully.', 'success');
         } catch (err) {
             console.error("Failed to update settings", err);

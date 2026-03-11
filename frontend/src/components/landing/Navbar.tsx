@@ -26,7 +26,7 @@ export default function Navbar() {
         if (stored) setUser(JSON.parse(stored));
 
         // Fetch nav links from settings
-        api.get('/admin/settings').then(res => {
+        api.get('/settings').then(res => {
             const data = res.data.settings;
             if (data && data.nav_links) {
                 try {

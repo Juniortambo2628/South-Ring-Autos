@@ -42,7 +42,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.get('/admin/settings').then(res => {
+    api.get('/settings').then(res => {
       const data = res.data.settings;
       if (data && data.landing_page_sections) {
         try {
