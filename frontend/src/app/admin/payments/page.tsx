@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import AdminLayout from "@/components/admin/AdminLayout";
 import {
     Search, CheckCircle2, XCircle, Clock, Loader2,
-    CreditCard, FileText, Filter, ChevronRight, AlertCircle
+    CreditCard, FileText, Filter, ChevronRight, AlertCircle, Plus
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -25,7 +25,14 @@ export default function AdminPaymentsPage() {
     const [editRef, setEditRef] = useState("");
     const [submitting, setSubmitting] = useState(false);
 
-    useEffect(() => { fetchPayments(); }, []);
+    // Invoice creation
+    const [isCreateOpen, setIsCreateOpen] = useState(false);
+    const [bookings, setBookings] = useState<any[]>([]);
+    const [invoiceBookingId, setInvoiceBookingId] = useState("");
+    const [invoiceAmount, setInvoiceAmount] = useState("");
+    const [creatingInvoice, setCreatingInvoice] = useState(false);
+
+    useEffect(() => { fetchPayments(); fetchBookings(); }, []);
 
     const fetchPayments = async () => {
         setLoading(true);
@@ -60,6 +67,36 @@ export default function AdminPaymentsPage() {
             console.error("Failed to update payment", err);
         } finally {
             setSubmitting(false);
+        }
+    };
+
+    const fetchBookings = async () => {
+        try {
+            const res = await api.get("/bookings");
+            setBookings(res.data.data || res.data || []);
+        } catch (err) {
+            console.error("Failed to fetch bookings", err);
+        }
+    };
+
+    const handleCreateInvoice = async () => {
+        if (!invoiceBookingId || !invoiceAmount) return;
+        setCreatingInvoice(true);
+        try {
+            await api.post("/admin/payments/create-invoice", {
+                booking_id: invoiceBookingId,
+                amount: parseFloat(invoiceAmount),
+                payment_method: "paystack",
+            });
+            setIsCreateOpen(false);
+            setInvoiceBookingId("");
+            setInvoiceAmount("");
+            fetchPayments();
+        } catch (err: any) {
+            console.error("Failed to create invoice", err);
+            alert(err.response?.data?.message || "Failed to create invoice");
+        } finally {
+            setCreatingInvoice(false);
         }
     };
 
@@ -100,6 +137,13 @@ export default function AdminPaymentsPage() {
                         <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Total Revenue</p>
                         <p className="text-lg font-black text-green-600">{formatCurrency(totalRevenue)}</p>
                     </div>
+                    <Button
+                        onClick={() => setIsCreateOpen(true)}
+                        className="bg-red-600 hover:bg-red-700 text-white rounded-2xl h-14 px-6 font-black uppercase tracking-widest text-[9px] shadow-xl shadow-red-600/20"
+                    >
+                        <Plus size={16} className="mr-2" />
+                        Create Invoice
+                    </Button>
                 </div>
             </div>
 
@@ -286,6 +330,56 @@ export default function AdminPaymentsPage() {
                             </DialogFooter>
                         </div>
                     )}
+                </DialogContent>
+            </Dialog>
+
+            {/* Create Invoice Modal */}
+            <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
+                <DialogContent className="bg-white border-slate-100 rounded-[32px] overflow-hidden p-0 max-w-md">
+                    <DialogHeader className="p-8 border-b border-slate-50">
+                        <DialogTitle className="text-xl font-black text-[#003366] uppercase tracking-tight">Create Invoice</DialogTitle>
+                    </DialogHeader>
+                    <div className="p-8 space-y-6">
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Select Booking</label>
+                            <select
+                                value={invoiceBookingId}
+                                onChange={e => setInvoiceBookingId(e.target.value)}
+                                className="w-full h-12 bg-slate-50 border border-slate-100 rounded-xl px-4 text-sm font-bold text-[#003366] focus:ring-red-600/10 focus:border-red-600"
+                            >
+                                <option value="">Choose a booking...</option>
+                                {bookings.map((b: any) => (
+                                    <option key={b.id} value={b.id}>
+                                        #{b.id} — {b.name || b.email} — {b.service} ({b.registration})
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Amount (KES)</label>
+                            <Input
+                                type="number"
+                                value={invoiceAmount}
+                                onChange={e => setInvoiceAmount(e.target.value)}
+                                className="bg-slate-50 border-slate-100 h-12 rounded-xl text-sm font-bold"
+                                placeholder="e.g. 5000"
+                                min="1"
+                            />
+                        </div>
+
+                        <DialogFooter className="pt-4">
+                            <Button variant="outline" onClick={() => setIsCreateOpen(false)} className="rounded-xl">Cancel</Button>
+                            <Button
+                                onClick={handleCreateInvoice}
+                                disabled={creatingInvoice || !invoiceBookingId || !invoiceAmount}
+                                className="bg-red-600 hover:bg-red-700 text-white rounded-xl font-black uppercase tracking-widest text-[9px]"
+                            >
+                                {creatingInvoice ? <Loader2 className="animate-spin mr-2" size={14} /> : null}
+                                Generate Invoice
+                            </Button>
+                        </DialogFooter>
+                    </div>
                 </DialogContent>
             </Dialog>
         </AdminLayout>

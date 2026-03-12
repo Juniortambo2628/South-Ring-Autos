@@ -5,7 +5,8 @@ import AdminLayout from "@/components/admin/AdminLayout";
 import {
     Settings, Save, Shield, Database,
     Globe, Palette, Bell, Eye, EyeOff,
-    CheckCircle2, AlertCircle, Loader2, GripVertical, CheckSquare, Square
+    CheckCircle2, AlertCircle, Loader2, GripVertical, CheckSquare, Square,
+    CreditCard
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -51,6 +52,11 @@ export default function AdminSettingsPage() {
         accent_color: "#ef4444",
     });
 
+    // Paystack keys
+    const [paystackPublicKey, setPaystackPublicKey] = useState("");
+    const [paystackSecretKey, setPaystackSecretKey] = useState("");
+    const [showSecretKey, setShowSecretKey] = useState(false);
+
     // Draggable Configs
     const [landingSections, setLandingSections] = useState(DEFAULT_SECTIONS);
     const [navLinks, setNavLinks] = useState(DEFAULT_NAV_LINKS);
@@ -87,6 +93,10 @@ export default function AdminSettingsPage() {
                         if (parsed && Array.isArray(parsed) && parsed.length > 0) setNavLinks(parsed);
                     } catch (e) { }
                 }
+
+                // Paystack keys
+                if (data.paystack_public_key) setPaystackPublicKey(data.paystack_public_key);
+                if (data.paystack_secret_key) setPaystackSecretKey(data.paystack_secret_key);
             }
         } catch (err) {
             console.error("Failed to fetch settings", err);
@@ -107,7 +117,9 @@ export default function AdminSettingsPage() {
                 primary_color: formData.primary_color,
                 accent_color: formData.accent_color,
                 landing_page_sections: landingSections,
-                nav_links: navLinks
+                nav_links: navLinks,
+                paystack_public_key: paystackPublicKey,
+                paystack_secret_key: paystackSecretKey
             };
 
             await api.post("/settings", { settings: settingsPayload });
@@ -182,6 +194,7 @@ export default function AdminSettingsPage() {
                             {[
                                 { id: "general", label: "General Identity", icon: Globe },
                                 { id: "layout", label: "Site Layout & Nav", icon: Palette },
+                                { id: "payments", label: "Payment Gateway", icon: CreditCard },
                                 { id: "security", label: "Access & Security", icon: Shield },
                                 { id: "database", label: "Data Management", icon: Database },
                             ].map(item => (
@@ -358,7 +371,58 @@ export default function AdminSettingsPage() {
                         </div>
                     )}
 
-                    {!['general', 'layout'].includes(activeTab) && (
+                    {activeTab === 'payments' && (
+                        <div className="bg-white rounded-[40px] border border-slate-100 shadow-sm p-12 animate-in fade-in slide-in-from-right-4">
+                            <div className="mb-12">
+                                <h3 className="text-xl font-black text-[#003366] uppercase tracking-tight mb-2">Payment Gateway</h3>
+                                <p className="text-sm text-slate-400 font-medium italic">Configure Paystack API keys for online payments. Get your keys from <a href="https://dashboard.paystack.com/#/settings/developer" target="_blank" rel="noopener noreferrer" className="text-red-600 underline">Paystack Dashboard</a>.</p>
+                            </div>
+
+                            <form className="space-y-10">
+                                <div className="space-y-4">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Public Key</label>
+                                    <Input
+                                        value={paystackPublicKey}
+                                        onChange={e => setPaystackPublicKey(e.target.value)}
+                                        placeholder="pk_test_..."
+                                        className="bg-slate-50 border-slate-100 h-16 rounded-2xl text-[12px] font-bold tracking-widest focus:ring-red-600/10 focus:border-red-600 transition-all shadow-none font-mono"
+                                    />
+                                </div>
+
+                                <div className="space-y-4">
+                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Secret Key</label>
+                                    <div className="relative">
+                                        <Input
+                                            type={showSecretKey ? "text" : "password"}
+                                            value={paystackSecretKey}
+                                            onChange={e => setPaystackSecretKey(e.target.value)}
+                                            placeholder="sk_test_..."
+                                            className="bg-slate-50 border-slate-100 h-16 rounded-2xl text-[12px] font-bold tracking-widest focus:ring-red-600/10 focus:border-red-600 transition-all shadow-none pr-16 font-mono"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowSecretKey(!showSecretKey)}
+                                            className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#003366] transition-colors"
+                                            aria-label={showSecretKey ? 'Hide secret key' : 'Show secret key'}
+                                        >
+                                            {showSecretKey ? <EyeOff size={18} /> : <Eye size={18} />}
+                                        </button>
+                                    </div>
+                                    <p className="text-[9px] font-bold text-amber-500 uppercase tracking-widest ml-1">⚠️ Keep your secret key confidential</p>
+                                </div>
+
+                                <div className="bg-slate-50 rounded-2xl p-6 border border-slate-100">
+                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Webhook URL</p>
+                                    <code className="block text-xs font-bold text-[#003366] font-mono break-all bg-white rounded-xl p-4 border border-slate-100">
+                                        {typeof window !== 'undefined' ? `${window.location.origin.replace('southringautos.com', 'api.southringautos.com')}/api/webhooks/paystack` : '/api/webhooks/paystack'}
+                                    </code>
+                                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-3">Add this URL in your Paystack Dashboard → Settings → API Keys & Webhooks</p>
+                                </div>
+                            </form>
+                        </div>
+                    )}
+
+                    {!['general', 'layout', 'payments'].includes(activeTab) && (
                         <div className="bg-white rounded-[40px] border border-slate-100 shadow-sm p-12 flex flex-col items-center justify-center h-[500px]">
                             <Settings size={64} className="text-slate-200 mb-6" />
                             <h3 className="text-xl font-black text-[#003366] uppercase tracking-tight mb-2">Module Offline</h3>

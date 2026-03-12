@@ -89,8 +89,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/notifications', [\App\Http\Controllers\API\NotificationController::class, 'index']);
     Route::patch('/notifications/{id}/read', [\App\Http\Controllers\API\NotificationController::class, 'markAsRead']);
 
-    // Payments
-    Route::post('/payments/initialize', [PaymentController::class, 'initialize']);
+    // Payments — Paystack
+    Route::post('/payments/paystack/initialize', [PaymentController::class, 'initializePaystack']);
+    Route::get('/payments/paystack/verify', [PaymentController::class, 'verifyPaystack']);
+    Route::get('/payments/paystack/public-key', [PaymentController::class, 'getPublicKey']);
+    Route::get('/payments/{id}/receipt', [PaymentController::class, 'receipt']);
     Route::get('/user/payments', [PaymentController::class, 'userPayments']);
 
     // Repair Progress (Client View)
@@ -103,6 +106,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/admin/stats', [\App\Http\Controllers\API\AdminDashboardController::class, 'stats']);
     Route::get('/admin/payments', [PaymentController::class, 'index']);
     Route::patch('/admin/payments/{id}/status', [PaymentController::class, 'updateStatus']);
+    Route::post('/admin/payments/create-invoice', [PaymentController::class, 'createInvoice']);
     
     // Admin: Repair Progress
     Route::post('/admin/bookings/{id}/progress', [RepairProgressController::class, 'store']);
@@ -134,3 +138,6 @@ Route::middleware('auth:sanctum')->group(function () {
 // Journal Public Routes
 Route::get('/journals', [JournalController::class, 'index']);
 Route::get('/journals/{id}', [JournalController::class, 'show']);
+
+// Paystack Webhook (no auth — verified via signature)
+Route::post('/webhooks/paystack', [PaymentController::class, 'paystackWebhook']);
