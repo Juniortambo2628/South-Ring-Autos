@@ -19,7 +19,6 @@ const menuItems = [
     { icon: CreditCard, label: "Billing & Invoices", path: "/dashboard/payments" },
     { icon: Car, label: "My Vehicles", path: "/dashboard/vehicles" },
     { icon: Star, label: "Loyalty Program", path: "/dashboard/loyalty" },
-    { icon: Settings, label: "Profile Settings", path: "/profile" },
 ];
 
 function Sidebar({ isOpen, toggleSidebar }: { isOpen: boolean; toggleSidebar: () => void }) {
@@ -38,24 +37,15 @@ function Sidebar({ isOpen, toggleSidebar }: { isOpen: boolean; toggleSidebar: ()
     return (
         <>
             {isOpen && <div className="fixed inset-0 bg-black/40 z-40 lg:hidden backdrop-blur-sm" onClick={toggleSidebar} />}
-            <aside className={`fixed top-0 left-0 bottom-0 w-72 bg-white text-slate-600 border-r border-slate-100 transition-transform duration-300 z-50 transform ${isOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}>
-                <div className="flex items-center justify-between p-8">
+            <aside className={`fixed top-0 left-0 bottom-0 w-72 bg-white text-slate-600 border-r border-slate-100 transition-transform duration-300 z-50 transform flex flex-col ${isOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}>
+                <div className="flex items-center justify-between p-8 shrink-0">
                     <Link href="/" className="flex items-center group">
                         <Image src={`${ASSET}/images/South-ring-logos/SR-Logo-Transparent-BG.png`} alt="South Ring Autos" width={140} height={56} className="h-10 w-auto object-contain" style={{ width: "auto" }} />
                     </Link>
                     <button onClick={toggleSidebar} className="lg:hidden text-slate-400 hover:text-red-600 transition-colors"><X size={24} /></button>
                 </div>
 
-                <div className="mt-4 px-6 mb-8">
-                    <Link href="/booking">
-                        <button className="w-full bg-red-600 hover:bg-red-700 text-white rounded-2xl py-4 flex items-center justify-center space-x-3 shadow-xl shadow-red-600/20 transition-all transform hover:-translate-y-1 group">
-                            <PlusCircle size={20} className="group-hover:rotate-90 transition-transform" />
-                            <span className="font-black text-[10px] uppercase tracking-[0.2em]">Book Appointment</span>
-                        </button>
-                    </Link>
-                </div>
-
-                <nav className="px-4 space-y-1">
+                <nav className="px-4 space-y-1 flex-1 overflow-y-auto">
                     <p className="px-6 py-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Main Menu</p>
                     {menuItems.map((item) => (
                         <Link key={item.path} href={item.path}
@@ -68,17 +58,6 @@ function Sidebar({ isOpen, toggleSidebar }: { isOpen: boolean; toggleSidebar: ()
                         </Link>
                     ))}
                 </nav>
-
-                <div className="absolute bottom-0 left-0 right-0 p-8 border-t border-slate-50 bg-slate-50/30">
-                    <Link href="/" className="flex items-center space-x-4 px-6 py-4 rounded-2xl text-slate-500 hover:bg-white hover:text-[#003366] transition-all group mb-2">
-                        <Home size={20} className="text-slate-400 group-hover:text-red-600 transition-colors" />
-                        <span className="text-xs font-bold uppercase tracking-wide">Back to Home</span>
-                    </Link>
-                    <button onClick={handleLogout} className="flex items-center space-x-4 w-full px-6 py-4 rounded-2xl text-red-600/70 hover:bg-red-50 hover:text-red-600 transition-all group">
-                        <LogOut size={20} />
-                        <span className="text-xs font-bold uppercase tracking-wide">Logout</span>
-                    </button>
-                </div>
             </aside>
         </>
     );
@@ -139,7 +118,11 @@ function Header({ toggleSidebar }: { toggleSidebar: () => void }) {
                 </div>
             </div>
 
-            <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-4">
+                <Link href="/booking" className="hidden sm:flex items-center space-x-2 bg-red-600 hover:bg-red-700 text-white rounded-2xl h-11 px-6 shadow-lg shadow-red-600/20 transition-all transform hover:-translate-y-0.5 group">
+                    <PlusCircle size={16} className="group-hover:rotate-90 transition-transform" />
+                    <span className="font-black text-[9px] uppercase tracking-[0.15em]">Book Appointment</span>
+                </Link>
                 <div className="relative" ref={notifRef}>
                     <button
                         onClick={() => setNotifOpen(!notifOpen)}

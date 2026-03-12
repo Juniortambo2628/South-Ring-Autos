@@ -4,15 +4,24 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\Vehicle;
 
 class VehicleController extends Controller
 {
     public function index(Request $request)
     {
+        $user = $request->user();
+
+        // Fetch vehicles owned by this user via the clients table
+        $client = DB::table('clients')->where('email', $user->email)->first();
+        $vehicles = $client
+            ? Vehicle::where('client_id', $client->id)->get()
+            : collect([]);
+
         return response()->json([
             'success' => true,
-            'data' => $request->user()->vehicles
+            'data' => $vehicles
         ]);
     }
 
@@ -27,7 +36,24 @@ class VehicleController extends Controller
             'mileage' => 'nullable|integer',
         ]);
 
-        $vehicle = $request->user()->vehicles()->create($validated);
+        $user = $request->user();
+
+        // Find or create the client record (vehicles FK references clients, not users)
+        $client = DB::table('clients')->where('email', $user->email)->first();
+        if (!$client) {
+            $clientId = DB::table('clients')->insertGetId([
+                'name' => $user->name,
+                'email' => $user->email,
+                'phone' => $user->phone ?? '',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        } else {
+            $clientId = $client->id;
+        }
+
+        $validated['client_id'] = $clientId;
+        $vehicle = Vehicle::create($validated);
 
         return response()->json([
             'success' => true,

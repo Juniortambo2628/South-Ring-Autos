@@ -39,8 +39,16 @@ class BookingController extends Controller
 
             // 1. Handle Client/User identification
             if ($user) {
-                // Logged-in user: use their id as client_id (bookings table uses client_id)
-                $client_id = $user->id;
+                // Logged-in user: find or create matching client record
+                $client = Client::where('email', $user->email)->first();
+                if (!$client) {
+                    $client = Client::create([
+                        'name' => $user->name,
+                        'email' => $user->email,
+                        'phone' => $user->phone ?? $validated['phone'],
+                    ]);
+                }
+                $client_id = $client->id;
             } else if (!empty($validated['email'])) {
                 $client = Client::where('email', $validated['email'])->first();
                 
@@ -60,19 +68,14 @@ class BookingController extends Controller
 
             // 2. Find or Create Vehicle
             $vehicle = null;
-            if ($user || $client) {
-                $query = Vehicle::query();
-                if ($user) {
-                    $query->where('client_id', $user->id);
-                } else {
-                    $query->where('client_id', $client->id);
-                }
-                
-                $vehicle = $query->where('registration', $validated['registration'])->first();
+            if ($client_id) {
+                $vehicle = Vehicle::where('client_id', $client_id)
+                    ->where('registration', $validated['registration'])
+                    ->first();
 
                 if (!$vehicle && !empty($validated['vehicle_make'])) {
                     $vehicle = Vehicle::create([
-                        'client_id' => $user ? $user->id : ($client ? $client->id : null),
+                        'client_id' => $client_id,
                         'make' => $validated['vehicle_make'],
                         'model' => $validated['vehicle_model'],
                         'year' => $validated['vehicle_year'] ?? null,
