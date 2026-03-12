@@ -11,7 +11,7 @@ import Link from "next/link";
 import api from "@/lib/api";
 
 const ASSET = process.env.NEXT_PUBLIC_ASSET_URL || "";
-export default function JournalDetailPage() {
+export default function JournalDetailPage({ params: paramsPromise }: { params: Promise<{ id: string }> }) {
     const params = useParams();
     const router = useRouter();
     const [journal, setJournal] = useState<any>(null);
