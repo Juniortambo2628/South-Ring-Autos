@@ -127,11 +127,17 @@ class BookingController extends Controller
             return response()->json(['success' => false, 'message' => 'Unauthorized'], 401);
         }
 
+        // Resolve client record from clients table
+        $client = \Illuminate\Support\Facades\DB::table('clients')->where('email', $user->email)->first();
+        $clientId = $client ? $client->id : null;
+
         // Query by email (reliable) or client_id (for users who booked while logged in)
         $bookings = Booking::with('vehicle')
-            ->where(function ($q) use ($user) {
-                $q->where('email', $user->email)
-                  ->orWhere('client_id', $user->id);
+            ->where(function ($q) use ($user, $clientId) {
+                $q->where('email', $user->email);
+                if ($clientId) {
+                    $q->orWhere('client_id', $clientId);
+                }
             })
             ->latest()
             ->get();

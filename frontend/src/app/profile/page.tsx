@@ -104,7 +104,7 @@ export default function ProfilePage() {
                                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-2">JPG, GIF or PNG. Max size of 2MB.</p>
                             </div>
                         </div>
-                        <Button className="bg-white hover:bg-slate-50 text-[#003366] border border-slate-200 rounded-2xl text-[10px] font-black uppercase tracking-widest px-8 h-12 shadow-none transition-all">Upload New</Button>
+                        <Button onClick={() => { /* TODO: avatar upload */ alert('Avatar upload coming soon!'); }} className="bg-white hover:bg-slate-50 text-[#003366] border border-slate-200 rounded-2xl text-[10px] font-black uppercase tracking-widest px-8 h-12 shadow-none transition-all">Upload New</Button>
                     </div>
 
                     {/* Form Card */}

@@ -24,7 +24,7 @@ class AdminDashboardController extends Controller
             'total_users' => User::where('role', 'client')->count(),
             'total_posts' => BlogPost::count(),
             'new_messages' => ContactMessage::where('status', 'unread')->count(),
-            'recent_bookings' => Booking::with(['user', 'vehicle'])
+            'recent_bookings' => Booking::with(['client', 'vehicle'])
                 ->latest()
                 ->take(5)
                 ->get(),

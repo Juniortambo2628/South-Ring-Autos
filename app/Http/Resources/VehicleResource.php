@@ -32,11 +32,11 @@ class VehicleResource extends JsonResource
             'updated_at' => $this->updated_at,
 
             // Relationships / Computed
-            'owner' => $this->whenLoaded('user', function () {
-                return $this->user->name;
+            'owner' => $this->whenLoaded('client', function () {
+                return $this->client->name;
             }),
-            'owner_email' => $this->whenLoaded('user', function () {
-                return $this->user->email;
+            'owner_email' => $this->whenLoaded('client', function () {
+                return $this->client->email;
             }),
         ];
     }

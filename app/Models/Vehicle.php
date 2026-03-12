@@ -21,9 +21,9 @@ class Vehicle extends Model
         'notes',
     ];
 
-    public function user()
+    public function client()
     {
-        return $this->belongsTo(User::class, 'client_id');
+        return $this->belongsTo(Client::class, 'client_id');
     }
 
     public function bookings()

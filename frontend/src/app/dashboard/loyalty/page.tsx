@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import api from "@/lib/api";
+import { useToast } from "@/hooks/use-toast";
 
 const rewards = [
     { id: 1, title: "Free Oil Filter", points: "200", icon: Gift, color: "text-blue-600", bg: "bg-blue-50" },
@@ -19,6 +20,7 @@ const rewards = [
 export default function LoyaltyPage() {
     const [stats, setStats] = useState<any>(null);
     const [loading, setLoading] = useState(true);
+    const { toast } = useToast();
 
     useEffect(() => {
         fetchStats();
@@ -127,6 +129,7 @@ export default function LoyaltyPage() {
                                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-8">{reward.points} Points Required</p>
                                     <Button
                                         disabled={currentPoints < parseInt(reward.points)}
+                                        onClick={() => toast({ title: "Coming Soon", description: "Reward redemption will be available shortly." })}
                                         className="w-full bg-slate-50 hover:bg-red-600 hover:text-white text-[#003366] border border-slate-100 rounded-2xl h-12 text-[9px] font-black uppercase tracking-widest transition-all shadow-none disabled:opacity-30 disabled:hover:bg-slate-50 disabled:hover:text-[#003366]"
                                     >
                                         {currentPoints < parseInt(reward.points) ? 'Insufficient Points' : 'Redeem Now'}
@@ -154,7 +157,7 @@ export default function LoyaltyPage() {
                             </div>
                         </div>
                         <div className="p-8 border-t border-slate-50">
-                            <Button variant="outline" className="w-full rounded-2xl h-12 text-[9px] font-black uppercase tracking-widest text-[#003366] border-slate-200 shadow-none">
+                            <Button onClick={() => toast({ title: "Coming Soon", description: "Points earning guide will be available shortly." })} variant="outline" className="w-full rounded-2xl h-12 text-[9px] font-black uppercase tracking-widest text-[#003366] border-slate-200 shadow-none">
                                 How to Earn Points
                             </Button>
                         </div>
@@ -165,7 +168,7 @@ export default function LoyaltyPage() {
                             <Sparkles size={32} className="text-amber-500 mb-6" />
                             <h4 className="text-sm font-black text-[#003366] uppercase tracking-tighter mb-4">Refer a Friend</h4>
                             <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest leading-relaxed mb-8">Earn 100 points for every successfully booked clinic appointment from your referral.</p>
-                            <Button className="w-full bg-[#003366] hover:bg-red-600 text-white rounded-2xl h-14 font-black uppercase tracking-widest text-[9px] shadow-lg shadow-blue-900/10 transition-all border-none">
+                            <Button onClick={() => toast({ title: "Coming Soon", description: "Referral program will be available shortly." })} className="w-full bg-[#003366] hover:bg-red-600 text-white rounded-2xl h-14 font-black uppercase tracking-widest text-[9px] shadow-lg shadow-blue-900/10 transition-all border-none">
                                 Invite Friends
                             </Button>
                         </div>

@@ -42,9 +42,12 @@ class PaymentController extends Controller
         $user = $request->user('sanctum');
         $booking = Booking::findOrFail($request->booking_id);
 
-        // Security check
-        if ($user && $booking->client_id !== $user->id && $user->role !== 'admin') {
-             return response()->json(['success' => false, 'message' => 'Unauthorized access to this booking'], 403);
+        // Security check — resolve client from user email, since client_id references clients table
+        if ($user && $user->role !== 'admin') {
+            $client = \Illuminate\Support\Facades\DB::table('clients')->where('email', $user->email)->first();
+            if (!$client || $booking->client_id !== $client->id) {
+                return response()->json(['success' => false, 'message' => 'Unauthorized access to this booking'], 403);
+            }
         }
 
         // Check if an active payment already exists

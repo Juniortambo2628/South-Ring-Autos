@@ -5,7 +5,9 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\DeliveryRequest;
 use App\Models\Booking;
+use App\Models\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DeliveryController extends Controller
 {
@@ -25,9 +27,16 @@ class DeliveryController extends Controller
 
         $user = $request->user('sanctum');
 
+        // Resolve client_id through the clients table
+        $clientId = null;
+        if ($user) {
+            $client = DB::table('clients')->where('email', $user->email)->first();
+            $clientId = $client ? $client->id : null;
+        }
+
         $delivery = DeliveryRequest::create([
             'booking_id' => $request->booking_id,
-            'client_id' => $user ? $user->id : null,
+            'client_id' => $clientId,
             'type' => $request->type,
             'address' => $request->address,
             'city' => $request->city,

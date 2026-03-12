@@ -54,6 +54,9 @@ Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 Route::post('/user/complete-profile', [AuthController::class, 'completeProfile'])->middleware('auth:sanctum');
 
+// Profile Update (used by /profile page)
+Route::post('/user/update-profile', [\App\Http\Controllers\API\ClientDashboardController::class, 'updateProfile'])->middleware('auth:sanctum');
+
 // Subscriptions
 Route::post('/subscribe', [\App\Http\Controllers\API\SubscriberController::class, 'subscribe']);
 

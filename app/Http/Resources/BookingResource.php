@@ -34,7 +34,6 @@ class BookingResource extends JsonResource
             // Loaded Relationships
             'client' => $this->whenLoaded('client'),
             'vehicle' => new VehicleResource($this->whenLoaded('vehicle')),
-            'user' => $this->whenLoaded('user'),
         ];
     }
 }
