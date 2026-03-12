@@ -12,9 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('payments', function (Blueprint $table) {
-            $table->unsignedBigInteger('booking_id')->nullable()->change();
+            // Drop foreign key first to allow changing the column type
+            $table->dropForeign(['booking_id']);
+        });
+
+        Schema::table('payments', function (Blueprint $table) {
+            // Change to integer to match bookings.id (which was created as integer('id', true))
+            $table->integer('booking_id')->nullable()->change();
             $table->string('payment_type')->default('booking'); // booking, journal
             $table->foreignId('journal_id')->nullable()->constrained()->nullOnDelete();
+            
+            // Re-add foreign key
+            $table->foreign('booking_id')->references('id')->on('bookings')->cascadeOnDelete();
         });
     }
 

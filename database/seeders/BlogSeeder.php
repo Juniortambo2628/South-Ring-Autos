@@ -15,14 +15,14 @@ class BlogSeeder extends Seeder
         $posts = [];
 
         foreach ($years as $year) {
-            for ($i = 1; $i <= 5; $i++) {
+            foreach ($categories as $index => $category) {
                 $posts[] = [
-                    'title' => "The Ultimate Guide to Automotive $categories[$i] in $year - Part $i",
-                    'excerpt' => "Explore the intricacies and advancements of $categories[$i] during the year $year. This article delves deep into what changed and how you can adapt.",
-                    'content' => "<p>Welcome to our comprehensive deep-dive into $categories[$i] for the year $year.</p><h2>The Landscape of $year</h2><p>Our experts have spent countless hours analyzing data and testing the latest models. This guide will provide you with unparalleled insights into maintaining, buying, and understanding vehicles in $year.</p><h3>Key Takeaways</h3><ul><li>Always check the manufacturer guidelines.</li><li>Stay updated with the latest software patches for your car's ECU.</li><li>Regular maintenance saves money in the long run.</li></ul><p>As we look towards the future, the lessons learned in $year will undoubtedly shape the automotive industry for decades to come.</p>",
-                    'category' => $categories[$i % count($categories)],
+                    'title' => "The Ultimate Guide to Automotive $category in $year - Part " . ($index + 1),
+                    'excerpt' => "Explore the intricacies and advancements of $category during the year $year. This article delves deep into what changed and how you can adapt.",
+                    'content' => "<p>Welcome to our comprehensive deep-dive into $category for the year $year.</p><h2>The Landscape of $year</h2><p>Our experts have spent countless hours analyzing data and testing the latest models. This guide will provide you with unparalleled insights into maintaining, buying, and understanding vehicles in $year.</p><h3>Key Takeaways</h3><ul><li>Always check the manufacturer guidelines.</li><li>Stay updated with the latest software patches for your car's ECU.</li><li>Regular maintenance saves money in the long run.</li></ul><p>As we look towards the future, the lessons learned in $year will undoubtedly shape the automotive industry for decades to come.</p>",
+                    'category' => $category,
                     'status' => 'published',
-                    'created_at' => Carbon::create($year, ($i * 2), 15),
+                    'created_at' => Carbon::create($year, (($index + 1) * 2), 15),
                 ];
             }
         }

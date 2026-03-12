@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('blog_post_journal', function (Blueprint $table) {
             $table->id();
             $table->foreignId('journal_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('blog_post_id')->constrained()->cascadeOnDelete();
+            $table->integer('blog_post_id');
+            $table->foreign('blog_post_id')->references('id')->on('blog_posts')->cascadeOnDelete();
             $table->timestamps();
             
             // Ensure a blog can only be specifically featured once per journal

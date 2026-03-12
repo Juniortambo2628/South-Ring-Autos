@@ -1,0 +1,59 @@
+﻿  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+System.Management.Automation.RemoteException
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0* Host api.southringautos.com:443 was resolved.
+* IPv6: (none)
+* IPv4: 51.89.113.223
+*   Trying 51.89.113.223:443...
+* schannel: disabled automatic use of client certificate
+* ALPN: curl offers http/1.1
+System.Management.Automation.RemoteException
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0* ALPN: server accepted http/1.1
+* Connected to api.southringautos.com (51.89.113.223) port 443
+* using HTTP/1.x
+> HEAD /api/settings HTTP/1.1
+System.Management.Automation.RemoteException
+> Host: api.southringautos.com
+System.Management.Automation.RemoteException
+> User-Agent: curl/8.13.0
+System.Management.Automation.RemoteException
+> Accept: */*
+System.Management.Automation.RemoteException
+> Origin: https://southringautos.com
+System.Management.Automation.RemoteException
+> 
+System.Management.Automation.RemoteException
+* Request completely sent off
+< HTTP/1.1 200 OK
+System.Management.Automation.RemoteException
+< Connection: Keep-Alive
+System.Management.Automation.RemoteException
+< Keep-Alive: timeout=5, max=100
+System.Management.Automation.RemoteException
+< content-type: text/html; charset=utf-8
+System.Management.Automation.RemoteException
+< cache-control: no-cache, private
+System.Management.Automation.RemoteException
+< set-cookie: XSRF-TOKEN=eyJpdiI6IlBVMDRjMVl6d0REZEQ2N3JqUUFGUXc9PSIsInZhbHVlIjoiMzR1Q2loVnZTSGJqLzhRZExPOTY1RVE4OUxrMTNKN3pkemJHUUtyNWxpc2E0SWFKVndERTRyUG4vRGtZcGU1TG1INXNsdTFsVG1aVXdqcVpVNUpxL3Q5QjUyUjlvVGhTYnd0RWFyTGwzcXFJOHM2Tjdkck1walhzNGVKUjVOQ04iLCJtYWMiOiIyNTFiY2UwNjA1MDkzODI3ODJiNDhjN2Q5YjNhODAwNjMwNGRjNmY3OWU4MTk0ZmZkMWQxNTczMzRlZjdkYjA4IiwidGFnIjoiIn0%3D; expires=Wed, 11 Mar 2026 20:54:14 GMT; Max-Age=7200; path=/; domain=.southringautos.com; secure; samesite=lax
+System.Management.Automation.RemoteException
+< set-cookie: south-ring-autos-session=eyJpdiI6IjFzS2V0YW5aV0wxQUMrOXM3VTV5T0E9PSIsInZhbHVlIjoiaUQ4SXVQb1gwRk1SZWRBUVBtenZJbTdueStsbnJKQjgrUDc3QWpJVjZDeXZqM0loNEwrMzdNSXMxcGFYOXg1bUJ3Z0I0d1VnQ0xFMkNuc3U2aThHMnAyelNIR09NZDVRMkExMjNpWkZFNm54WXZIOGo4dW5ad1R0Q3dzcEs0YkoiLCJtYWMiOiI5OWVkMTNiZDE2ZTJhNGU1NmM2NDRlNjUwODlmMWNiMmFjZmNhZTBiYjJkZjY4MzUwYWE2NjI3MjA5NWE4MGNhIiwidGFnIjoiIn0%3D; expires=Wed, 11 Mar 2026 20:54:14 GMT; Max-Age=7200; path=/; domain=.southringautos.com; secure; httponly; samesite=lax
+System.Management.Automation.RemoteException
+< date: Wed, 11 Mar 2026 18:54:14 GMT
+System.Management.Automation.RemoteException
+< alt-svc: h3=":443"; ma=2592000, h3-29=":443"; ma=2592000, h3-Q050=":443"; ma=2592000, h3-Q046=":443"; ma=2592000, h3-Q043=":443"; ma=2592000, quic=":443"; ma=2592000; v="43,46"
+System.Management.Automation.RemoteException
+< 
+System.Management.Automation.RemoteException
+System.Management.Automation.RemoteException
+  0     0    0     0    0     0      0      0 --:--:--  0:00:01 --:--:--     0
+* Connection #0 to host api.southringautos.com left intact
+HTTP/1.1 200 OK
+Connection: Keep-Alive
+Keep-Alive: timeout=5, max=100
+content-type: text/html; charset=utf-8
+cache-control: no-cache, private
+set-cookie: XSRF-TOKEN=eyJpdiI6IlBVMDRjMVl6d0REZEQ2N3JqUUFGUXc9PSIsInZhbHVlIjoiMzR1Q2loVnZTSGJqLzhRZExPOTY1RVE4OUxrMTNKN3pkemJHUUtyNWxpc2E0SWFKVndERTRyUG4vRGtZcGU1TG1INXNsdTFsVG1aVXdqcVpVNUpxL3Q5QjUyUjlvVGhTYnd0RWFyTGwzcXFJOHM2Tjdkck1walhzNGVKUjVOQ04iLCJtYWMiOiIyNTFiY2UwNjA1MDkzODI3ODJiNDhjN2Q5YjNhODAwNjMwNGRjNmY3OWU4MTk0ZmZkMWQxNTczMzRlZjdkYjA4IiwidGFnIjoiIn0%3D; expires=Wed, 11 Mar 2026 20:54:14 GMT; Max-Age=7200; path=/; domain=.southringautos.com; secure; samesite=lax
+set-cookie: south-ring-autos-session=eyJpdiI6IjFzS2V0YW5aV0wxQUMrOXM3VTV5T0E9PSIsInZhbHVlIjoiaUQ4SXVQb1gwRk1SZWRBUVBtenZJbTdueStsbnJKQjgrUDc3QWpJVjZDeXZqM0loNEwrMzdNSXMxcGFYOXg1bUJ3Z0I0d1VnQ0xFMkNuc3U2aThHMnAyelNIR09NZDVRMkExMjNpWkZFNm54WXZIOGo4dW5ad1R0Q3dzcEs0YkoiLCJtYWMiOiI5OWVkMTNiZDE2ZTJhNGU1NmM2NDRlNjUwODlmMWNiMmFjZmNhZTBiYjJkZjY4MzUwYWE2NjI3MjA5NWE4MGNhIiwidGFnIjoiIn0%3D; expires=Wed, 11 Mar 2026 20:54:14 GMT; Max-Age=7200; path=/; domain=.southringautos.com; secure; httponly; samesite=lax
+date: Wed, 11 Mar 2026 18:54:14 GMT
+alt-svc: h3=":443"; ma=2592000, h3-29=":443"; ma=2592000, h3-Q050=":443"; ma=2592000, h3-Q046=":443"; ma=2592000, h3-Q043=":443"; ma=2592000, quic=":443"; ma=2592000; v="43,46"
+
