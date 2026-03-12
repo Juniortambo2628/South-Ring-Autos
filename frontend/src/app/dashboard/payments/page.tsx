@@ -13,8 +13,9 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import api from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
+import { Suspense } from "react";
 
-export default function PaymentsPage() {
+function PaymentsContent() {
     const [searchTerm, setSearchTerm] = useState("");
     const [payments, setPayments] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
@@ -253,5 +254,20 @@ export default function PaymentsPage() {
                 )}
             </div>
         </DashboardLayout>
+    );
+}
+
+export default function PaymentsPage() {
+    return (
+        <Suspense fallback={
+            <DashboardLayout>
+                <div className="flex flex-col items-center justify-center h-[400px]">
+                    <Loader2 className="w-8 h-8 text-red-600 animate-spin mb-4" />
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Loading billing center...</p>
+                </div>
+            </DashboardLayout>
+        }>
+            <PaymentsContent />
+        </Suspense>
     );
 }
