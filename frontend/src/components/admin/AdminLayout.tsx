@@ -7,7 +7,7 @@ import {
     LayoutDashboard, CalendarDays, FileText, MessageSquare,
     Settings, LogOut, Menu, X, UserCircle, Bell, Wrench,
     ChevronDown, ExternalLink, Plus, CreditCard, Car, Users,
-    Truck, Activity, BookOpen, Mail
+    Truck, Activity, BookOpen, Mail, Quote
 } from "lucide-react";
 import api from "@/lib/api";
 import { NotificationProvider, useNotifications } from "@/lib/NotificationContext";
