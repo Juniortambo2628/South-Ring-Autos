@@ -25,8 +25,9 @@
 
     # Allow CORS for static assets
     <IfModule mod_headers.c>
-        <FilesMatch "\.(gif|jpe?g|png|ico|svg|css|js)$">
+        <FilesMatch "\.(gif|jpe?g|png|ico|svg|css|js|webp|avif)$">
             Header set Access-Control-Allow-Origin "*"
+            Header set Access-Control-Allow-Methods "GET, OPTIONS"
         </FilesMatch>
     </IfModule>
 </IfModule>

@@ -18,9 +18,12 @@ return [
         env('FRONTEND_URL', 'http://localhost:3000'),
         'https://southringautos.com',
         'https://www.southringautos.com',
+        'https://api.southringautos.com',
     ],
 
-    'allowed_origins_patterns' => [],
+    'allowed_origins_patterns' => [
+        '/^https:\/\/.*\.southringautos\.com$/',
+    ],
 
     'allowed_headers' => ['*'],
 
