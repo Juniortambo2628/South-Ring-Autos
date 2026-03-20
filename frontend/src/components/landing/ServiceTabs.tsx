@@ -16,7 +16,7 @@ const ICON_MAP: Record<string, React.ReactNode> = {
     'Truck': <Truck size={20} />
 };
 
-export default function ServiceTabs() {
+export default function ServiceTabs({ content }: { content?: any }) {
     const [services, setServices] = useState<any[]>([]);
     const [activeTab, setActiveTab] = useState<number | null>(null);
     const [loading, setLoading] = useState(true);

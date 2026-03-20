@@ -5,7 +5,7 @@ import Link from "next/link";
 import api from "@/lib/api";
 import { ArrowRight, Calendar, User, BookOpen } from "lucide-react";
 
-export default function FeaturedJournals() {
+export default function FeaturedJournals({ content }: { content?: any }) {
     const [journals, setJournals] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const ASSET_URL = process.env.NEXT_PUBLIC_ASSET_URL || "http://127.0.0.1:8000";

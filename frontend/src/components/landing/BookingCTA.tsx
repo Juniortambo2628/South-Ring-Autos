@@ -1,7 +1,7 @@
 import { Clock, ShieldCheck, Wrench, UserPlus } from "lucide-react";
 import Link from "next/link";
 
-export default function BookingCTA() {
+export default function BookingCTA({ content }: { content?: any }) {
     return (
         <section className="py-24 bg-slate-900 relative overflow-hidden">
             <div className="absolute inset-0 z-0 opacity-40 bg-cover bg-fixed bg-center" style={{ backgroundImage: `url(${process.env.NEXT_PUBLIC_ASSET_URL || ""}/images/Hero-Slide-2-BG.jpg)` }} />

@@ -27,7 +27,11 @@ const DEFAULT_SECTIONS = [
   { id: 'contact', visible: true, component: BookingCTA }
 ];
 
-const COMPONENT_MAP: Record<string, React.FC> = {
+interface LandingSectionProps {
+  content?: any;
+}
+
+const COMPONENT_MAP: Record<string, React.ComponentType<LandingSectionProps>> = {
   'hero': HeroSection,
   'services': ServiceTabs,
   'appraisal': ServiceHighlights,

@@ -5,7 +5,7 @@ import Link from "next/link";
 import api from "@/lib/api";
 import { ArrowRight, Calendar, User } from "lucide-react";
 
-export default function LatestBlogs() {
+export default function LatestBlogs({ content }: { content?: any }) {
     const [blogs, setBlogs] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const ASSET_URL = process.env.NEXT_PUBLIC_ASSET_URL || "http://127.0.0.1:8000";

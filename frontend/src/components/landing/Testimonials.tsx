@@ -6,7 +6,7 @@ import api from "@/lib/api";
 
 const ASSET_URL = process.env.NEXT_PUBLIC_ASSET_URL || "http://127.0.0.1:8000";
 
-export default function Testimonials() {
+export default function Testimonials({ content }: { content?: any }) {
     const [testimonials, setTestimonials] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 

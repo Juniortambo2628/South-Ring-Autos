@@ -7,7 +7,7 @@ const highlights = [
     { icon: Wrench, title: "Material Guarantee", desc: "We use proper equipment and ECU diagnostics so problems get fixed right the first time every single time.", link: "/services" },
 ];
 
-export default function ServiceHighlights() {
+export default function ServiceHighlights({ content }: { content?: any }) {
     return (
         <div className="container mx-auto px-4 -mt-12 relative z-20 pb-12">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-0 rounded-xl overflow-hidden shadow-none border border-slate-100">
