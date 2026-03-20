@@ -64,6 +64,7 @@ export default function AddVehicleModal({ open, onOpenChange, onSuccess }: AddVe
                     year: "",
                     registration: "",
                     color: "",
+                    fuel_type: "",
                     mileage: "",
                 });
                 onSuccess();
