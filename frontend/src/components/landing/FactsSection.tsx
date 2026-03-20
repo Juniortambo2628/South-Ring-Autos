@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { CheckCircle, Users, Car, Clock } from "lucide-react";
+import { CheckCircle, Users, Car, Clock, Wrench } from "lucide-react";
 
 const ASSET = process.env.NEXT_PUBLIC_ASSET_URL || "";
 
