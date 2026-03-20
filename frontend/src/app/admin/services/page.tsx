@@ -340,6 +340,7 @@ export default function AdminServicesPage() {
             ) : viewMode === 'grid' ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {filteredServices.map(service => (
+                        <div key={service.id} className="relative p-8 bg-white rounded-[32px] border border-slate-50 group hover:shadow-xl hover:shadow-blue-900/5 transition-all">
                             <div className="absolute top-4 left-4 z-10 text-slate-400 cursor-pointer" onClick={() => toggleSelection(service.id)}>
                                 {selectedIds.includes(service.id) ? <CheckSquare className="text-red-600" size={20} /> : <Square size={20} className="opacity-0 group-hover:opacity-100 transition-opacity" />}
                             </div>
