@@ -20,23 +20,38 @@ export default function JournalDetailPage({ params: paramsPromise }: { params: P
     const [user, setUser] = useState<any>(null);
     const [notification, setNotification] = useState<{ type: "success" | "error"; message: string } | null>(null);
 
+    const [scriptLoaded, setScriptLoaded] = useState(false);
+
     useEffect(() => {
+        // Load Paystack inline JS
+        if (typeof window !== "undefined" && !window.PaystackPop) {
+            const script = document.createElement("script");
+            script.src = "https://js.paystack.co/v2/inline.js";
+            script.async = true;
+            script.onload = () => setScriptLoaded(true);
+            document.head.appendChild(script);
+        } else {
+            setScriptLoaded(true);
+        }
+
         const stored = localStorage.getItem("user");
         if (stored) setUser(JSON.parse(stored));
 
-        const fetchJournal = async () => {
-            try {
-                const res = await api.get(`/journals/${params.id}`);
-                setJournal(res.data.data);
-            } catch (err) {
-                console.error("Failed to fetch journal details", err);
-                setNotification({ type: "error", message: "Could not load journal details." });
-            } finally {
-                setLoading(false);
-            }
-        };
         fetchJournal();
     }, [params.id]);
+
+    const fetchJournal = async () => {
+        setLoading(true);
+        try {
+            const res = await api.get(`/journals/${params.id}`);
+            setJournal(res.data.data);
+        } catch (err) {
+            console.error("Failed to fetch journal details", err);
+            setNotification({ type: "error", message: "Could not load journal details." });
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handlePurchase = async () => {
         if (!user) {
@@ -44,23 +59,76 @@ export default function JournalDetailPage({ params: paramsPromise }: { params: P
             return;
         }
 
+        if (!window.PaystackPop) {
+            setNotification({ type: "error", message: "Payment script still loading. Please wait a moment." });
+            return;
+        }
+
         setPurchasing(true);
         try {
-            const response = await api.post("/journals/purchase", {
-                journal_id: journal.id
+            // 1. Initiate purchase on backend
+            const initRes = await api.post("/journals/purchase", {
+                journal_id: journal.id,
+                payment_method: "paystack"
             });
-            setNotification({ type: "success", message: "Purchase initialized! Redirecting to dashboard..." });
-            // In a real flow, this might go to a payment gateway first
-            router.push("/dashboard/payments");
+
+            if (!initRes.data.success) {
+                setNotification({ type: "error", message: initRes.data.message || "Failed to initialize purchase." });
+                setPurchasing(false);
+                return;
+            }
+
+            const { payment_id, amount } = initRes.data.data;
+
+            // 2. Initialize Paystack transaction
+            const payRes = await api.post("/payments/paystack/initialize", {
+                payment_id: payment_id
+            });
+
+            if (!payRes.data.success) {
+                setNotification({ type: "error", message: payRes.data.message || "Failed to initialize payment gateway." });
+                setPurchasing(false);
+                return;
+            }
+
+            const { access_code, reference } = payRes.data.data;
+
+            // 3. Get Public Key
+            const keyRes = await api.get("/payments/paystack/public-key");
+            const publicKey = keyRes.data.data?.public_key;
+
+            if (!publicKey) {
+                setNotification({ type: "error", message: "Payment gateway is not configured." });
+                setPurchasing(false);
+                return;
+            }
+
+            // 4. Open Paystack popup
+            const popup = new window.PaystackPop();
+            popup.newTransaction({
+                key: publicKey,
+                accessCode: access_code,
+                onSuccess: async (transaction: any) => {
+                    setNotification({ type: "success", message: "Payment successful! Verifying access..." });
+                    try {
+                        // Verify on backend
+                        await api.get(`/payments/paystack/verify?reference=${reference}`);
+                        // Reload journal data to show "Read" button
+                        fetchJournal();
+                    } catch (e) {
+                        console.error("Verification failed, but access might be granted via webhook later", e);
+                        setNotification({ type: "success", message: "Payment confirmed. Access will be granted shortly." });
+                    }
+                },
+                onCancel: () => {
+                    setPurchasing(false);
+                },
+            });
+
         } catch (error: any) {
             console.error("Purchase failed", error);
-            if (error.response?.status === 422) {
-                const message = error.response.data.message || "Validation error";
-                setNotification({ type: "error", message });
-            } else {
-                setNotification({ type: "error", message: "Failed to process purchase. Please try again." });
-            }
-        } finally {
+            const message = error.response?.data?.message || "Failed to process purchase. Please try again.";
+            setNotification({ type: "error", message });
             setPurchasing(false);
         }
     };

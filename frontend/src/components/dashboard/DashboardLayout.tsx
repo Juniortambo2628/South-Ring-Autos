@@ -10,6 +10,7 @@ import {
     ChevronDown, Home, Star, PlusCircle, Loader2, CreditCard
 } from "lucide-react";
 import api from "@/lib/api";
+import { NotificationProvider, useNotifications } from "@/lib/NotificationContext";
 
 const ASSET = process.env.NEXT_PUBLIC_ASSET_URL || "";
 
@@ -67,27 +68,16 @@ function Header({ toggleSidebar }: { toggleSidebar: () => void }) {
     const [user, setUser] = useState<any>(null);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [notifOpen, setNotifOpen] = useState(false);
-    const [notifications, setNotifications] = useState<any[]>([]);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const notifRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
 
+    const { notifications, unreadCount, markAsRead, markAllAsRead, deleteAll } = useNotifications();
+
     useEffect(() => {
         const stored = localStorage.getItem("user");
         if (stored) setUser(JSON.parse(stored));
-        fetchNotifications();
     }, []);
-
-    const fetchNotifications = async () => {
-        try {
-            const res = await api.get("/notifications");
-            if (res.data.success) setNotifications(res.data.data);
-        } catch (err) { }
-    };
-
-    const markAsRead = async (id: number) => {
-        try { await api.patch(`/notifications/${id}/read`); fetchNotifications(); } catch (err) { }
-    };
 
     useEffect(() => {
         const handler = (e: MouseEvent) => {
@@ -104,8 +94,6 @@ function Header({ toggleSidebar }: { toggleSidebar: () => void }) {
         localStorage.removeItem("user");
         router.push("/login");
     };
-
-    const unreadCount = notifications.filter(n => !n.read_status).length;
 
     return (
         <header className="h-20 bg-white border-b border-slate-100 sticky top-0 z-30 flex items-center justify-between px-8 backdrop-blur-xl bg-white/80">
@@ -147,10 +135,13 @@ function Header({ toggleSidebar }: { toggleSidebar: () => void }) {
                                     notifications.map((n) => (
                                         <div
                                             key={n.id}
-                                            className={`p-6 border-b border-slate-50 last:border-0 hover:bg-slate-50/50 transition-colors cursor-pointer relative group ${!n.read_status ? 'bg-blue-50/20' : ''}`}
-                                            onClick={() => markAsRead(n.id)}
+                                            className={`p-6 border-b border-slate-50 last:border-0 hover:bg-slate-50/50 transition-colors cursor-pointer relative group ${!n.read_at ? 'bg-blue-50/20' : ''}`}
+                                            onClick={() => {
+                                                if (!n.read_at) markAsRead(n.id);
+                                                if (n.link) router.push(n.link);
+                                            }}
                                         >
-                                            {!n.read_status && <div className="absolute left-2 top-1/2 -translate-y-1/2 w-1 h-8 bg-red-600 rounded-full" />}
+                                            {!n.read_at && <div className="absolute left-2 top-1/2 -translate-y-1/2 w-1 h-8 bg-red-600 rounded-full" />}
                                             <p className="text-[11px] font-black text-[#003366] uppercase tracking-tight mb-1">{n.title}</p>
                                             <p className="text-[10px] font-medium text-slate-500 line-clamp-2 leading-relaxed">{n.message}</p>
                                             <p className="text-[8px] font-black text-slate-300 uppercase tracking-widest mt-3">{new Date(n.created_at).toLocaleDateString()}</p>
@@ -165,7 +156,7 @@ function Header({ toggleSidebar }: { toggleSidebar: () => void }) {
                                     </div>
                                 )}
                             </div>
-                            <button className="w-full py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-t border-slate-50 hover:bg-slate-50 transition-all">Clear All</button>
+                            <button onClick={deleteAll} className="w-full py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-t border-slate-50 hover:bg-slate-50 transition-all hover:text-red-600">Clear All</button>
                         </div>
                     )}
                 </div>
@@ -245,25 +236,27 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     }
 
     return (
-        <div className="min-h-screen bg-slate-50/50 font-sans text-slate-700 antialiased selection:bg-red-600 selection:text-white">
-            <Sidebar isOpen={sidebarOpen} toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
-            <div className="lg:pl-72 flex flex-col min-h-screen">
-                <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
-                <main className="flex-1 p-6 lg:p-12 overflow-x-hidden">
-                    {children}
-                </main>
-                <footer className="px-8 lg:px-12 py-10">
-                    <div className="border-t border-slate-200/60 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-loose">
-                            &copy; {new Date().getFullYear()} South Ring Autos. All rights reserved.
-                        </p>
-                        <div className="flex items-center space-x-6">
-                            <Link href="#" className="text-[9px] font-black text-slate-400 hover:text-red-600 uppercase tracking-[0.2em] transition-colors">Privacy Policy</Link>
-                            <Link href="#" className="text-[9px] font-black text-slate-400 hover:text-red-600 uppercase tracking-[0.2em] transition-colors">Terms of Service</Link>
+        <NotificationProvider>
+            <div className="min-h-screen bg-slate-50/50 font-sans text-slate-700 antialiased selection:bg-red-600 selection:text-white">
+                <Sidebar isOpen={sidebarOpen} toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+                <div className="lg:pl-72 flex flex-col min-h-screen">
+                    <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+                    <main className="flex-1 p-6 lg:p-12 overflow-x-hidden">
+                        {children}
+                    </main>
+                    <footer className="px-8 lg:px-12 py-10">
+                        <div className="border-t border-slate-200/60 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-loose">
+                                &copy; {new Date().getFullYear()} South Ring Autos. All rights reserved.
+                            </p>
+                            <div className="flex items-center space-x-6">
+                                <Link href="#" className="text-[9px] font-black text-slate-400 hover:text-red-600 uppercase tracking-[0.2em] transition-colors">Privacy Policy</Link>
+                                <Link href="#" className="text-[9px] font-black text-slate-400 hover:text-red-600 uppercase tracking-[0.2em] transition-colors">Terms of Service</Link>
+                            </div>
                         </div>
-                    </div>
-                </footer>
+                    </footer>
+                </div>
             </div>
-        </div>
+        </NotificationProvider>
     );
 }

@@ -1,12 +1,24 @@
-import { Quote } from "lucide-react";
+"use client";
 
-const testimonials = [
-    { id: 1, name: "Kevin N.", role: "Honda Fit", image: "https://randomuser.me/api/portraits/men/32.jpg", content: "Excellent service! The team was professional and the engine scan was very detailed. Highly recommend South Ring Autos." },
-    { id: 2, name: "Sarah M.", role: "Toyota VitZ", image: "https://randomuser.me/api/portraits/women/44.jpg", content: "Transparent costing and great turnaround time. Finally found a mechanic I can trust in Karen." },
-    { id: 3, name: "James K.", role: "VW Golf", image: "https://randomuser.me/api/portraits/men/86.jpg", content: "They fixed my transmission issues when others couldn't. Expert technicians who know what they're doing." },
-];
+import { useState, useEffect } from "react";
+import { Quote, Loader2 } from "lucide-react";
+import api from "@/lib/api";
+
+const ASSET_URL = process.env.NEXT_PUBLIC_ASSET_URL || "http://127.0.0.1:8000";
 
 export default function Testimonials() {
+    const [testimonials, setTestimonials] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        api.get('/testimonials').then(res => {
+            setTestimonials(res.data.testimonials || []);
+        }).finally(() => setLoading(false));
+    }, []);
+
+    if (loading) return null; // Or a subtle skeleton
+    if (testimonials.length === 0) return null;
+
     return (
         <section className="py-24 bg-white">
             <div className="container mx-auto px-4">
@@ -23,7 +35,15 @@ export default function Testimonials() {
                     {testimonials.map((t) => (
                         <div key={t.id} className="p-10 bg-slate-50 border-b-4 border-red-600 hover:bg-white hover:shadow-2xl transition-all duration-300 flex flex-col items-center text-center">
                             <div className="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center text-white mb-6 border-4 border-white shadow-md overflow-hidden">
-                                <img src={t.image} alt={t.name} className="w-full h-full object-cover grayscale opacity-80" />
+                                {t.image_url ? (
+                                    <img 
+                                        src={t.image_url.startsWith('http') ? t.image_url : (t.image_url.startsWith('storage') ? `${ASSET_URL}/${t.image_url}` : `${ASSET_URL}/storage/${t.image_url}`)} 
+                                        alt={t.name} 
+                                        className="w-full h-full object-cover" 
+                                    />
+                                ) : (
+                                    <span className="text-xl font-black uppercase">{t.name.charAt(0)}</span>
+                                )}
                             </div>
                             <h4 className="font-black text-slate-900 uppercase text-sm tracking-widest mb-1">{t.name}</h4>
                             <span className="text-red-600 font-bold text-[10px] uppercase tracking-wide mb-6">{t.role}</span>

@@ -199,6 +199,7 @@ export default function AdminPaymentsPage() {
                             <thead>
                                 <tr className="bg-slate-50/50">
                                     <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Invoice</th>
+                                    <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Item</th>
                                     <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Client</th>
                                     <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Amount</th>
                                     <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Method</th>
@@ -227,6 +228,19 @@ export default function AdminPaymentsPage() {
                                                     </span>
                                                 </div>
                                             </div>
+                                        </td>
+                                        <td className="px-8 py-6">
+                                            {payment.payment_type === 'journal' ? (
+                                                <div className="flex flex-col">
+                                                    <span className="text-[10px] font-black text-red-600 uppercase tracking-widest">Journal Access</span>
+                                                    <span className="text-[11px] font-bold text-slate-600 line-clamp-1">{payment.journal?.title || 'Premium Content'}</span>
+                                                </div>
+                                            ) : (
+                                                <div className="flex flex-col">
+                                                    <span className="text-[10px] font-black text-[#003366] uppercase tracking-widest">Service Booking</span>
+                                                    <span className="text-[11px] font-bold text-slate-600 line-clamp-1">{payment.booking?.service || 'Direct Invoice'}</span>
+                                                </div>
+                                            )}
                                         </td>
                                         <td className="px-8 py-6">
                                             <span className="text-[11px] font-bold text-slate-600">{payment.user?.name || "Guest"}</span>
@@ -290,6 +304,15 @@ export default function AdminPaymentsPage() {
                                     <div>
                                         <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Method</p>
                                         <p className="font-bold text-slate-600 uppercase">{selectedPayment.payment_method}</p>
+                                    </div>
+                                    <div className="col-span-2 pt-2 border-t border-slate-100">
+                                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Item Details</p>
+                                        <p className="font-bold text-[#003366]">
+                                            {selectedPayment.payment_type === 'journal' 
+                                                ? `Journal: ${selectedPayment.journal?.title || 'Premium Access'}`
+                                                : `Service: ${selectedPayment.booking?.service || 'Maintenance/Repair'}`
+                                            }
+                                        </p>
                                     </div>
                                 </div>
                             </div>

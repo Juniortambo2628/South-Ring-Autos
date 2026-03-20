@@ -87,7 +87,7 @@ export default function Navbar() {
             <div className="bg-white border-b border-slate-100">
                 <div className="container mx-auto px-4 h-20 flex justify-between items-center">
                     <Link href="/" className="flex items-center">
-                        <Image src={`${ASSET}/images/South-ring-logos/SR-Logo-Transparent-BG.png`} alt="South Ring Autos" width={160} height={64} className="h-16 w-auto object-contain" style={{ width: "auto" }} priority />
+                        <Image src={`${ASSET}/images/South-ring-logos/SR-Logo-Transparent-BG.png`} alt="South Ring Autos" width={160} height={64} className="h-16 w-auto object-contain" priority />
                     </Link>
 
                     <nav className="hidden lg:flex items-center space-x-10 font-black text-[11px] uppercase tracking-[0.2em]">

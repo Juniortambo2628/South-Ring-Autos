@@ -12,16 +12,41 @@ const facts = [
     { icon: <Clock size={32} />, count: 3, label: "Years Experience" },
 ];
 
-export default function FactsSection() {
+const ICON_MAP: Record<string, React.ReactNode> = {
+    'Users': <Users size={32} />,
+    'Wrench': <Wrench size={32} />,
+    'Award': <CheckCircle size={32} />,
+    'Car': <Car size={32} />,
+    'Clock': <Clock size={32} />,
+    'CheckCircle': <CheckCircle size={32} />
+};
+
+export default function FactsSection({ content }: { content?: any }) {
+    const defaultFacts = [
+        { icon: <CheckCircle size={32} />, count: "500+", label: "Satisfied Clients" },
+        { icon: <Users size={32} />, count: "15+", label: "Expert Technicians" },
+        { icon: <Car size={32} />, count: "1000+", label: "Complete Projects" },
+        { icon: <Clock size={32} />, count: "3+", label: "Years Experience" },
+    ];
+
+    const displayFacts = content?.facts?.map((f: any) => ({
+        icon: ICON_MAP[f.icon] || <CheckCircle size={32} />,
+        count: f.count,
+        label: f.label
+    })) || defaultFacts;
+
+    const hero = content?.hero || {};
+    const statsBg = hero.background_url ? (hero.background_url.startsWith('http') ? hero.background_url : `${ASSET}/${hero.background_url}`) : `${ASSET}/images/Stats-summary-strip-BG.jpg`;
+
     return (
         <section
             className="py-16 bg-slate-900 relative overflow-hidden bg-cover bg-fixed bg-center"
-            style={{ backgroundImage: `url(${ASSET}/images/Stats-summary-strip-BG.jpg)` }}
+            style={{ backgroundImage: `url(${statsBg})` }}
         >
             <div className="absolute inset-0 bg-slate-900/80" />
             <div className="container mx-auto px-4 relative z-10">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
-                    {facts.map((fact, index) => (
+                    {displayFacts.map((fact: any, index: number) => (
                         <motion.div
                             key={index}
                             initial={{ opacity: 0, y: 20 }}

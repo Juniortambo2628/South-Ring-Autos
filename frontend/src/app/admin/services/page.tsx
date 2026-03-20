@@ -5,14 +5,27 @@ import AdminLayout from "@/components/admin/AdminLayout";
 import {
     Plus, Search, Edit2, Trash2,
     CheckCircle2, AlertCircle, Loader2, Wrench,
-    Grid, List as ListIcon, CheckSquare, Square
+    Grid, List as ListIcon, CheckSquare, Square,
+    Image as ImageIcon
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import Image from "next/image";
+
+// FilePond
+import { FilePond, registerPlugin } from 'react-filepond';
+import 'filepond/dist/filepond.min.css';
+import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
+import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
+
+registerPlugin(FilePondPluginImagePreview, FilePondPluginFileValidateType, FilePondPluginFileValidateSize);
 
 const MySwal = withReactContent(Swal);
+const ASSET_URL = process.env.NEXT_PUBLIC_ASSET_URL || "http://127.0.0.1:8000";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -27,8 +40,8 @@ export default function AdminServicesPage() {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [submitting, setSubmitting] = useState(false);
-    const [formData, setFormData] = useState({ title: "", description: "", icon: "Wrench" });
-    const [editData, setEditData] = useState({ id: 0, title: "", description: "", icon: "Wrench" });
+    const [formData, setFormData] = useState({ title: "", description: "", icon: "Wrench", image: "" });
+    const [editData, setEditData] = useState({ id: 0, title: "", description: "", icon: "Wrench", image: "" });
 
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
@@ -56,7 +69,7 @@ export default function AdminServicesPage() {
         try {
             await api.post("/services", formData);
             setIsAddModalOpen(false);
-            setFormData({ title: "", description: "", icon: "Wrench" });
+            setFormData({ title: "", description: "", icon: "Wrench", image: "" });
             fetchServices();
             MySwal.fire('Added!', 'Service has been created.', 'success');
         } catch (err) {
@@ -74,7 +87,8 @@ export default function AdminServicesPage() {
             await api.patch(`/services/${editData.id}`, {
                 title: editData.title,
                 description: editData.description,
-                icon: editData.icon
+                icon: editData.icon,
+                image: editData.image
             });
             setIsEditModalOpen(false);
             fetchServices();
@@ -92,7 +106,8 @@ export default function AdminServicesPage() {
             id: service.id,
             title: service.title,
             description: service.description,
-            icon: service.icon || "Wrench"
+            icon: service.icon || "Wrench",
+            image: service.image || ""
         });
         setIsEditModalOpen(true);
     };
@@ -212,6 +227,33 @@ export default function AdminServicesPage() {
                                     required
                                 />
                             </div>
+                            <div className="space-y-4">
+                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Service Icon / Image</label>
+                                <div className="rounded-2xl border-2 border-dashed border-slate-100 p-2">
+                                    <FilePond
+                                        onprocessfile={(error, file) => {
+                                            if (!error) {
+                                                const response = JSON.parse(file.serverId);
+                                                setFormData({ ...formData, image: response.url });
+                                            }
+                                        }}
+                                        server={{
+                                            process: {
+                                                url: (process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api") + '/media/upload',
+                                                method: 'POST',
+                                                headers: {
+                                                    'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+                                                },
+                                                onload: (response: any) => response,
+                                            }
+                                        }}
+                                        name="file"
+                                        labelIdle='Upload service thumbnail <span class="filepond--label-action">Browse</span>'
+                                        acceptedFileTypes={['image/*']}
+                                        allowMultiple={false}
+                                    />
+                                </div>
+                            </div>
                             <DialogFooter className="pt-4">
                                 <Button type="button" variant="ghost" onClick={() => setIsAddModalOpen(false)} className="h-14 px-8 text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-[#003366]">Cancel</Button>
                                 <Button type="submit" disabled={submitting} className="bg-[#003366] hover:bg-red-600 text-white rounded-2xl h-14 px-8 font-black uppercase tracking-widest text-[10px] shadow-xl shadow-blue-900/10 transition-all">
@@ -298,30 +340,25 @@ export default function AdminServicesPage() {
             ) : viewMode === 'grid' ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {filteredServices.map(service => (
-                        <div key={service.id} className={`bg-white rounded-3xl border transition-all duration-300 relative group p-8 flex flex-col items-center text-center ${selectedIds.includes(service.id) ? 'border-red-600 shadow-md shadow-red-600/10' : 'border-slate-100 hover:border-slate-200 hover:shadow-lg hover:shadow-slate-200/50'}`}>
-                            {/* Card Selection */}
                             <div className="absolute top-4 left-4 z-10 text-slate-400 cursor-pointer" onClick={() => toggleSelection(service.id)}>
                                 {selectedIds.includes(service.id) ? <CheckSquare className="text-red-600" size={20} /> : <Square size={20} className="opacity-0 group-hover:opacity-100 transition-opacity" />}
                             </div>
 
-                            <div className="absolute top-4 right-4 flex space-x-2">
-                                <button
-                                    onClick={() => openEditModal(service)}
-                                    className="w-8 h-8 bg-slate-50 text-[#003366] rounded-full flex items-center justify-center hover:bg-[#003366] hover:text-white transition-all opacity-0 group-hover:opacity-100"
-                                >
-                                    <Edit2 size={12} />
-                                </button>
-                                <button
-                                    onClick={() => handleDelete(service.id)}
-                                    className="w-8 h-8 bg-red-50 text-red-600 rounded-full flex items-center justify-center hover:bg-red-600 hover:text-white transition-all opacity-0 group-hover:opacity-100"
-                                >
-                                    <Trash2 size={12} />
-                                </button>
-                            </div>
-
-                            <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center border border-slate-100 mb-6 group-hover:bg-[#003366] group-hover:text-white transition-all shadow-sm">
-                                <Wrench size={28} />
-                            </div>
+                            {service.image ? (
+                                <div className="w-full h-32 relative mb-6 rounded-2xl overflow-hidden border border-slate-50">
+                                    <Image 
+                                        src={service.image.startsWith('http') ? service.image : (service.image.startsWith('storage') ? `${ASSET_URL}/${service.image}` : `${ASSET_URL}/storage/${service.image}`)} 
+                                        alt={service.title} 
+                                        fill 
+                                        className="object-cover" 
+                                        unoptimized
+                                    />
+                                </div>
+                            ) : (
+                                <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center border border-slate-100 mb-6 group-hover:bg-[#003366] group-hover:text-white transition-all shadow-sm">
+                                    <Wrench size={28} />
+                                </div>
+                            )}
                             <h3 className="text-lg font-black uppercase tracking-tight text-[#003366] mb-2">{service.title}</h3>
                             <p className="text-[9px] text-red-600 font-bold uppercase tracking-widest italic mb-4">Core Service</p>
                             <p className="text-[11px] text-slate-500 font-medium leading-relaxed italic line-clamp-3 w-full">

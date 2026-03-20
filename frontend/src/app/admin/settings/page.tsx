@@ -6,7 +6,7 @@ import {
     Settings, Save, Shield, Database,
     Globe, Palette, Bell, Eye, EyeOff,
     CheckCircle2, AlertCircle, Loader2, GripVertical, CheckSquare, Square,
-    CreditCard
+    CreditCard, Layout, Image as ImageIcon, Plus, Trash2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,7 +15,18 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
+// FilePond
+import { FilePond, registerPlugin } from 'react-filepond';
+import 'filepond/dist/filepond.min.css';
+import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
+import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
+
+registerPlugin(FilePondPluginImagePreview, FilePondPluginFileValidateType, FilePondPluginFileValidateSize);
+
 const MySwal = withReactContent(Swal);
+const ASSET_URL = process.env.NEXT_PUBLIC_ASSET_URL || "http://127.0.0.1:8000";
 
 // Default sections if none exist in DB
 const DEFAULT_SECTIONS = [
@@ -50,6 +61,27 @@ export default function AdminSettingsPage() {
         office_address: "Kinsale Rd, Ballinlough, Cork, T12 CP22",
         primary_color: "#003366",
         accent_color: "#ef4444",
+    });
+
+    const [landingContent, setLandingContent] = useState({
+        hero: {
+            title: "Expert Vehicle Services You Can Trust",
+            subtitle: "Premium Care for Your Vehicle",
+            tagline: "Quality Service • Professional Experts • Genuine Parts",
+            background_url: ""
+        },
+        about: {
+            title: "Reliable Service for Every Vehicle",
+            subtitle: "ABOUT SOUTH RING AUTOS",
+            content: "We take pride in delivering exceptional automotive services with a focus on quality, transparency, and customer satisfaction.",
+            image_url: "",
+            experience_years: "15+"
+        },
+        facts: [
+            { icon: "Users", count: "5000+", label: "Happy Clients" },
+            { icon: "Wrench", count: "12000+", label: "repairs done" },
+            { icon: "Award", count: "100%", label: "Satisfaction" }
+        ]
     });
 
     // Paystack keys
@@ -97,6 +129,13 @@ export default function AdminSettingsPage() {
                 // Paystack keys
                 if (data.paystack_public_key) setPaystackPublicKey(data.paystack_public_key);
                 if (data.paystack_secret_key) setPaystackSecretKey(data.paystack_secret_key);
+
+                if (data.landing_content) {
+                    try {
+                        const parsed = typeof data.landing_content === 'string' ? JSON.parse(data.landing_content) : data.landing_content;
+                        if (parsed) setLandingContent(prev => ({ ...prev, ...parsed }));
+                    } catch (e) { }
+                }
             }
         } catch (err) {
             console.error("Failed to fetch settings", err);
@@ -116,10 +155,10 @@ export default function AdminSettingsPage() {
                 company_address: formData.office_address,
                 primary_color: formData.primary_color,
                 accent_color: formData.accent_color,
-                landing_page_sections: landingSections,
                 nav_links: navLinks,
                 paystack_public_key: paystackPublicKey,
-                paystack_secret_key: paystackSecretKey
+                paystack_secret_key: paystackSecretKey,
+                landing_content: landingContent
             };
 
             await api.post("/settings", { settings: settingsPayload });
@@ -194,6 +233,7 @@ export default function AdminSettingsPage() {
                             {[
                                 { id: "general", label: "General Identity", icon: Globe },
                                 { id: "layout", label: "Site Layout & Nav", icon: Palette },
+                                { id: "landing", label: "Landing Content", icon: Layout },
                                 { id: "payments", label: "Payment Gateway", icon: CreditCard },
                                 { id: "security", label: "Access & Security", icon: Shield },
                                 { id: "database", label: "Data Management", icon: Database },
@@ -367,6 +407,168 @@ export default function AdminSettingsPage() {
                                         )}
                                     </Droppable>
                                 </DragDropContext>
+                            </div>
+                        </div>
+                    )}
+
+                    {activeTab === 'landing' && (
+                        <div className="space-y-8 animate-in fade-in slide-in-from-right-4">
+                            {/* Hero Section */}
+                            <div className="bg-white rounded-[40px] border border-slate-100 shadow-sm p-12">
+                                <div className="mb-10">
+                                    <h3 className="text-xl font-black text-[#003366] uppercase tracking-tight mb-2">Hero Section</h3>
+                                    <p className="text-sm text-slate-400 font-medium italic">Customize the main spotlight of your website</p>
+                                </div>
+                                <div className="space-y-8">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                        <div className="space-y-3">
+                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Main Heading</label>
+                                            <Input 
+                                                value={landingContent.hero.title}
+                                                onChange={e => setLandingContent({ ...landingContent, hero: { ...landingContent.hero, title: e.target.value } })}
+                                                className="bg-slate-50 border-slate-100 h-14 rounded-2xl text-xs font-bold focus:ring-red-600/10 focus:border-red-600 transition-all shadow-none uppercase tracking-widest" 
+                                            />
+                                        </div>
+                                        <div className="space-y-3">
+                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Sub-Heading</label>
+                                            <Input 
+                                                value={landingContent.hero.subtitle}
+                                                onChange={e => setLandingContent({ ...landingContent, hero: { ...landingContent.hero, subtitle: e.target.value } })}
+                                                className="bg-slate-50 border-slate-100 h-14 rounded-2xl text-xs font-bold focus:ring-red-600/10 focus:border-red-600 transition-all shadow-none uppercase tracking-widest" 
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="space-y-3">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Hero Tagline</label>
+                                        <Input 
+                                            value={landingContent.hero.tagline}
+                                            onChange={e => setLandingContent({ ...landingContent, hero: { ...landingContent.hero, tagline: e.target.value } })}
+                                            className="bg-slate-50 border-slate-100 h-14 rounded-2xl text-xs font-bold focus:ring-red-600/10 focus:border-red-600 transition-all shadow-none uppercase tracking-widest" 
+                                        />
+                                    </div>
+                                    <div className="space-y-3">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Background Image</label>
+                                        <div className="rounded-2xl border-2 border-dashed border-slate-100 p-2">
+                                            <FilePond
+                                                onprocessfile={(error, file) => {
+                                                    if (!error) {
+                                                        const response = JSON.parse(file.serverId);
+                                                        setLandingContent({ ...landingContent, hero: { ...landingContent.hero, background_url: response.url } });
+                                                    }
+                                                }}
+                                                server={{
+                                                    process: {
+                                                        url: (process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api") + '/media/upload',
+                                                        method: 'POST',
+                                                        headers: { 'Authorization': `Bearer ${localStorage.getItem('auth_token')}` },
+                                                        onload: (response: any) => response,
+                                                    }
+                                                }}
+                                                name="file"
+                                                labelIdle='Drop Hero background <span class="filepond--label-action">Browse</span>'
+                                                acceptedFileTypes={['image/*']}
+                                                allowMultiple={false}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* About Section */}
+                            <div className="bg-white rounded-[40px] border border-slate-100 shadow-sm p-12">
+                                <div className="mb-10">
+                                    <h3 className="text-xl font-black text-[#003366] uppercase tracking-tight mb-2">About Section</h3>
+                                    <p className="text-sm text-slate-400 font-medium italic">Customize your company biography</p>
+                                </div>
+                                <div className="space-y-8">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                        <div className="space-y-3">
+                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Section Title</label>
+                                            <Input 
+                                                value={landingContent.about.title}
+                                                onChange={e => setLandingContent({ ...landingContent, about: { ...landingContent.about, title: e.target.value } })}
+                                                className="bg-slate-50 border-slate-100 h-14 rounded-2xl text-xs font-bold focus:ring-red-600/10 focus:border-red-600 transition-all shadow-none uppercase tracking-widest" 
+                                            />
+                                        </div>
+                                        <div className="space-y-3">
+                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Sub-Topic</label>
+                                            <Input 
+                                                value={landingContent.about.subtitle}
+                                                onChange={e => setLandingContent({ ...landingContent, about: { ...landingContent.about, subtitle: e.target.value } })}
+                                                className="bg-slate-50 border-slate-100 h-14 rounded-2xl text-xs font-bold focus:ring-red-600/10 focus:border-red-600 transition-all shadow-none uppercase tracking-widest" 
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="space-y-3">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Biography Content</label>
+                                        <textarea 
+                                            value={landingContent.about.content}
+                                            onChange={e => setLandingContent({ ...landingContent, about: { ...landingContent.about, content: e.target.value } })}
+                                            className="w-full bg-slate-50 border-slate-100 rounded-[28px] px-8 py-6 text-sm font-medium focus:outline-none focus:ring-8 focus:ring-red-600/5 focus:border-red-600 transition-all min-h-[160px] text-[#003366]"
+                                        />
+                                    </div>
+                                    <div className="space-y-3">
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">About Image</label>
+                                        <div className="rounded-2xl border-2 border-dashed border-slate-100 p-2">
+                                            <FilePond
+                                                onprocessfile={(error, file) => {
+                                                    if (!error) {
+                                                        const response = JSON.parse(file.serverId);
+                                                        setLandingContent({ ...landingContent, about: { ...landingContent.about, image_url: response.url } });
+                                                    }
+                                                }}
+                                                server={{
+                                                    process: {
+                                                        url: (process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api") + '/media/upload',
+                                                        method: 'POST',
+                                                        headers: { 'Authorization': `Bearer ${localStorage.getItem('auth_token')}` },
+                                                        onload: (response: any) => response,
+                                                    }
+                                                }}
+                                                name="file"
+                                                labelIdle='Drop about section image <span class="filepond--label-action">Browse</span>'
+                                                acceptedFileTypes={['image/*']}
+                                                allowMultiple={false}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Facts & Stats */}
+                            <div className="bg-white rounded-[40px] border border-slate-100 shadow-sm p-12">
+                                <div className="mb-10 flex items-center justify-between">
+                                    <div>
+                                        <h3 className="text-xl font-black text-[#003366] uppercase tracking-tight mb-2">Facts & Statistics</h3>
+                                        <p className="text-sm text-slate-400 font-medium italic">Display key achievement counters</p>
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                    {landingContent.facts.map((fact, idx) => (
+                                        <div key={idx} className="bg-slate-50 border border-slate-100 rounded-3xl p-6 space-y-4">
+                                            <Input 
+                                                value={fact.count}
+                                                onChange={e => {
+                                                    const newFacts = [...landingContent.facts];
+                                                    newFacts[idx].count = e.target.value;
+                                                    setLandingContent({ ...landingContent, facts: newFacts });
+                                                }}
+                                                className="bg-white border-slate-100 h-12 rounded-xl text-center text-xs font-black uppercase tracking-widest text-[#003366]"
+                                                placeholder="Count (e.g. 5000+)" 
+                                            />
+                                            <Input 
+                                                value={fact.label}
+                                                onChange={e => {
+                                                    const newFacts = [...landingContent.facts];
+                                                    newFacts[idx].label = e.target.value;
+                                                    setLandingContent({ ...landingContent, facts: newFacts });
+                                                }}
+                                                className="bg-white border-slate-100 h-10 rounded-xl text-center text-[10px] font-bold uppercase tracking-widest text-red-600"
+                                                placeholder="Label (e.g. Clients)" 
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     )}

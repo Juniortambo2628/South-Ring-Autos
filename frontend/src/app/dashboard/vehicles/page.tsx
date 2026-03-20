@@ -136,7 +136,7 @@ export default function VehiclesPage() {
 
                                     <div className="flex items-center space-x-4 mt-8">
                                         <Button
-                                            onClick={() => router.push(`/booking?reg=${encodeURIComponent(vehicle.registration)}&make=${encodeURIComponent(vehicle.make)}&model=${encodeURIComponent(vehicle.model)}`)}
+                                            onClick={() => router.push(`/booking?reg=${encodeURIComponent(vehicle.registration)}&make=${encodeURIComponent(vehicle.make)}&model=${encodeURIComponent(vehicle.model)}&year=${encodeURIComponent(vehicle.year || '')}&fuel=${encodeURIComponent(vehicle.fuel_type || '')}`)}
                                             className="flex-grow bg-[#003366] hover:bg-red-600 text-white rounded-2xl h-12 text-[9px] font-black uppercase tracking-[0.2em] shadow-none transition-all"
                                         >
                                             Book Service

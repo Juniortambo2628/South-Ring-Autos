@@ -7,9 +7,10 @@ import {
     LayoutDashboard, CalendarDays, FileText, MessageSquare,
     Settings, LogOut, Menu, X, UserCircle, Bell, Wrench,
     ChevronDown, ExternalLink, Plus, CreditCard, Car, Users,
-    Truck, Activity, BookOpen
+    Truck, Activity, BookOpen, Mail
 } from "lucide-react";
 import api from "@/lib/api";
+import { NotificationProvider, useNotifications } from "@/lib/NotificationContext";
 
 const menuItems = [
     { icon: LayoutDashboard, label: "Overview", path: "/admin" },
@@ -21,8 +22,10 @@ const menuItems = [
     { icon: Wrench, label: "Services", path: "/admin/services" },
     { icon: FileText, label: "Blog Posts", path: "/admin/blog" },
     { icon: BookOpen, label: "Journals", path: "/admin/journals" },
+    { icon: Quote, label: "Testimonials", path: "/admin/testimonials" },
     { icon: MessageSquare, label: "Messages", path: "/admin/messages" },
     { icon: Settings, label: "Settings", path: "/admin/settings" },
+    { icon: Mail, label: "Email Templates", path: "/admin/email-templates" },
 ];
 
 function Sidebar({ isOpen, toggleSidebar }: { isOpen: boolean; toggleSidebar: () => void }) {
@@ -44,18 +47,11 @@ function Sidebar({ isOpen, toggleSidebar }: { isOpen: boolean; toggleSidebar: ()
             <aside className={`fixed top-0 left-0 bottom-0 w-72 bg-white border-r border-slate-100 transition-transform duration-300 z-50 transform ${isOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0 flex flex-col`}>
                 <div className="p-8 flex-shrink-0 pb-6">
                     <Link href="/admin" className="flex items-center space-x-3 group mb-10">
-                        <img src="/car-logos/toyota.png" alt="South Ring" className="h-10 w-auto grayscale" />
+                        <img src="/images/logo-sra.png" alt="South Ring" className="h-10 w-auto" />
                         <div className="flex flex-col">
-                            <span className="font-black text-sm text-[#003366] tracking-tighter leading-none">SOUTH RING</span>
-                            <span className="font-bold text-[9px] text-red-600 tracking-[0.3em] uppercase">Admin Console</span>
+                            <span className="font-black text-sm text-[#003366] tracking-tighter leading-none uppercase">South Ring</span>
+                            <span className="font-bold text-[9px] text-red-600 tracking-[0.3em] uppercase">Autos Console</span>
                         </div>
-                    </Link>
-
-                    <Link href="/admin/bookings">
-                        <button className="w-full bg-red-600 hover:bg-red-700 text-white rounded-2xl h-14 font-black uppercase tracking-widest text-[9px] flex items-center justify-center space-x-2 shadow-xl shadow-red-600/20 transition-all">
-                            <Plus size={16} />
-                            <span>New Appointment</span>
-                        </button>
                     </Link>
                 </div>
 
@@ -75,16 +71,7 @@ function Sidebar({ isOpen, toggleSidebar }: { isOpen: boolean; toggleSidebar: ()
                     </nav>
                 </div>
 
-                <div className="p-6 bg-gradient-to-t from-white via-white to-transparent pt-6 border-t border-slate-50 flex-shrink-0">
-                    <Link href="/" className="flex items-center space-x-4 px-4 py-3 rounded-2xl text-slate-500 hover:bg-slate-50 hover:text-[#003366] transition-all mb-2">
-                        <LayoutDashboard size={20} className="text-slate-400" />
-                        <span className="text-[10px] font-black uppercase tracking-widest">Back to Home</span>
-                    </Link>
-                    <button onClick={handleLogout} className="flex items-center space-x-4 px-4 py-3 rounded-2xl text-red-600 hover:bg-red-50 transition-all w-full leading-none">
-                        <LogOut size={20} />
-                        <span className="text-[10px] font-black uppercase tracking-widest leading-none">Logout</span>
-                    </button>
-                </div>
+                {/* Footer removed and moved to Header Profile Dropdown */}
             </aside>
         </>
     );
@@ -97,6 +84,8 @@ function Header({ toggleSidebar }: { toggleSidebar: () => void }) {
     const dropdownRef = useRef<HTMLDivElement>(null);
     const notifRef = useRef<HTMLDivElement>(null);
     const router = useRouter();
+
+    const { notifications, unreadCount, markAsRead, markAllAsRead, deleteAll } = useNotifications();
 
     useEffect(() => {
         const stored = localStorage.getItem("user");
@@ -135,31 +124,51 @@ function Header({ toggleSidebar }: { toggleSidebar: () => void }) {
             </div>
 
             <div className="flex items-center space-x-8">
+                {/* New Appointment Button moved here from Sidebar */}
+                <Link href="/admin/bookings" className="hidden md:block">
+                    <button className="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-2xl h-12 font-black uppercase tracking-widest text-[9px] flex items-center space-x-2 shadow-lg shadow-red-600/20 transition-all">
+                        <Plus size={16} />
+                        <span>New Appointment</span>
+                    </button>
+                </Link>
+
                 <div className="relative" ref={notifRef}>
                     <button onClick={() => setNotificationsOpen(!notificationsOpen)} className="relative w-12 h-12 bg-white rounded-2xl border border-slate-100 flex items-center justify-center text-slate-400 hover:text-red-600 hover:border-red-100 transition-all group shadow-sm z-10">
                         <Bell size={20} />
-                        <span className="absolute top-3 right-3 w-2 h-2 bg-red-600 rounded-full border-2 border-white" />
+                        {unreadCount > 0 && <span className="absolute top-3 right-3 w-5 h-5 bg-red-600 rounded-full border-2 border-white text-[9px] font-black text-white flex items-center justify-center -translate-y-1 translate-x-1">{unreadCount}</span>}
                     </button>
                     {notificationsOpen && (
                         <div className="absolute right-0 top-full mt-4 w-80 bg-white rounded-3xl border border-slate-100 shadow-xl overflow-hidden z-[100] animate-in slide-in-from-top-4">
                             <div className="p-4 border-b border-slate-50 flex items-center justify-between bg-slate-50/50">
                                 <span className="text-[10px] font-black uppercase tracking-widest text-[#003366]">Notifications</span>
-                                <span className="px-2 py-0.5 bg-red-100 text-red-600 text-[9px] font-black rounded-full">2 New</span>
+                                {unreadCount > 0 && <span className="px-2 py-0.5 bg-red-100 text-red-600 text-[9px] font-black rounded-full">{unreadCount} New</span>}
                             </div>
                             <div className="max-h-80 overflow-y-auto">
-                                <div className="p-4 border-b border-slate-50 hover:bg-slate-50/50 transition-colors cursor-pointer">
-                                    <p className="text-[11px] font-bold text-[#003366] mb-1">New Booking Request</p>
-                                    <p className="text-[10px] text-slate-500 line-clamp-2">John Doe requested a Full Service for Toyota Camry.</p>
-                                    <p className="text-[9px] font-black uppercase tracking-widest text-slate-400 mt-2">10 mins ago</p>
-                                </div>
-                                <div className="p-4 border-b border-slate-50 hover:bg-slate-50/50 transition-colors cursor-pointer">
-                                    <p className="text-[11px] font-bold text-[#003366] mb-1">System Update</p>
-                                    <p className="text-[10px] text-slate-500 line-clamp-2">Admin dashboard successfully updated.</p>
-                                    <p className="text-[9px] font-black uppercase tracking-widest text-slate-400 mt-2">1 hour ago</p>
-                                </div>
+                                {notifications.length > 0 ? (
+                                    notifications.map((n) => (
+                                        <div
+                                            key={n.id}
+                                            className={`p-4 border-b border-slate-50 hover:bg-slate-50/50 transition-colors cursor-pointer relative ${!n.read_at ? 'bg-blue-50/20' : ''}`}
+                                            onClick={() => {
+                                                if (!n.read_at) markAsRead(n.id);
+                                                if (n.link) router.push(n.link);
+                                            }}
+                                        >
+                                            {!n.read_at && <div className="absolute left-1 top-1/2 -translate-y-1/2 w-1 h-6 bg-red-600 rounded-full" />}
+                                            <p className="text-[11px] font-bold text-[#003366] mb-1 pl-2">{n.title}</p>
+                                            <p className="text-[10px] text-slate-500 line-clamp-2 pl-2">{n.message}</p>
+                                            <p className="text-[9px] font-black uppercase tracking-widest text-slate-400 mt-2 pl-2">{new Date(n.created_at).toLocaleDateString()}</p>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="p-8 text-center text-slate-400 text-[10px] font-black uppercase tracking-widest">
+                                        No new notifications
+                                    </div>
+                                )}
                             </div>
-                            <div className="p-3 border-t border-slate-50 bg-slate-50/50 text-center">
-                                <button className="text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-[#003366] transition-colors">Mark all as read</button>
+                            <div className="p-3 border-t border-slate-50 bg-slate-50/50 text-center flex justify-between px-4">
+                                <button onClick={markAllAsRead} className="text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-[#003366] transition-colors">Mark all as read</button>
+                                <button onClick={deleteAll} className="text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-red-600 transition-colors">Clear All</button>
                             </div>
                         </div>
                     )}
@@ -182,11 +191,16 @@ function Header({ toggleSidebar }: { toggleSidebar: () => void }) {
                                 <p className="text-sm font-black text-[#003366] uppercase tracking-tight">{user?.name || "Super Admin"}</p>
                                 <p className="text-[10px] text-slate-500 font-medium">{user?.email || "admin@southring.com"}</p>
                             </div>
-                            <div className="p-2">
+                            <div className="p-2 border-t border-slate-50">
+                                <Link href="/" className="flex items-center space-x-3 px-4 py-3 rounded-2xl text-slate-500 hover:bg-slate-50 hover:text-[#003366] transition-colors">
+                                    <ExternalLink size={16} />
+                                    <span className="text-[10px] font-black uppercase tracking-widest">View Website</span>
+                                </Link>
                                 <Link href="/admin/settings" onClick={() => setProfileOpen(false)} className="flex items-center space-x-3 px-4 py-3 rounded-2xl text-slate-500 hover:bg-slate-50 hover:text-[#003366] transition-colors">
                                     <Settings size={16} />
                                     <span className="text-[10px] font-black uppercase tracking-widest">Account Settings</span>
                                 </Link>
+                                <div className="h-px bg-slate-50 my-1 mx-2" />
                                 <button onClick={handleLogout} className="flex items-center space-x-3 px-4 py-3 rounded-2xl text-red-600 hover:bg-red-50 transition-colors w-full text-left">
                                     <LogOut size={16} />
                                     <span className="text-[10px] font-black uppercase tracking-widest">Secure Logout</span>
@@ -236,15 +250,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     }
 
     return (
-        <div className="min-h-screen bg-slate-50 font-sans text-[#003366]">
-            <Sidebar isOpen={sidebarOpen} toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
-            <div className="lg:pl-72 flex flex-col min-h-screen">
-                <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
-                <main className="flex-1 p-8 lg:p-12 pt-0">{children}</main>
-                <footer className="px-12 py-8 text-[10px] font-black text-slate-400 uppercase tracking-widest border-t border-slate-100 mx-12">
-                    &copy; {new Date().getFullYear()} South Ring Autos - Administrative Management System
-                </footer>
+        <NotificationProvider>
+            <div className="min-h-screen bg-slate-50 font-sans text-[#003366]">
+                <Sidebar isOpen={sidebarOpen} toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+                <div className="lg:pl-72 flex flex-col min-h-screen">
+                    <Header toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+                    <main className="flex-1 p-8 lg:p-12 pt-0">{children}</main>
+                    <footer className="px-12 py-8 text-[10px] font-black text-slate-400 uppercase tracking-widest border-t border-slate-100 mx-12">
+                        &copy; {new Date().getFullYear()} South Ring Autos - Administrative Management System
+                    </footer>
+                </div>
             </div>
-        </div>
+        </NotificationProvider>
     );
 }

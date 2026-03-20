@@ -30,6 +30,7 @@ export default function AddVehicleModal({ open, onOpenChange, onSuccess }: AddVe
         year: "",
         registration: "",
         color: "",
+        fuel_type: "",
         mileage: "",
     });
 
@@ -162,6 +163,24 @@ export default function AddVehicleModal({ open, onOpenChange, onSuccess }: AddVe
                                 className="h-14 rounded-2xl bg-slate-50 border-slate-100 px-5 font-bold focus:bg-white transition-all outline-none"
                             />
                         </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="fuel_type" className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Fuel Type</Label>
+                            <select
+                                id="fuel_type"
+                                value={formData.fuel_type}
+                                onChange={(e) => setFormData({ ...formData, fuel_type: e.target.value })}
+                                className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-sm font-bold focus:ring-2 focus:ring-red-600/10 focus:border-red-600 transition-all outline-none appearance-none cursor-pointer"
+                            >
+                                <option value="" disabled>Select Fuel</option>
+                                <option value="Petrol">Petrol</option>
+                                <option value="Diesel">Diesel</option>
+                                <option value="Electric">Electric</option>
+                                <option value="Hybrid">Hybrid</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-6">
                         <div className="space-y-2">
                             <Label htmlFor="mileage" className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Mileage (KM)</Label>
                             <Input

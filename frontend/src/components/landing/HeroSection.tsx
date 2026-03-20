@@ -6,26 +6,37 @@ import Link from "next/link";
 
 const ASSET = process.env.NEXT_PUBLIC_ASSET_URL || "";
 
-export default function HeroSection() {
+export default function HeroSection({ content }: { content?: any }) {
+    const hero = content?.hero || {
+        title: "From General Servicing to Full Engine Overhauls",
+        subtitle: "Expert Vehicle Services You Can Trust",
+        tagline: "Transparency & Efficiency",
+        background_url: `${ASSET}/images/Hero-Slide-2-BG.jpg`
+    };
+
+    const bgUrl = hero.background_url ? (hero.background_url.startsWith('http') ? hero.background_url : `${ASSET}/${hero.background_url}`) : `${ASSET}/images/Hero-Slide-2-BG.jpg`;
+
     return (
         <div className="relative h-[90vh] min-h-[700px] w-full overflow-hidden bg-slate-900">
             <div
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-700"
-                style={{ backgroundImage: `url(${ASSET}/images/Hero-Slide-2-BG.jpg)` }}
+                style={{ backgroundImage: `url(${bgUrl})` }}
             >
                 <div className="absolute inset-0 bg-black/40 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
             </div>
 
             <div className="relative h-full container mx-auto px-4 flex items-center pb-32 md:pb-40">
-                <div className="max-w-2xl text-white">
+                <div className="max-w-3xl text-white">
                     <motion.h6 initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.3, duration: 0.5 }} className="text-white text-xs font-bold uppercase tracking-[0.3em] mb-4 flex items-center">
-                        <span className="w-8 h-[2px] bg-red-600 mr-3" />Transparency &amp; Efficiency
+                        <span className="w-8 h-[2px] bg-red-600 mr-3" />{hero.tagline}
                     </motion.h6>
                     <motion.h1 initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.5, duration: 0.5 }} className="text-4xl md:text-6xl font-black mb-6 leading-tight uppercase">
-                        From General Servicing to <br /><span className="text-white">Full Engine Overhauls</span>
+                        {hero.title.split('\n').map((line: string, i: number) => (
+                            <span key={i}>{line}<br /></span>
+                        ))}
                     </motion.h1>
                     <motion.p initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.7, duration: 0.5 }} className="text-sm md:text-base text-slate-200 mb-10 max-w-lg leading-relaxed font-medium">
-                        We treat every vehicle with respect and care making sure that every vehicle gets the best service possible done by our experienced technicians.
+                        {hero.subtitle}
                     </motion.p>
                     <motion.div initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.9, duration: 0.5 }} className="flex flex-wrap gap-4">
                         <Link href="/services" className="bg-red-600 hover:bg-red-700 text-white px-8 py-3.5 rounded text-xs font-black uppercase tracking-widest transition-all flex items-center group shadow-xl">

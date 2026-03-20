@@ -39,24 +39,34 @@ const COMPONENT_MAP: Record<string, React.FC> = {
 
 export default function HomePage() {
   const [sections, setSections] = useState<any[]>([]);
+  const [landingContent, setLandingContent] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     api.get('/settings').then(res => {
       const data = res.data.settings;
-      if (data && data.landing_page_sections) {
-        try {
-          const parsed = typeof data.landing_page_sections === 'string' ? JSON.parse(data.landing_page_sections) : data.landing_page_sections;
-          if (parsed && Array.isArray(parsed) && parsed.length > 0) {
-            setSections(parsed);
-          } else {
+      if (data) {
+        if (data.landing_page_sections) {
+            try {
+              const parsed = typeof data.landing_page_sections === 'string' ? JSON.parse(data.landing_page_sections) : data.landing_page_sections;
+              if (parsed && Array.isArray(parsed) && parsed.length > 0) {
+                setSections(parsed);
+              } else {
+                setSections(DEFAULT_SECTIONS);
+              }
+            } catch (e) {
+              setSections(DEFAULT_SECTIONS);
+            }
+        } else {
             setSections(DEFAULT_SECTIONS);
-          }
-        } catch (e) {
-          setSections(DEFAULT_SECTIONS);
         }
-      } else {
-        setSections(DEFAULT_SECTIONS);
+
+        if (data.landing_content) {
+            try {
+              const parsed = typeof data.landing_content === 'string' ? JSON.parse(data.landing_content) : data.landing_content;
+              if (parsed) setLandingContent(parsed);
+            } catch (e) { }
+        }
       }
     }).catch(err => {
       console.error("Could not load landing sections", err);
@@ -82,7 +92,7 @@ export default function HomePage() {
           const SectionComponent = COMPONENT_MAP[sectionConfig.id];
           if (!SectionComponent) return null;
 
-          return <SectionComponent key={sectionConfig.id} />;
+          return <SectionComponent key={sectionConfig.id} content={landingContent} />;
         })}
       </main>
       <Footer />

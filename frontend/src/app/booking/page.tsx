@@ -42,6 +42,8 @@ function BookingForm() {
         registration_number: searchParams.get("reg") || "",
         vehicle_make: searchParams.get("make") || "",
         vehicle_model: searchParams.get("model") || "",
+        vehicle_year: searchParams.get("year") || "",
+        vehicle_fuel_type: "",
         service_type: "Full Service",
         preferred_date: "",
         preferred_time: "morning",
@@ -99,8 +101,11 @@ function BookingForm() {
                 registration: formData.registration_number,
                 vehicle_make: formData.vehicle_make,
                 vehicle_model: formData.vehicle_model,
+                vehicle_year: formData.vehicle_year,
+                vehicle_fuel_type: formData.vehicle_fuel_type,
                 service: formData.service_type,
                 date: formData.preferred_date,
+                preferred_time: formData.preferred_time,
                 message: formData.notes,
             };
             const response = await api.post("/bookings", payload);
@@ -220,9 +225,30 @@ function BookingForm() {
                                                     </button>
                                                 </div>
                                             </div>
-                                            <div className="space-y-4">
-                                                <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Vehicle Model & Year</Label>
-                                                <Input id="vehicle_model" placeholder="e.g. Vanguard 2014" value={formData.vehicle_model} onChange={handleChange} className="py-6 rounded-xl bg-slate-50/50 border-slate-200" />
+                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                                <div className="space-y-4">
+                                                    <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Vehicle Model</Label>
+                                                    <Input id="vehicle_model" placeholder="e.g. Vanguard" value={formData.vehicle_model} onChange={handleChange} className="py-6 rounded-xl bg-slate-50/50 border-slate-200" />
+                                                </div>
+                                                <div className="space-y-4">
+                                                    <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Year</Label>
+                                                    <Input id="vehicle_year" type="number" placeholder="e.g. 2014" value={formData.vehicle_year} onChange={handleChange} className="py-6 rounded-xl bg-slate-50/50 border-slate-200" />
+                                                </div>
+                                                <div className="space-y-4">
+                                                    <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Fuel Type</Label>
+                                                    <select
+                                                        id="vehicle_fuel_type"
+                                                        value={formData.vehicle_fuel_type}
+                                                        onChange={handleChange}
+                                                        className="w-full bg-slate-50/50 border border-slate-200 rounded-xl px-6 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-red-600/10 focus:border-red-600 transition-all appearance-none cursor-pointer h-[50px] mt-0"
+                                                    >
+                                                        <option value="">Select Fuel</option>
+                                                        <option value="Petrol">Petrol</option>
+                                                        <option value="Diesel">Diesel</option>
+                                                        <option value="Electric">Electric</option>
+                                                        <option value="Hybrid">Hybrid</option>
+                                                    </select>
+                                                </div>
                                             </div>
                                             <div className="pt-6 flex justify-end">
                                                 <Button onClick={nextStep} className="bg-red-600 hover:bg-red-700 text-white font-black px-10 py-6 h-auto rounded-xl uppercase tracking-widest text-xs flex items-center">
@@ -271,7 +297,8 @@ function BookingForm() {
                                             <div className="bg-slate-50/80 p-6 rounded-2xl border border-dashed border-slate-200 mb-8">
                                                 <h4 className="text-[10px] font-black text-red-600 uppercase tracking-widest mb-4">Summary</h4>
                                                 <div className="grid grid-cols-2 gap-4 text-xs font-bold text-slate-700 uppercase tracking-tight">
-                                                    <div>VEHICLE: <span className="text-[#003366]">{formData.vehicle_make} {formData.vehicle_model} ({formData.registration_number})</span></div>
+                                                    <div>VEHICLE: <span className="text-[#003366]">{formData.vehicle_make} {formData.vehicle_model} {formData.vehicle_year} ({formData.vehicle_fuel_type})</span></div>
+                                                    <div>REG: <span className="text-[#003366]">{formData.registration_number}</span></div>
                                                     <div>SERVICE: <span className="text-[#003366]">{formData.service_type}</span></div>
                                                     <div>DATE: <span className="text-[#003366]">{formData.preferred_date}</span></div>
                                                     <div>TIME: <span className="text-[#003366]">{formData.preferred_time}</span></div>

@@ -6,18 +6,28 @@ import Link from "next/link";
 
 const ASSET = process.env.NEXT_PUBLIC_ASSET_URL || "";
 
-export default function AboutSection() {
+export default function AboutSection({ content }: { content?: any }) {
+    const about = content?.about || {
+        title: "We're South Ring Autos – Your Neighbourhood Auto Clinic",
+        subtitle: "WHO WE ARE",
+        content: "We treat every vehicle with respect and care making sure that every vehicle gets the best service possible done by our experienced technicians. We fix, tune and care for cars so you can get back on the road faster.",
+        image_url: `${ASSET}/images/Hero-Slide-2-BG.jpg`,
+        experience_years: "15+"
+    };
+
+    const imageUrl = about.image_url ? (about.image_url.startsWith('http') ? about.image_url : `${ASSET}/${about.image_url}`) : `${ASSET}/images/Hero-Slide-2-BG.jpg`;
+
     return (
         <section className="py-24 bg-white overflow-hidden">
             <div className="container mx-auto px-4">
                 <div className="flex flex-col lg:flex-row items-center gap-16">
                     <div className="lg:w-1/2 relative">
                         <div className="relative z-10 rounded-2xl overflow-hidden shadow-2xl border-[12px] border-slate-50">
-                            <img src={`${ASSET}/images/Hero-Slide-2-BG.jpg`} alt="South Ring Autos Workshop" className="w-full h-auto object-cover aspect-[4/3]" />
+                            <img src={imageUrl} alt="South Ring Autos Workshop" className="w-full h-auto object-cover aspect-[4/3]" />
                         </div>
                         <div className="absolute -bottom-6 -left-6 bg-red-600 text-white p-6 rounded-xl shadow-2xl z-20 hidden md:block">
                             <div className="flex items-center space-x-4">
-                                <div className="text-4xl font-black">15+</div>
+                                <div className="text-4xl font-black">{about.experience_years}</div>
                                 <div className="text-[10px] font-black uppercase tracking-widest leading-tight">Years OF <br />CAR REPAIR EXPERIENCE</div>
                             </div>
                         </div>
@@ -26,13 +36,13 @@ export default function AboutSection() {
                     <div className="lg:w-1/2">
                         <motion.div initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }} viewport={{ once: true }}>
                             <h6 className="text-red-600 font-black uppercase tracking-[0.3em] text-xs mb-4 flex items-center">
-                                <span className="w-8 h-[2px] bg-red-600 mr-3" />WHO WE ARE<span className="w-8 h-[2px] bg-red-600 ml-3" />
+                                <span className="w-8 h-[2px] bg-red-600 mr-3" />{about.subtitle}<span className="w-8 h-[2px] bg-red-600 ml-3" />
                             </h6>
                             <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-8 leading-tight uppercase">
-                                We&apos;re South Ring Autos – <br /><span className="text-[#003366]">Your Neighbourhood Auto Clinic</span>
+                                {about.title}
                             </h2>
                             <p className="text-slate-500 text-base mb-8 leading-relaxed font-medium">
-                                We treat every vehicle with respect and care making sure that every vehicle gets the best service possible done by our experienced technicians. We fix, tune and care for cars so you can get back on the road faster.
+                                {about.content}
                             </p>
 
                             <div className="space-y-6 mb-10">
