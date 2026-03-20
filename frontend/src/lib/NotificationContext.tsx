@@ -35,7 +35,7 @@ const NotificationContext = createContext<NotificationContextType | undefined>(u
 export function NotificationProvider({ children }: { children: ReactNode }) {
   const [notifications, setNotifications] = useState<AppNotification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
-  const [echoInstance, setEchoInstance] = useState<Echo | null>(null);
+  const [echoInstance, setEchoInstance] = useState<Echo<any> | null>(null);
 
   // Initialize Echo based on .env variables
   useEffect(() => {
