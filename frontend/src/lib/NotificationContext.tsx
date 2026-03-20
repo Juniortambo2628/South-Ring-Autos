@@ -7,7 +7,7 @@ import api from './api';
 
 // Expose Pusher globally for Echo
 if (typeof window !== 'undefined') {
-  window.Pusher = Pusher;
+  (window as any).Pusher = Pusher;
 }
 
 export interface AppNotification {
