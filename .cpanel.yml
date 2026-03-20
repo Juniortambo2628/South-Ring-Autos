@@ -1,5 +1,5 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/zhpebukm/public_html/southringautos.com/api
+    - export DEPLOYPATH=/home/zhpebukm/southringautos.com/api
     - /bin/cp -R backend/public/* $DEPLOYPATH
