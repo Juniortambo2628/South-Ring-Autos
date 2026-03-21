@@ -23,6 +23,19 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 
+    # Robust CORS for all requests (including preflight)
+    <IfModule mod_headers.c>
+        SetEnvIf Origin "https://(www\.)?southringautos\.com$" ACCESS_CONTROL_ALLOW_ORIGIN=$0
+        Header always set Access-Control-Allow-Origin %{ACCESS_CONTROL_ALLOW_ORIGIN}e env=ACCESS_CONTROL_ALLOW_ORIGIN
+        Header always set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS, PATCH"
+        Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With, X-XSRF-TOKEN, Accept"
+        Header always set Access-Control-Allow-Credentials "true"
+
+        # Handle OPTIONS preflight requests
+        RewriteCond %{REQUEST_METHOD} OPTIONS
+        RewriteRule ^(.*)$ $1 [R=204,L]
+    </IfModule>
+
     # Allow CORS for static assets
     <IfModule mod_headers.c>
         <FilesMatch "\.(gif|jpe?g|png|ico|svg|css|js|webp|avif)$">
