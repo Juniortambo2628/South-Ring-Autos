@@ -3,10 +3,10 @@
 return [
 
     /*
-    |--------------------------------------------------------------------------
-    | Cross-Origin Resource Sharing (CORS) Configuration
-    |--------------------------------------------------------------------------
-    */
+     |--------------------------------------------------------------------------
+     | Cross-Origin Resource Sharing (CORS) Configuration
+     |--------------------------------------------------------------------------
+     */
 
     'paths' => ['api/*', 'sanctum/csrf-cookie', 'images/*'],
 
@@ -19,9 +19,12 @@ return [
         'https://southringautos.com',
         'https://www.southringautos.com',
         'https://api.southringautos.com',
+        'https://southringautos.com/api',
+        'https://www.southringautos.com/api',
     ],
 
     'allowed_origins_patterns' => [
+        '/^https:\/\/(www\.)?southringautos\.com$/',
         '/^https:\/\/.*\.southringautos\.com$/',
     ],
 

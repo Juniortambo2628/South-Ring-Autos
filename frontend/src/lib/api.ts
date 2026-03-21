@@ -1,6 +1,11 @@
 import axios from "axios";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+let API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+
+// Fallback to current origin in browser to avoid CORS redirects between www and non-www
+if (typeof window !== "undefined" && window.location.hostname.includes("southringautos.com")) {
+    API_BASE_URL = `${window.location.origin}/api`;
+}
 
 const api = axios.create({
     baseURL: API_BASE_URL,
