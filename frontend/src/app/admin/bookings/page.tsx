@@ -17,10 +17,7 @@ import {
 import api from "@/lib/api";
 import { Booking } from "@/types";
 import { useToast } from "@/hooks/use-toast";
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
-
-const MySwal = withReactContent(Swal);
+import MySwal from "@/lib/swal";
 
 export default function AdminBookingsPage() {
     const [bookings, setBookings] = useState<Booking[]>([]);
@@ -45,7 +42,7 @@ export default function AdminBookingsPage() {
     const fetchBookings = async () => {
         setLoading(true);
         try {
-            const response = await api.get("/bookings");
+            const response = await api.get("/admin/bookings");
             setBookings(response.data.data || []);
         } catch (err: any) {
             console.error("Failed to fetch bookings", err);
@@ -62,7 +59,7 @@ export default function AdminBookingsPage() {
     const updateStatus = async (id: number, status: string) => {
         setIsUpdating(prev => ({ ...prev, [id]: true }));
         try {
-            await api.patch(`/bookings/${id}/status`, { status });
+            await api.patch(`/admin/bookings/${id}/status`, { status });
             toast({
                 title: 'Status Updated',
                 description: `Booking successfully marked as ${status}.`,
@@ -95,7 +92,7 @@ export default function AdminBookingsPage() {
 
         setIsDeleting(prev => ({ ...prev, [id]: true }));
         try {
-            await api.delete(`/bookings/${id}`);
+            await api.delete(`/admin/bookings/${id}`);
             toast({
                 title: 'Booking Deleted',
                 description: 'The appointment was permanently removed.',
@@ -129,7 +126,7 @@ export default function AdminBookingsPage() {
         if (!result.isConfirmed) return;
 
         try {
-            await Promise.all(selectedIds.map(id => api.delete(`/bookings/${id}`)));
+            await Promise.all(selectedIds.map(id => api.delete(`/admin/bookings/${id}`)));
             setSelectedIds([]);
             fetchBookings();
             MySwal.fire('Deleted!', 'Selected bookings have been deleted.', 'success');

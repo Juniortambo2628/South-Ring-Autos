@@ -11,8 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import api from "@/lib/api";
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
+import MySwal from "@/lib/swal";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 // FilePond
@@ -25,7 +24,6 @@ import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
 
 registerPlugin(FilePondPluginImagePreview, FilePondPluginFileValidateType, FilePondPluginFileValidateSize);
 
-const MySwal = withReactContent(Swal);
 const ASSET_URL = process.env.NEXT_PUBLIC_ASSET_URL || "http://127.0.0.1:8000";
 
 // Default sections if none exist in DB
@@ -161,7 +159,7 @@ export default function AdminSettingsPage() {
                 landing_content: landingContent
             };
 
-            await api.post("/settings", { settings: settingsPayload });
+            await api.post("/admin/settings", { settings: settingsPayload });
             MySwal.fire('Saved!', 'Settings have been updated successfully.', 'success');
         } catch (err) {
             console.error("Failed to update settings", err);

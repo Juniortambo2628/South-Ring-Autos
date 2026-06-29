@@ -10,8 +10,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
+import MySwal from "@/lib/swal";
 import Image from "next/image";
 
 // FilePond
@@ -24,7 +23,6 @@ import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
 
 registerPlugin(FilePondPluginImagePreview, FilePondPluginFileValidateType, FilePondPluginFileValidateSize);
 
-const MySwal = withReactContent(Swal);
 const ASSET_URL = process.env.NEXT_PUBLIC_ASSET_URL || "http://127.0.0.1:8000";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -67,7 +65,7 @@ export default function AdminServicesPage() {
         e.preventDefault();
         setSubmitting(true);
         try {
-            await api.post("/services", formData);
+            await api.post("/admin/services", formData);
             setIsAddModalOpen(false);
             setFormData({ title: "", description: "", icon: "Wrench", image: "" });
             fetchServices();
@@ -84,7 +82,7 @@ export default function AdminServicesPage() {
         e.preventDefault();
         setSubmitting(true);
         try {
-            await api.patch(`/services/${editData.id}`, {
+            await api.patch(`/admin/services/${editData.id}`, {
                 title: editData.title,
                 description: editData.description,
                 icon: editData.icon,
@@ -126,7 +124,7 @@ export default function AdminServicesPage() {
         if (!result.isConfirmed) return;
 
         try {
-            await api.delete(`/services/${id}`);
+            await api.delete(`/admin/services/${id}`);
             fetchServices();
             setSelectedIds(prev => prev.filter(selId => selId !== id));
             MySwal.fire('Deleted!', 'Service has been deleted.', 'success');
@@ -151,7 +149,7 @@ export default function AdminServicesPage() {
         if (!result.isConfirmed) return;
 
         try {
-            await Promise.all(selectedIds.map(id => api.delete(`/services/${id}`)));
+            await Promise.all(selectedIds.map(id => api.delete(`/admin/services/${id}`)));
             setSelectedIds([]);
             fetchServices();
             MySwal.fire('Deleted!', 'Selected services have been deleted.', 'success');

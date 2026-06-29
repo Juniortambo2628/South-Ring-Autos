@@ -12,11 +12,9 @@ import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import api from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
+import MySwal from "@/lib/swal";
 import Image from "next/image";
 
-const MySwal = withReactContent(Swal);
 const ASSET_URL = process.env.NEXT_PUBLIC_ASSET_URL || "http://127.0.0.1:8000";
 
 export default function AdminJournalsPage() {

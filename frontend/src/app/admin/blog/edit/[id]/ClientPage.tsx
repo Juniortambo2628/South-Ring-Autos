@@ -113,7 +113,7 @@ export default function EditBlogPost() {
                 payload.append('image', formData.image);
             }
 
-            await api.post(`/blog/${params.id}`, payload, {
+            await api.post(`/admin/blog/${params.id}`, payload, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
             localStorage.removeItem(`blog_edit_draft_${params.id}`);

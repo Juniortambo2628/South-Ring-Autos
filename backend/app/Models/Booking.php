@@ -10,11 +10,15 @@ class Booking extends Model
     
     protected $fillable = [
         'client_id',
+        'user_id',
         'vehicle_id',
         'name',
         'phone',
         'email',
         'registration',
+        'vehicle_make',
+        'vehicle_model',
+        'vehicle_year',
         'service',
         'date',
         'preferred_time',

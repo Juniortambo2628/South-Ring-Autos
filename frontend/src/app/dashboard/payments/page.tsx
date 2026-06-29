@@ -10,6 +10,7 @@ import {
     FileText, Loader2, Download, Clock, Printer
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { formatCurrency } from "@/lib/utils";
 import Link from "next/link";
 import api from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
@@ -80,9 +81,6 @@ function PaymentsContent() {
         });
         fetchPayments();
     };
-
-    const formatCurrency = (amount: number) =>
-        new Intl.NumberFormat("en-KE", { style: "currency", currency: "KES" }).format(amount);
 
     const totalPaid = payments
         .filter((p) => p.status === "completed")

@@ -1,43 +1,34 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import AdminLayout from "@/components/admin/AdminLayout";
-import {
-    Search, Car, Loader2, User, Calendar,
-    Grid, List as ListIcon, CheckSquare, Square, Trash2, Fuel
-} from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Car, Trash2, User, Calendar, Fuel } from "lucide-react";
+import { motion } from "framer-motion";
 import api from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
+import MySwal from "@/lib/swal";
+import { useApiFetch } from "@/hooks/useApiFetch";
+import { SWEETALERT_CONFIRM_OPTIONS } from "@/lib/constants";
+import {
+    AdminPageHeader, AdminLoading, AdminEmpty,
+    BulkActionsBar, ViewModeToggle, SelectAllButton, SelectionCheckbox, FilterControls
+} from "@/components/admin/shared";
 
-const MySwal = withReactContent(Swal);
+const SORT_OPTIONS = [
+    { value: "newest", label: "Newest First" },
+    { value: "oldest", label: "Oldest First" },
+    { value: "a-z", label: "Make (A-Z)" },
+    { value: "year", label: "Year (Newest)" },
+];
 
 export default function AdminVehiclesPage() {
-    const [vehicles, setVehicles] = useState<any[]>([]);
-    const [loading, setLoading] = useState(true);
+    const { data: vehicles, loading, refetch } = useApiFetch<any[]>("/admin/vehicles");
     const [searchTerm, setSearchTerm] = useState("");
-
-    // New Features
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
-    const [sortOrder, setSortOrder] = useState<'newest' | 'oldest' | 'a-z' | 'year'>('newest');
-    const [filterFuel, setFilterFuel] = useState<string>('all');
+    const [sortOrder, setSortOrder] = useState('newest');
+    const [filterFuel, setFilterFuel] = useState('all');
     const { toast } = useToast();
-
-    useEffect(() => { fetchVehicles(); }, []);
-
-    const fetchVehicles = async () => {
-        setLoading(true);
-        try {
-            const res = await api.get("/admin/vehicles");
-            setVehicles(res.data.data || []);
-        } catch (err) { console.error("Failed to fetch vehicles", err); }
-        finally { setLoading(false); }
-    };
 
     const handleDelete = async (id: number, e?: React.MouseEvent) => {
         if (e) e.stopPropagation();
@@ -46,20 +37,16 @@ export default function AdminVehiclesPage() {
             text: "This action will permanently remove the vehicle from the registry.",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
+            ...SWEETALERT_CONFIRM_OPTIONS,
             confirmButtonText: 'Yes, delete it!'
         });
-
         if (!result.isConfirmed) return;
-
         try {
             await api.delete(`/admin/vehicles/${id}`);
-            fetchVehicles();
+            refetch();
             setSelectedIds(prev => prev.filter(selId => selId !== id));
             toast({ title: "Vehicle Deleted", description: "The vehicle record was removed." });
         } catch (err) {
-            console.error("Failed to delete vehicle", err);
             toast({ variant: "destructive", title: "Error", description: "Failed to delete vehicle." });
         }
     };
@@ -71,20 +58,16 @@ export default function AdminVehiclesPage() {
             text: "This action cannot be undone.",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
+            ...SWEETALERT_CONFIRM_OPTIONS,
             confirmButtonText: 'Yes, delete them!'
         });
-
         if (!result.isConfirmed) return;
-
         try {
             await Promise.all(selectedIds.map(id => api.delete(`/admin/vehicles/${id}`)));
             setSelectedIds([]);
-            fetchVehicles();
+            refetch();
             toast({ title: "Vehicles Deleted", description: "Selected vehicles were successfully removed." });
         } catch (err) {
-            console.error("Failed to delete vehicles", err);
             toast({ variant: "destructive", title: "Error", description: "Failed to delete some vehicles." });
         }
     };
@@ -102,7 +85,7 @@ export default function AdminVehiclesPage() {
         }
     };
 
-    let filtered = vehicles.filter(v =>
+    let filtered = (vehicles || []).filter(v =>
         (v.make?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             v.model?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             v.registration?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -118,114 +101,54 @@ export default function AdminVehiclesPage() {
         return 0;
     });
 
-    const uniqueFuelTypes = ['all', ...Array.from(new Set(vehicles.map(v => v.fuel_type).filter(Boolean)))];
+    const uniqueFuelTypes = ['all', ...Array.from(new Set((vehicles || []).map(v => v.fuel_type).filter(Boolean)))];
+    const fuelOptions = uniqueFuelTypes.map(ft => ({
+        value: ft as string,
+        label: ft === 'all' ? 'All Fuel Types' : (ft as string).charAt(0).toUpperCase() + (ft as string).slice(1).toLowerCase()
+    }));
+    const allSelected = filtered.length > 0 && selectedIds.length === filtered.length;
 
     return (
         <AdminLayout>
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
-                <div>
-                    <div className="flex items-center space-x-2 mb-2">
-                        <span className="px-3 py-1 bg-blue-50 text-blue-600 text-[9px] font-black uppercase tracking-[0.2em] rounded-full border border-blue-100">Fleet Registry</span>
-                    </div>
-                    <h2 className="text-3xl font-black text-[#003366] uppercase tracking-tighter">All Vehicles</h2>
-                    <p className="text-slate-500 font-medium italic">View all registered client vehicles across the system</p>
-                </div>
-                <div className="bg-white rounded-2xl border border-slate-100 p-4 shadow-sm text-center min-w-[100px]">
-                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Total Fleet</p>
-                    <p className="text-2xl font-black text-[#003366]">{vehicles.length}</p>
-                </div>
-            </div>
+            <AdminPageHeader
+                badge="Fleet Registry"
+                badgeColor="blue"
+                title="All Vehicles"
+                subtitle="View all registered client vehicles across the system"
+                stats={[{ label: "Total Fleet", value: (vehicles || []).length }]}
+            />
 
-            {/* Controls Bar */}
-            <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-4 mb-6 flex flex-col lg:flex-row items-center justify-between gap-4">
-                <div className="flex flex-col md:flex-row items-center gap-4 w-full lg:w-auto">
-                    <div className="relative w-full md:w-[300px] group">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-red-600 transition-colors" size={16} />
-                        <Input
-                            value={searchTerm}
-                            onChange={e => setSearchTerm(e.target.value)}
-                            className="bg-slate-50 border-slate-100 pl-10 h-10 rounded-xl text-xs font-bold uppercase tracking-wider focus:ring-red-600/10 focus:border-red-600 transition-all shadow-none"
-                            placeholder="Make, model, reg, owner..."
-                        />
-                    </div>
-                    <div className="flex gap-4 w-full md:w-auto">
-                        <select
-                            value={filterFuel}
-                            onChange={e => setFilterFuel(e.target.value)}
-                            className="bg-slate-50 border-slate-100 h-10 px-4 rounded-xl text-[10px] font-black uppercase tracking-wider text-[#003366] focus:outline-none focus:ring-2 focus:ring-red-600/20 w-full md:w-auto"
-                        >
-                            {uniqueFuelTypes.map(ft => (
-                                <option key={ft as string} value={ft as string}>{ft === 'all' ? 'All Fuel Types' : (ft as string).charAt(0).toUpperCase() + (ft as string).slice(1).toLowerCase()}</option>
-                            ))}
-                        </select>
-                        <select
-                            value={sortOrder}
-                            onChange={e => setSortOrder(e.target.value as any)}
-                            className="bg-slate-50 border-slate-100 h-10 px-4 rounded-xl text-[10px] font-black uppercase tracking-wider text-[#003366] focus:outline-none focus:ring-2 focus:ring-red-600/20 w-full md:w-auto"
-                        >
-                            <option value="newest">Newest First</option>
-                            <option value="oldest">Oldest First</option>
-                            <option value="a-z">Make (A-Z)</option>
-                            <option value="year">Year (Newest)</option>
-                        </select>
-                    </div>
-                </div>
+            <FilterControls
+                searchTerm={searchTerm}
+                onSearchChange={setSearchTerm}
+                searchPlaceholder="Make, model, reg, owner..."
+                sortOptions={SORT_OPTIONS}
+                sortOrder={sortOrder}
+                onSortChange={setSortOrder}
+                filterOptions={fuelOptions}
+                filterValue={filterFuel}
+                onFilterChange={setFilterFuel}
+                selectAllButton={<SelectAllButton allSelected={allSelected} onSelectAll={selectAll} />}
+                viewModeToggle={<ViewModeToggle viewMode={viewMode} setViewMode={setViewMode} />}
+            />
 
-                <div className="flex items-center justify-between w-full lg:w-auto gap-4">
-                    <button onClick={selectAll} className="text-[10px] font-black uppercase text-slate-400 hover:text-[#003366] tracking-widest flex items-center gap-2">
-                        {selectedIds.length === filtered.length && filtered.length > 0 ? <CheckSquare size={14} className="text-red-600" /> : <Square size={14} />} Select All
-                    </button>
-                    <div className="flex items-center bg-slate-50 p-1 rounded-xl border border-slate-100">
-                        <button onClick={() => setViewMode('grid')} className={`p-1.5 rounded-lg transition-all flex items-center justify-center ${viewMode === 'grid' ? 'bg-white shadow-sm text-red-600' : 'text-slate-400 hover:text-[#003366]'}`}>
-                            <Grid size={14} />
-                        </button>
-                        <button onClick={() => setViewMode('list')} className={`p-1.5 rounded-lg transition-all flex items-center justify-center ${viewMode === 'list' ? 'bg-white shadow-sm text-red-600' : 'text-slate-400 hover:text-[#003366]'}`}>
-                            <ListIcon size={14} />
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            {/* Bulk Actions Menu */}
-            <AnimatePresence>
-                {selectedIds.length > 0 && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        className="bg-[#003366] text-white rounded-2xl p-4 mb-8 flex items-center justify-between shadow-xl shadow-[#003366]/10 animate-in slide-in-from-bottom-4"
-                    >
-                        <div className="flex items-center gap-4 text-xs font-bold uppercase tracking-widest pl-4">
-                            <span className="bg-white/20 w-8 h-8 rounded-lg flex items-center justify-center">{selectedIds.length}</span>
-                            Vehicles Selected
-                        </div>
-                        <div className="flex items-center gap-3">
-                            <button onClick={() => setSelectedIds([])} className="px-6 h-10 rounded-xl hover:bg-white/10 transition-colors text-[10px] font-black uppercase tracking-widest">Cancel</button>
-                            <button onClick={handleBulkDelete} className="bg-red-600 hover:bg-red-700 h-10 px-6 rounded-xl transition-colors text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
-                                <Trash2 size={14} /> Delete Selected
-                            </button>
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+            <BulkActionsBar
+                count={selectedIds.length}
+                label="Vehicles"
+                onDelete={handleBulkDelete}
+                onCancel={() => setSelectedIds([])}
+            />
 
             {loading ? (
-                <div className="flex flex-col items-center justify-center py-24 bg-white rounded-3xl border border-slate-100 shadow-sm">
-                    <Loader2 className="w-8 h-8 text-red-600 animate-spin mb-4" />
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Loading registry...</p>
-                </div>
+                <AdminLoading message="Loading registry..." />
             ) : filtered.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-24 bg-white rounded-3xl border border-slate-100 shadow-sm">
-                    <Car size={32} className="text-slate-300 mb-4" />
-                    <p className="text-sm font-black text-[#003366] uppercase tracking-widest">No Vehicles Found</p>
-                </div>
+                <AdminEmpty icon={<Car size={32} className="text-slate-300" />} message="No Vehicles Found" />
             ) : viewMode === 'grid' ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
                     {filtered.map(v => (
                         <div key={v.id} className={`bg-white rounded-3xl border transition-all duration-300 relative group p-6 overflow-hidden ${selectedIds.includes(v.id) ? 'border-red-600 shadow-md shadow-red-600/10 ring-1 ring-red-600' : 'border-slate-100 hover:border-slate-200 hover:shadow-lg hover:shadow-slate-200/50'}`}>
-                            {/* Card Selection */}
                             <div className="absolute top-4 left-4 z-10 text-slate-400 cursor-pointer" onClick={(e) => toggleSelection(v.id, e)}>
-                                {selectedIds.includes(v.id) ? <CheckSquare className="text-red-600" size={20} /> : <Square size={20} className="opacity-0 group-hover:opacity-100 transition-opacity" />}
+                                <SelectionCheckbox selected={selectedIds.includes(v.id)} showOnHover />
                             </div>
 
                             <div className="absolute top-4 right-4 z-10">
@@ -275,9 +198,7 @@ export default function AdminVehiclesPage() {
                             <thead>
                                 <tr className="bg-slate-50/50">
                                     <th className="px-6 py-6 w-12 text-center">
-                                        <button onClick={selectAll} className="text-slate-400 hover:text-[#003366]">
-                                            {selectedIds.length === filtered.length && filtered.length > 0 ? <CheckSquare size={16} className="text-red-600" /> : <Square size={16} />}
-                                        </button>
+                                        <SelectAllButton allSelected={allSelected} onSelectAll={selectAll} />
                                     </th>
                                     <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Vehicle</th>
                                     <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Registration</th>
@@ -298,7 +219,7 @@ export default function AdminVehiclesPage() {
                                     >
                                         <td className="px-6 py-4 text-center">
                                             <button onClick={(e) => toggleSelection(v.id, e)} className="text-slate-400 hover:text-[#003366]">
-                                                {selectedIds.includes(v.id) ? <CheckSquare size={16} className="text-red-600" /> : <Square size={16} />}
+                                                <SelectionCheckbox selected={selectedIds.includes(v.id)} />
                                             </button>
                                         </td>
                                         <td className="px-8 py-6">

@@ -13,15 +13,16 @@ class AdminClientController extends Controller
 {
     public function index()
     {
+        $spentByUser = Payment::where('status', 'completed')
+            ->selectRaw('user_id, SUM(amount) as total_spent')
+            ->groupBy('user_id')
+            ->pluck('total_spent', 'user_id');
+
         $clients = User::where('role', '!=', 'admin')
             ->withCount(['bookings', 'vehicles'])
             ->latest()
             ->get()
-            ->map(function ($user) {
-                $totalSpent = Payment::where('user_id', $user->id)
-                    ->where('status', 'completed')
-                    ->sum('amount');
-
+            ->map(function ($user) use ($spentByUser) {
                 return [
                     'id' => $user->id,
                     'name' => $user->name,
@@ -31,7 +32,7 @@ class AdminClientController extends Controller
                     'membership_tier' => $user->membership_tier ?? 'Bronze',
                     'bookings_count' => $user->bookings_count,
                     'vehicles_count' => $user->vehicles_count,
-                    'total_spent' => $totalSpent,
+                    'total_spent' => (float) ($spentByUser->get($user->id) ?? 0),
                     'created_at' => $user->created_at,
                 ];
             });
@@ -43,8 +44,6 @@ class AdminClientController extends Controller
     {
         $user = User::with('client')->findOrFail($id);
         
-        // If the user has a linked client record, use that client's ID. 
-        // Otherwise, fall back to matching by email (for older records or inconsistencies).
         $clientId = $user->client ? $user->client->id : null;
 
         $bookings = Booking::with(['vehicle'])
@@ -61,12 +60,11 @@ class AdminClientController extends Controller
             if ($clientId) {
                 $q->where('client_id', $clientId);
             } else {
-                // This shouldn't happen much, but fallback to email just in case we add that to vehicles later
                 $q->whereRaw('0 = 1'); 
             }
         })->get();
         
-        $payments = Payment::with('booking')
+        $payments = Payment::with(['booking', 'journal'])
             ->where('user_id', $user->id)
             ->latest()
             ->get();
@@ -79,6 +77,25 @@ class AdminClientController extends Controller
                 'vehicles' => $vehicles,
                 'payments' => $payments,
             ],
+        ]);
+    }
+
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+
+        if ($user->role === 'admin') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cannot delete admin users',
+            ], 400);
+        }
+
+        $user->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Client deleted successfully',
         ]);
     }
 }

@@ -13,11 +13,6 @@ class AdminDashboardController extends Controller
 {
     public function stats(Request $request)
     {
-        // Check if user is admin
-        if ($request->user()->role !== 'admin') {
-            return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
-        }
-
         $stats = [
             'total_bookings' => Booking::count(),
             'pending_bookings' => Booking::where('status', 'pending')->count(),

@@ -94,7 +94,7 @@ class BlogController extends Controller
                 $hasAccess = false;
             } else {
                 // Admins have bypass
-                if ($user->role === 'admin' || $user->email === 'admin@southringautos.com') {
+                if ($user->role === 'admin') {
                     $hasAccess = true;
                 } else {
                     $hasAccess = \App\Models\JournalPurchase::where('user_id', $user->id)

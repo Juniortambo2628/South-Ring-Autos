@@ -6,13 +6,22 @@ use App\Http\Controllers\Controller;
 use App\Models\RepairProgress;
 use App\Models\Booking;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RepairProgressController extends Controller
 {
     // Client: View progress for a specific booking
     public function show($bookingId)
     {
-        $progress = RepairProgress::where('booking_id', $bookingId)
+        $user = Auth::user();
+        $booking = Booking::with('client')->findOrFail($bookingId);
+
+        // Authorization: user must own this booking OR be an admin
+        if ($booking->client_id && $booking->client && $booking->client->user_id !== $user->id && $user->role !== 'admin') {
+            return response()->json(['success' => false, 'message' => 'Unauthorized.'], 403);
+        }
+
+        $progress = RepairProgress::with('updater')->where('booking_id', $bookingId)
             ->orderBy('created_at', 'desc')
             ->get();
 

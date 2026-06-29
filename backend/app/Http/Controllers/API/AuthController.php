@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Actions\NotifyUser;
 use App\Http\Controllers\Controller;
 use App\Mail\AccountWelcomeMail;
 use App\Mail\CustomResetPasswordMail;
-use App\Models\LoyaltyPoint;
 use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -14,9 +14,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use App\Notifications\AppNotification;
-use App\Models\EmailTemplate;
-use App\Mail\DynamicEmail;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Str;
 
@@ -61,15 +58,9 @@ class AuthController extends Controller
                 ]);
             }
 
-            // Provide starting loyalty points if enabled
-            $welcomePoints = Setting::where('key', 'welcome_loyalty_points')->value('value') ?? 0;
+            $welcomePoints = (int) (Setting::where('key', 'welcome_loyalty_points')->value('value') ?? 0);
             if ($welcomePoints > 0) {
-                LoyaltyPoint::create([
-                    'user_id' => $user->id,
-                    'points' => $welcomePoints,
-                    'transaction_type' => 'earned',
-                    'description' => 'Welcome bonus for creating an account',
-                ]);
+                $user->increment('loyalty_points', $welcomePoints);
             }
 
             try {
@@ -106,24 +97,18 @@ class AuthController extends Controller
             'profile_completed' => false,
         ]);
 
-        $user->notify(new AppNotification(
+        NotifyUser::send(
+            $user,
             'Welcome to South Ring Autos!',
             'Thank you for creating an account with us. Complete your profile to get the most out of your dashboard.',
             'success',
             '/profile'
-        ));
+        );
 
-        $template = EmailTemplate::where('type', 'registration')->where('is_active', true)->first();
-        if ($template) {
-            try {
-                Mail::to($user->email)->send(new DynamicEmail($template, [
-                    'name' => $user->name,
-                    'email' => $user->email,
-                ]));
-            } catch (\Exception $e) {
-                Log::error("Failed to send welcome email: " . $e->getMessage());
-            }
-        }
+        NotifyUser::sendDynamicEmail($user->email, 'registration', [
+            'name' => $user->name,
+            'email' => $user->email,
+        ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
 

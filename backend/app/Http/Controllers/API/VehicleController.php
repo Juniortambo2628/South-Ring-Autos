@@ -4,19 +4,21 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Vehicle;
+use App\Traits\ResolvesClient;
 
 class VehicleController extends Controller
 {
+    use ResolvesClient;
+
     public function index(Request $request)
     {
         $user = $request->user();
+        $clientId = $this->resolveClientIdByEmail($user->email);
 
-        // Fetch vehicles owned by this user via the clients table
-        $client = DB::table('clients')->where('email', $user->email)->first();
-        $vehicles = $client
-            ? Vehicle::where('client_id', $client->id)->get()
+        $vehicles = $clientId
+            ? Vehicle::where('client_id', $clientId)->get()
             : collect([]);
 
         return response()->json([
@@ -31,29 +33,25 @@ class VehicleController extends Controller
             'make' => 'required|string',
             'model' => 'required|string',
             'year' => 'nullable|integer',
-            'registration' => 'required|string|unique:vehicles,registration',
+            'registration' => 'required|string',
             'color' => 'nullable|string',
             'fuel_type' => 'nullable|string',
             'mileage' => 'nullable|integer',
         ]);
 
         $user = $request->user();
+        $client = $this->resolveOrCreateClient($user);
 
-        // Find or create the client record (vehicles FK references clients, not users)
-        $client = DB::table('clients')->where('email', $user->email)->first();
-        if (!$client) {
-            $clientId = DB::table('clients')->insertGetId([
-                'name' => $user->name,
-                'email' => $user->email,
-                'phone' => $user->phone ?? '',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        } else {
-            $clientId = $client->id;
+        $existing = Vehicle::where('client_id', $client->id)
+            ->where('registration', $validated['registration'])->exists();
+        if ($existing) {
+            return response()->json([
+                'success' => false,
+                'message' => 'A vehicle with this registration is already registered to your account.',
+            ], 422);
         }
 
-        $validated['client_id'] = $clientId;
+        $validated['client_id'] = $client->id;
         $vehicle = Vehicle::create($validated);
 
         return response()->json([
@@ -100,7 +98,20 @@ class VehicleController extends Controller
 
     public function destroy($id, Request $request)
     {
-        $vehicle = $request->user()->vehicles()->findOrFail($id);
+        $vehicle = $request->user()->vehicles()->with('images')->findOrFail($id);
+
+        // Clean up vehicle images from storage
+        foreach ($vehicle->images as $image) {
+            $path = str_replace('storage/', '', $image->image_path);
+            Storage::disk('public')->delete($path);
+        }
+
+        // Clean up vehicle thumbnail from storage
+        if ($vehicle->thumbnail) {
+            $thumbPath = str_replace('storage/', '', $vehicle->thumbnail);
+            Storage::disk('public')->delete($thumbPath);
+        }
+
         $vehicle->delete();
 
         return response()->json([

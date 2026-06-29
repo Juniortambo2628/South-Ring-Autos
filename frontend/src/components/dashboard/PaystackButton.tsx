@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Loader2, CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import api from "@/lib/api";
+import { formatCurrency } from "@/lib/utils";
 
 declare global {
     interface Window {
@@ -102,9 +103,6 @@ export default function PaystackButton({
             setLoading(false);
         }
     };
-
-    const formatCurrency = (amt: number) =>
-        new Intl.NumberFormat("en-KE", { style: "currency", currency: "KES" }).format(amt);
 
     return (
         <Button

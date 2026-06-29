@@ -26,6 +26,7 @@ const menuItems = [
     { icon: MessageSquare, label: "Messages", path: "/admin/messages" },
     { icon: Settings, label: "Settings", path: "/admin/settings" },
     { icon: Mail, label: "Email Templates", path: "/admin/email-templates" },
+    { icon: Mail, label: "Subscribers", path: "/admin/subscribers" },
 ];
 
 function Sidebar({ isOpen, toggleSidebar }: { isOpen: boolean; toggleSidebar: () => void }) {

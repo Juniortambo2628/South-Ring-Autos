@@ -7,11 +7,12 @@ use App\Models\DeliveryRequest;
 use App\Models\Booking;
 use App\Models\Client;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Traits\ResolvesClient;
 
 class DeliveryController extends Controller
 {
-    // Client: Create a delivery request
+    use ResolvesClient;
+
     public function store(Request $request)
     {
         $request->validate([
@@ -26,13 +27,7 @@ class DeliveryController extends Controller
         ]);
 
         $user = $request->user('sanctum');
-
-        // Resolve client_id through the clients table
-        $clientId = null;
-        if ($user) {
-            $client = DB::table('clients')->where('email', $user->email)->first();
-            $clientId = $client ? $client->id : null;
-        }
+        $clientId = $user ? $this->resolveClientIdByEmail($user->email) : null;
 
         $delivery = DeliveryRequest::create([
             'booking_id' => $request->booking_id,
@@ -55,17 +50,15 @@ class DeliveryController extends Controller
         ], 201);
     }
 
-    // Admin: Get all delivery requests
     public function index()
     {
-        $deliveries = DeliveryRequest::with(['booking', 'assignee'])
+        $deliveries = DeliveryRequest::with(['booking', 'assignee', 'client'])
             ->latest('created_at')
             ->get();
 
         return response()->json(['success' => true, 'data' => $deliveries]);
     }
 
-    // Admin: Update delivery (assign driver, update status)
     public function update(Request $request, $id)
     {
         $request->validate([

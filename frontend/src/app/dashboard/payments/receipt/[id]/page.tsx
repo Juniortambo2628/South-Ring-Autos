@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { Loader2, Printer, ArrowLeft, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import api from "@/lib/api";
+import { formatCurrency } from "@/lib/utils";
 
 export default function ReceiptPage() {
     const params = useParams();
@@ -28,9 +29,6 @@ export default function ReceiptPage() {
             setLoading(false);
         }
     };
-
-    const formatCurrency = (amount: number) =>
-        new Intl.NumberFormat("en-KE", { style: "currency", currency: "KES" }).format(amount);
 
     if (loading) {
         return (

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Actions\NotifyUser;
 use App\Http\Controllers\Controller;
 use App\Models\Payment;
 use App\Models\Booking;
@@ -11,11 +12,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Mail;
-use App\Models\EmailTemplate;
-use App\Mail\DynamicEmail;
-use App\Notifications\AppNotification;
-use App\Models\User;
 
 class PaymentController extends Controller
 {
@@ -49,7 +45,7 @@ class PaymentController extends Controller
     {
         $user = $request->user('sanctum');
 
-        $payments = Payment::with('booking')
+        $payments = Payment::with(['booking', 'journal'])
             ->where('user_id', $user->id)
             ->latest()
             ->get();
@@ -107,12 +103,13 @@ class PaymentController extends Controller
         $booking->update(['estimated_cost' => $request->amount]);
 
         if ($user) {
-            $user->notify(new AppNotification(
+            NotifyUser::send(
+                $user,
                 'New Invoice Created',
                 "An invoice of Ksh " . number_format($request->amount, 2) . " has been generated for your {$booking->service} booking.",
                 'info',
                 '/dashboard/payments'
-            ));
+            );
         }
 
         return response()->json([
@@ -133,7 +130,7 @@ class PaymentController extends Controller
         $payment = Payment::findOrFail($request->payment_id);
 
         // Security: ensure the payment belongs to this user
-        if ($payment->user_id && $payment->user_id !== $user->id && $user->role !== 'admin') {
+        if ($payment->user_id && $payment->user_id !== $user->id) {
             return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
         }
 
@@ -160,13 +157,13 @@ class PaymentController extends Controller
             ?: (rtrim(config('app.frontend_url', 'https://southringautos.com'), '/') . '/dashboard/payments?verify=' . $reference);
 
         try {
-            $request = Http::withToken($secretKey);
+            $http = Http::withToken($secretKey);
             
             if (config('app.env') === 'local') {
-                $request->withoutVerifying();
+                $http->withoutVerifying();
             }
 
-            $response = $request->post('https://api.paystack.co/transaction/initialize', [
+            $response = $http->post('https://api.paystack.co/transaction/initialize', [
                 'email' => $user->email,
                 'amount' => $amountInCents,
                 'reference' => $reference,
@@ -225,13 +222,13 @@ class PaymentController extends Controller
         }
 
         try {
-            $request = Http::withToken($secretKey);
+            $http = Http::withToken($secretKey);
 
             if (config('app.env') === 'local') {
-                $request->withoutVerifying();
+                $http->withoutVerifying();
             }
 
-            $response = $request->get("https://api.paystack.co/transaction/verify/{$reference}");
+            $response = $http->get("https://api.paystack.co/transaction/verify/{$reference}");
 
             $data = $response->json();
 
@@ -260,25 +257,19 @@ class PaymentController extends Controller
                 $this->fulfillPayment($payment);
 
                 if ($payment->user) {
-                    $payment->user->notify(new AppNotification(
+                    NotifyUser::send(
+                        $payment->user,
                         'Payment Successful',
                         "Your payment of Ksh " . number_format($payment->amount, 2) . " for Invoice {$payment->invoice_number} has been received.",
                         'success',
                         "/dashboard/payments/receipt/{$payment->id}"
-                    ));
+                    );
 
-                    try {
-                        $template = EmailTemplate::where('type', 'payment_confirmation')->where('is_active', true)->first();
-                        if ($template) {
-                            Mail::to($payment->user->email)->send(new DynamicEmail($template, [
-                                'name' => $payment->user->name,
-                                'amount' => number_format($payment->amount, 2),
-                                'invoice_number' => $payment->invoice_number,
-                            ]));
-                        }
-                    } catch (\Exception $e) {
-                        Log::error("Failed to send payment confirmation email: " . $e->getMessage());
-                    }
+                    NotifyUser::sendDynamicEmail($payment->user->email, 'payment_confirmation', [
+                        'name' => $payment->user->name,
+                        'amount' => number_format($payment->amount, 2),
+                        'invoice_number' => $payment->invoice_number,
+                    ]);
                 }
 
                 return response()->json([
@@ -390,7 +381,7 @@ class PaymentController extends Controller
 
         // Security: user can only see their own receipts
         $user = $request->user('sanctum');
-        if ($user->role !== 'admin' && $payment->user_id !== $user->id) {
+        if ($payment->user_id !== $user->id) {
             return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
         }
 

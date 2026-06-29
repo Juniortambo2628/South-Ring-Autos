@@ -5,12 +5,15 @@ import AdminLayout from "@/components/admin/AdminLayout";
 import {
     CalendarDays, FileText, MessageSquare, TrendingUp, ChevronRight, Search, Edit2, Trash2, CheckCircle2,
     XCircle, Clock, Calendar, User, Phone, Car,
-    ChevronLeft, Loader2, Filter, Plus, ClipboardList, Star, Users
+    ChevronLeft, Loader2, Filter, Plus, Star, Users
 } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { PageHeader } from "@/components/ui/page-header";
+import { EmptyState } from "@/components/ui/empty-state";
+import { StatusBadge } from "@/components/ui/status-badge";
 import api from "@/lib/api";
 
 function StatCard({ title, value, icon: Icon, color, bg }: {
@@ -58,23 +61,19 @@ export default function AdminDashboardPage() {
 
     return (
         <AdminLayout>
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
-                <div>
-                    <div className="flex items-center space-x-2 mb-2">
-                        <span className="px-3 py-1 bg-red-50 text-red-600 text-[9px] font-black uppercase tracking-[0.2em] rounded-full border border-red-100">Administrative Console</span>
-                    </div>
-                    <h2 className="text-3xl font-black text-[#003366] uppercase tracking-tighter">System Overview</h2>
-                    <p className="text-slate-500 font-medium italic">Welcome back, Super Admin</p>
-                </div>
-                <div className="flex items-center space-x-3">
+            <PageHeader
+                badge="Administrative Console"
+                title="System Overview"
+                description="Welcome back, Super Admin"
+                action={
                     <Link href="/admin/bookings">
                         <Button className="bg-[#003366] hover:bg-red-600 text-white rounded-2xl h-14 px-8 font-black uppercase tracking-widest text-[10px] shadow-xl shadow-blue-900/10 transition-all flex items-center space-x-3">
                             <Plus size={18} />
                             <span>New Booking</span>
                         </Button>
                     </Link>
-                </div>
-            </div>
+                }
+            />
 
             {loading ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
@@ -120,23 +119,17 @@ export default function AdminDashboardPage() {
                                             </div>
                                         </div>
                                         <div className="flex items-center space-x-4">
-                                            <span className={`px-4 py-1.5 text-[9px] font-black uppercase tracking-widest rounded-full border ${booking.status === 'confirmed' ? 'bg-green-50 text-green-600 border-green-100' :
-                                                booking.status === 'pending' ? 'bg-amber-50 text-amber-600 border-amber-100' :
-                                                    'bg-red-50 text-red-600 border-red-100'
-                                                }`}>
-                                                {booking.status}
-                                            </span>
+                                            <StatusBadge status={booking.status} />
                                             <ChevronRight size={18} className="text-slate-300 group-hover:text-red-600 group-hover:translate-x-1 transition-all" />
                                         </div>
                                     </div>
                                 ))
                             ) : (
-                                <div className="p-20 text-center">
-                                    <div className="w-16 h-16 bg-slate-50 rounded-3xl flex items-center justify-center mx-auto mb-6 border border-slate-100 text-slate-200">
-                                        <ClipboardList size={32} />
-                                    </div>
-                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">No recent appointments</p>
-                                </div>
+                                <EmptyState
+                                    icon={ClipboardList}
+                                    title="No recent appointments"
+                                    description="No recent bookings to display"
+                                />
                             )}
                         </div>
                     </div>

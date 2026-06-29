@@ -51,7 +51,7 @@ class JournalController extends Controller
         }
 
         // Admins automatically get access to all journals
-        if ($user->role === 'admin' || $user->email === 'admin@southringautos.com') {
+        if ($user->role === 'admin') {
             return response()->json(['has_access' => true]);
         }
 

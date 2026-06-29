@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Actions\NotifyUser;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\Client;
@@ -11,15 +12,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Log;
-use App\Models\EmailTemplate;
-use App\Mail\DynamicEmail;
-use App\Notifications\AppNotification;
-use App\Models\User;
+use App\Traits\ResolvesClient;
 
 class BookingController extends Controller
 {
+    use ResolvesClient;
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -54,9 +51,9 @@ class BookingController extends Controller
                 }
                 $client_id = $client->id;
             } else if (!empty($validated['email'])) {
-                $client = Client::where('email', $validated['email'])->first();
+                $resolvedClient = $this->resolveClientByEmail($validated['email']);
                 
-                if (!$client) {
+                if (!$resolvedClient) {
                     $password = Str::random(8);
                     $client = Client::create([
                         'name' => $validated['name'],
@@ -64,8 +61,10 @@ class BookingController extends Controller
                         'phone' => $validated['phone'],
                         'password' => Hash::make($password),
                     ]);
+                    $client_id = $client->id;
+                } else {
+                    $client_id = $resolvedClient->id;
                 }
-                $client_id = $client->id;
             } else {
                 $client_id = null;
             }
@@ -104,48 +103,30 @@ class BookingController extends Controller
             ]);
 
             if ($booking->email) {
-                try {
-                    $template = EmailTemplate::where('type', 'booking_received')->where('is_active', true)->first();
-                    if ($template) {
-                        Mail::to($booking->email)->send(new DynamicEmail($template, [
-                            'name' => $booking->name,
-                            'service' => $booking->service,
-                            'registration' => $booking->registration,
-                            'reference' => 'SRA-' . str_pad($booking->id, 6, '0', STR_PAD_LEFT),
-                            'date' => $booking->date ? date('Y-m-d', strtotime($booking->date)) : 'N/A',
-                            'time' => $booking->preferred_time ?? ($booking->date ? date('H:i', strtotime($booking->date)) : 'N/A'),
-                        ]));
-                    }
-                } catch (\Exception $e) {
-                    Log::error("Failed to send booking created email to {$booking->email}: " . $e->getMessage());
-                }
+                NotifyUser::sendDynamicEmail($booking->email, 'booking_received', [
+                    'name' => $booking->name,
+                    'service' => $booking->service,
+                    'registration' => $booking->registration,
+                    'reference' => 'SRA-' . str_pad($booking->id, 6, '0', STR_PAD_LEFT),
+                    'date' => $booking->date ? date('Y-m-d', strtotime($booking->date)) : 'N/A',
+                    'time' => $booking->preferred_time ?? ($booking->date ? date('H:i', strtotime($booking->date)) : 'N/A'),
+                ]);
 
-                // Send real-time notification to User if they have an account
-                $notifiableUser = User::where('email', $booking->email)->first();
-                if ($notifiableUser) {
-                    $notifiableUser->notify(new AppNotification(
-                        'Booking Received',
-                        "Your {$booking->service} booking for {$booking->registration} has been received and is pending review.",
-                        'info',
-                        '/dashboard/bookings'
-                    ));
-                }
+                NotifyUser::send(
+                    $booking->email,
+                    'Booking Received',
+                    "Your {$booking->service} booking for {$booking->registration} has been received and is pending review.",
+                    'info',
+                    '/dashboard/bookings'
+                );
             }
 
-            // Notify Admins
-            try {
-                $admins = User::where('role', 'admin')->get();
-                foreach ($admins as $admin) {
-                    $admin->notify(new AppNotification(
-                        'New Booking Request',
-                        "New booking from {$booking->name} ({$booking->registration}) for {$booking->service}.",
-                        'info',
-                        '/admin/bookings'
-                    ));
-                }
-            } catch (\Exception $e) {
-                Log::error("Failed to notify admins of new booking: " . $e->getMessage());
-            }
+            NotifyUser::notifyAdmins(
+                'New Booking Request',
+                "New booking from {$booking->name} ({$booking->registration}) for {$booking->service}.",
+                'info',
+                '/admin/bookings'
+            );
 
             return response()->json([
                 'success' => true,
@@ -170,11 +151,10 @@ class BookingController extends Controller
         }
 
         // Resolve client record from clients table
-        $client = \Illuminate\Support\Facades\DB::table('clients')->where('email', $user->email)->first();
-        $clientId = $client ? $client->id : null;
+        $clientId = $this->resolveClientIdByEmail($user->email);
 
         // Query by email (reliable) or client_id (for users who booked while logged in)
-        $bookings = Booking::with('vehicle')
+        $bookings = Booking::with(['vehicle', 'client'])
             ->where(function ($q) use ($user, $clientId) {
                 $q->where('email', $user->email);
                 if ($clientId) {
@@ -203,35 +183,37 @@ class BookingController extends Controller
         $booking->update($validated);
 
         if ($booking->status !== $oldStatus && $booking->email) {
-            try {
-                $template = EmailTemplate::where('type', 'booking_status_updated')->where('is_active', true)->first();
-                if ($template) {
-                    Mail::to($booking->email)->send(new DynamicEmail($template, [
-                        'name' => $booking->name,
-                        'status' => $booking->status,
-                        'registration' => $booking->registration,
-                    ]));
-                }
-            } catch (\Exception $e) {
-                Log::error("Failed to send booking status email to {$booking->email}: " . $e->getMessage());
-            }
+            NotifyUser::sendDynamicEmail($booking->email, 'booking_status_updated', [
+                'name' => $booking->name,
+                'status' => $booking->status,
+                'registration' => $booking->registration,
+            ]);
 
-            $notifiableUser = User::where('email', $booking->email)->first();
-            if ($notifiableUser) {
-                $statusMsg = $booking->status === 'confirmed' ? "has been confirmed! Please check your invoice." : "status is now: {$booking->status}";
-                $notifiableUser->notify(new AppNotification(
-                    'Booking Status Updated',
-                    "Your booking for {$booking->registration} {$statusMsg}",
-                    $booking->status === 'confirmed' ? 'success' : 'info',
-                    '/dashboard/bookings'
-                ));
-            }
+            $statusMsg = $booking->status === 'confirmed' ? 'has been confirmed! Please check your invoice.' : "status is now: {$booking->status}";
+            NotifyUser::send(
+                $booking->email,
+                'Booking Status Updated',
+                "Your booking for {$booking->registration} {$statusMsg}",
+                $booking->status === 'confirmed' ? 'success' : 'info',
+                '/dashboard/bookings'
+            );
         }
 
         return response()->json([
             'success' => true,
             'message' => 'Booking status updated successfully',
             'booking' => $booking->load(['client', 'vehicle'])
+        ]);
+    }
+
+    public function destroy($id)
+    {
+        $booking = Booking::findOrFail($id);
+        $booking->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Booking deleted successfully',
         ]);
     }
 }

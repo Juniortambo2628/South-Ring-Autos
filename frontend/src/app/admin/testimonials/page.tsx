@@ -12,8 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import api from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
+import MySwal from "@/lib/swal";
 import Image from "next/image";
 
 // FilePond
@@ -26,7 +25,7 @@ import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
 
 registerPlugin(FilePondPluginImagePreview, FilePondPluginFileValidateType, FilePondPluginFileValidateSize);
 
-const MySwal = withReactContent(Swal);
+
 const ASSET_URL = process.env.NEXT_PUBLIC_ASSET_URL || "http://127.0.0.1:8000";
 
 export default function AdminTestimonialsPage() {

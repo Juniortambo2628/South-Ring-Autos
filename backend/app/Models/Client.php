@@ -18,6 +18,10 @@ class Client extends Model
         'password',
     ];
 
+    protected $casts = [
+        'password' => 'hashed',
+    ];
+
     public function vehicles()
     {
         return $this->hasMany(Vehicle::class);

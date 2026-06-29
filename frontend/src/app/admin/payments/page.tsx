@@ -13,6 +13,7 @@ import {
     Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter
 } from "@/components/ui/dialog";
 import api from "@/lib/api";
+import { formatCurrency } from "@/lib/utils";
 
 export default function AdminPaymentsPage() {
     const [payments, setPayments] = useState<any[]>([]);
@@ -72,7 +73,7 @@ export default function AdminPaymentsPage() {
 
     const fetchBookings = async () => {
         try {
-            const res = await api.get("/bookings");
+            const res = await api.get("/admin/bookings");
             setBookings(res.data.data || res.data || []);
         } catch (err) {
             console.error("Failed to fetch bookings", err);
@@ -99,9 +100,6 @@ export default function AdminPaymentsPage() {
             setCreatingInvoice(false);
         }
     };
-
-    const formatCurrency = (amount: number) =>
-        new Intl.NumberFormat('en-KE', { style: 'currency', currency: 'KES' }).format(amount);
 
     const statusCounts = {
         all: payments.length,

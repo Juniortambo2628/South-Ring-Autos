@@ -8,10 +8,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
-
-const MySwal = withReactContent(Swal);
+import MySwal from "@/lib/swal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
@@ -59,7 +56,7 @@ export default function AdminBlogPage() {
 
         setDeleting(id);
         try {
-            await api.delete(`/blog/${id}`);
+            await api.delete(`/admin/blog/${id}`);
             fetchPosts();
             setSelectedIds(prev => prev.filter(selId => selId !== id));
         } catch (err) {
@@ -84,7 +81,7 @@ export default function AdminBlogPage() {
         if (!result.isConfirmed) return;
 
         try {
-            await Promise.all(selectedIds.map(id => api.delete(`/blog/${id}`)));
+            await Promise.all(selectedIds.map(id => api.delete(`/admin/blog/${id}`)));
             setSelectedIds([]);
             fetchPosts();
             MySwal.fire('Deleted!', 'Selected posts have been deleted.', 'success');

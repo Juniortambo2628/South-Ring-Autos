@@ -14,10 +14,7 @@ import { Input } from "@/components/ui/input";
 import api from "@/lib/api";
 import { ContactMessage } from "@/types";
 import { useToast } from "@/hooks/use-toast";
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
-
-const MySwal = withReactContent(Swal);
+import MySwal from "@/lib/swal";
 
 export default function AdminMessagesPage() {
     const [messages, setMessages] = useState<ContactMessage[]>([]);
@@ -39,7 +36,7 @@ export default function AdminMessagesPage() {
     const fetchMessages = async () => {
         setLoading(true);
         try {
-            const response = await api.get("/contact");
+            const response = await api.get("/admin/contact");
             setMessages(response.data.data || []);
         } catch (err: any) {
             console.error("Failed to fetch messages", err);
@@ -69,7 +66,7 @@ export default function AdminMessagesPage() {
 
         setIsDeleting(prev => ({ ...prev, [id]: true }));
         try {
-            await api.delete(`/contact/${id}`);
+            await api.delete(`/admin/contact/${id}`);
             toast({
                 title: 'Message Deleted',
                 description: 'The correspondence has been securely removed.',
@@ -103,7 +100,7 @@ export default function AdminMessagesPage() {
         if (!result.isConfirmed) return;
 
         try {
-            await Promise.all(selectedIds.map(id => api.delete(`/contact/${id}`)));
+            await Promise.all(selectedIds.map(id => api.delete(`/admin/contact/${id}`)));
             setSelectedIds([]);
             fetchMessages();
             toast({ title: "Messages Deleted", description: "Selected correspondence has been securely removed." });

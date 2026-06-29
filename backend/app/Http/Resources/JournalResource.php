@@ -20,7 +20,7 @@ class JournalResource extends JsonResource
         if ($this->year == \Carbon\Carbon::now()->year) {
             $hasAccess = true;
         } elseif ($user) {
-            if ($user->role === 'admin' || $user->email === 'admin@southringautos.com') {
+            if ($user->role === 'admin') {
                 $hasAccess = true;
             } else {
                 $hasAccess = \App\Models\JournalPurchase::where('user_id', $user->id)
