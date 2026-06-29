@@ -59,7 +59,7 @@ export function SelectAllButton({ allSelected, onSelectAll }: SelectAllButtonPro
 
 interface SelectionCheckboxProps {
     selected: boolean;
-    onClick: (e: React.MouseEvent) => void;
+    onClick?: (e: React.MouseEvent) => void;
     showOnHover?: boolean;
 }
 
