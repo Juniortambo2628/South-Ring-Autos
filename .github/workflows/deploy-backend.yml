@@ -16,17 +16,25 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Sync Backend Files via rsync
-        uses: burnett0/rsync-deployments@v7.0.1
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
         with:
-          switch: -avz --delete
-          path: backend/
-          remote_path: /home/YOUR_CPANEL_USERNAME/sra-core
-          remote_host: ${{ secrets.SSH_HOST }}
-          remote_port: ${{ secrets.SSH_PORT }}
-          remote_user: ${{ secrets.SSH_USER }}
-          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
-          args: --exclude='.env' --exclude='storage/app/public/*' --exclude='storage/framework/cache/*' --exclude='storage/framework/sessions/*' --exclude='storage/framework/views/*' --exclude='storage/logs/*'
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: unnecessary
+          if_key_exists: replace
+
+      - name: Sync Backend Files via rsync
+        run: |
+          rsync -avz --delete \
+            -e "ssh -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no" \
+            --exclude='.env' \
+            --exclude='storage/app/public/*' \
+            --exclude='storage/framework/cache/*' \
+            --exclude='storage/framework/sessions/*' \
+            --exclude='storage/framework/views/*' \
+            --exclude='storage/logs/*' \
+            backend/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/YOUR_CPANEL_USERNAME/sra-core
+
 
       - name: Run Remote Post-Deployment Commands
         uses: appleboy/ssh-action@v1.0.3
