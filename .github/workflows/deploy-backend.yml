@@ -23,11 +23,18 @@ jobs:
           known_hosts: unnecessary
           if_key_exists: replace
 
+      - name: Ensure Remote Directory Exists
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: mkdir -p /home/zhpebukm/sra-core
+
       - name: Sync Backend Files via SCP
         run: |
-          scp -P ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no -r backend/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/YOUR_CPANEL_USERNAME/sra-core/
-
-
+          scp -P ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no -r backend/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/zhpebukm/sra-core/
 
       - name: Run Remote Post-Deployment Commands
         uses: appleboy/ssh-action@v1.0.3
@@ -37,7 +44,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd /home/YOUR_CPANEL_USERNAME/sra-core
+            cd /home/zhpebukm/sra-core
             composer install --no-dev --optimize-autoloader
             php artisan migrate --force
             php artisan config:cache
