@@ -23,17 +23,10 @@ jobs:
           known_hosts: unnecessary
           if_key_exists: replace
 
-      - name: Sync Backend Files via rsync
+      - name: Sync Backend Files via SCP
         run: |
-          rsync -avz --delete \
-            -e "ssh -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no" \
-            --exclude='.env' \
-            --exclude='storage/app/public/*' \
-            --exclude='storage/framework/cache/*' \
-            --exclude='storage/framework/sessions/*' \
-            --exclude='storage/framework/views/*' \
-            --exclude='storage/logs/*' \
-            backend/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/YOUR_CPANEL_USERNAME/sra-core
+          scp -P ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no -r backend/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/YOUR_CPANEL_USERNAME/sra-core/
+
 
 
       - name: Run Remote Post-Deployment Commands
