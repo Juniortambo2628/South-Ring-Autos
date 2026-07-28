@@ -16,6 +16,11 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Setup PHP 8.3
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+
       - name: Install SSH Key
         uses: shimataro/ssh-key-action@v2
         with:
@@ -45,6 +50,13 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             cd /home/zhpebukm/sra-core
+            echo "Verifying PHP version..."
+            php -v
+            PHP_MAJOR_MINOR=$(php -r "echo PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;")
+            if [ "$PHP_MAJOR_MINOR" != "8.3" ]; then
+              echo "ERROR: Expected PHP 8.3 but found PHP $PHP_MAJOR_MINOR"
+              exit 1
+            fi
             composer install --no-dev --optimize-autoloader
             php artisan migrate --force
             php artisan config:cache
