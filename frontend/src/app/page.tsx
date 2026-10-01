@@ -96,6 +96,7 @@ export default function HomePage() {
 
           return <SectionComponent key={sectionConfig.id} content={landingContent} />;
         })}
+        <BrandsSection />
       </main>
     </PublicShell>
   );

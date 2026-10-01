@@ -23,6 +23,7 @@ const menuItems = [
     { icon: FileText, label: "Blog Posts", path: "/admin/blog" },
     { icon: BookOpen, label: "Journals", path: "/admin/journals" },
     { icon: Quote, label: "Testimonials", path: "/admin/testimonials" },
+{ icon: Car, label: "Car Brands", path: "/admin/car-brands" },
     { icon: MessageSquare, label: "Messages", path: "/admin/messages" },
     { icon: Settings, label: "Settings", path: "/admin/settings" },
     { icon: Mail, label: "Email Templates", path: "/admin/email-templates" },
