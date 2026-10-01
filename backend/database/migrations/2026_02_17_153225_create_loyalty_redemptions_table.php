@@ -15,7 +15,7 @@ return new class extends Migration
             $table->integer('id', true);
             $table->integer('client_id');
             $table->integer('reward_id')->index('reward_id');
-            $table->integer('booking_id')->nullable()->index('booking_id');
+            $table->integer('booking_id')->nullable()->index('idx_lrd_booking_id');
             $table->integer('points_spent');
             $table->enum('status', ['pending', 'applied', 'cancelled'])->nullable()->default('pending');
             $table->decimal('discount_applied', 10)->nullable();

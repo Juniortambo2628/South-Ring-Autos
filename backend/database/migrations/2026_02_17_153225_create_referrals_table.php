@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('referred_email', 100)->index('idx_referred_email');
             $table->integer('referred_client_id')->nullable()->index('referred_client_id');
             $table->string('referral_code', 50)->index('idx_code');
-            $table->enum('status', ['pending', 'registered', 'completed', 'rewarded'])->nullable()->default('pending')->index('idx_status');
+            $table->enum('status', ['pending', 'registered', 'completed', 'rewarded'])->nullable()->default('pending')->index('idx_ref_status');
             $table->decimal('referrer_reward', 10)->nullable()->default(500);
             $table->decimal('referee_reward', 10)->nullable()->default(500);
             $table->integer('first_booking_id')->nullable()->index('first_booking_id');

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('repair_progress', function (Blueprint $table) {
             $table->integer('id', true);
-            $table->integer('booking_id')->index('idx_booking_id');
+            $table->integer('booking_id')->index('idx_rp_booking_id');
             $table->string('stage', 50);
             $table->text('description')->nullable();
             $table->integer('progress_percentage')->nullable()->default(0);

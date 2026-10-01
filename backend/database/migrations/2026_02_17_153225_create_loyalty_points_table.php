@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('loyalty_points', function (Blueprint $table) {
             $table->integer('id', true);
-            $table->integer('client_id')->unique('client_id');
+            $table->integer('client_id')->unique('uniq_lp_client_id');
             $table->integer('points_earned')->nullable()->default(0);
             $table->integer('points_redeemed')->nullable()->default(0);
             $table->integer('points_available')->nullable()->storedAs('(`points_earned` - `points_redeemed`)')->index('idx_points_available');

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('mileage_history', function (Blueprint $table) {
             $table->integer('id', true);
             $table->integer('vehicle_id');
-            $table->integer('booking_id')->nullable()->index('booking_id');
+            $table->integer('booking_id')->nullable()->index('idx_mh_booking_id');
             $table->integer('mileage');
             $table->date('recorded_date')->index('idx_recorded_date');
             $table->enum('source', ['booking', 'manual', 'service'])->nullable()->default('booking');

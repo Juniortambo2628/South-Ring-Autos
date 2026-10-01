@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('vehicles', function (Blueprint $table) {
             $table->integer('id', true);
-            $table->integer('client_id')->index('idx_client_id');
+            $table->integer('client_id')->index('idx_veh_client_id');
             $table->string('make', 50);
             $table->string('model', 50);
             $table->integer('year')->nullable();
