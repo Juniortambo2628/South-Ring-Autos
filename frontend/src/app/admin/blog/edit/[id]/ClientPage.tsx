@@ -102,7 +102,6 @@ export default function EditBlogPost() {
         setSubmitting(true);
         try {
             const payload = new FormData();
-            payload.append('_method', 'PATCH');
             payload.append('title', formData.title);
             payload.append('category', formData.category);
             payload.append('status', formData.status);
@@ -113,7 +112,7 @@ export default function EditBlogPost() {
                 payload.append('image', formData.image);
             }
 
-            await api.post(`/admin/blog/${params.id}`, payload, {
+            await api.patch(`/admin/blog/${params.id}`, payload, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
             localStorage.removeItem(`blog_edit_draft_${params.id}`);

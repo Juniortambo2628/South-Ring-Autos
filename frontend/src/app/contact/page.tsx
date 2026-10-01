@@ -5,8 +5,36 @@ import Footer from "@/components/landing/Footer";
 import PageHero from "@/components/landing/PageHero";
 import { motion } from "framer-motion";
 import { Phone, Mail, MapPin, Clock, Send, Facebook, Twitter, Instagram, ArrowRight } from "lucide-react";
+import api from "@/lib/api";
+import { useState } from "react";
 
 export default function ContactPage() {
+    const [form, setForm] = useState({ name: "", email: "", phone: "", subject: "General Inquiry", message: "" });
+    const [sending, setSending] = useState(false);
+    const [status, setStatus] = useState<{ ok: boolean; text: string } | null>(null);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setSending(true);
+        setStatus(null);
+        try {
+            const { data } = await api.post("/contact", form);
+            setStatus({ ok: !!data.success, text: data.message || "Message sent." });
+            if (data.success) setForm({ name: "", email: "", phone: "", subject: "General Inquiry", message: "" });
+        } catch (err) {
+            const data = (err as { response?: { data?: { message?: string; errors?: { message?: string[] } } } }).response?.data;
+            setStatus({
+                ok: false,
+                text: data?.message || data?.errors?.message?.[0] || "Could not send your message. Please try again.",
+            });
+        } finally {
+            setSending(false);
+        }
+    };
     return (
         <div className="flex flex-col min-h-screen font-sans text-gray-800 antialiased selection:bg-red-500 selection:text-white">
             <Navbar />
@@ -71,25 +99,25 @@ export default function ContactPage() {
                                     viewport={{ once: true }}
                                     className="bg-white p-8 md:p-12 rounded-2xl shadow-2xl shadow-slate-200/50 border border-slate-100"
                                 >
-                                    <form className="space-y-6">
+                                    <form className="space-y-6" onSubmit={handleSubmit}>
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                             <div className="space-y-2">
                                                 <label className="text-[10px] font-black text-slate-900 uppercase tracking-[0.2em] ml-1">Full Name</label>
-                                                <input type="text" className="w-full bg-slate-50 border border-slate-200 rounded-lg px-6 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-red-600/20 focus:border-red-600 transition-all" placeholder="John Doe" />
+                                                <input type="text" name="name" value={form.name} onChange={handleChange} required className="w-full bg-slate-50 border border-slate-200 rounded-lg px-6 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-red-600/20 focus:border-red-600 transition-all" placeholder="John Doe" />
                                             </div>
                                             <div className="space-y-2">
                                                 <label className="text-[10px] font-black text-slate-900 uppercase tracking-[0.2em] ml-1">Email Address</label>
-                                                <input type="email" className="w-full bg-slate-50 border border-slate-200 rounded-lg px-6 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-red-600/20 focus:border-red-600 transition-all" placeholder="john@example.com" />
+                                                <input type="email" name="email" value={form.email} onChange={handleChange} required className="w-full bg-slate-50 border border-slate-200 rounded-lg px-6 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-red-600/20 focus:border-red-600 transition-all" placeholder="john@example.com" />
                                             </div>
                                         </div>
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                             <div className="space-y-2">
                                                 <label className="text-[10px] font-black text-slate-900 uppercase tracking-[0.2em] ml-1">Phone Number</label>
-                                                <input type="tel" className="w-full bg-slate-50 border border-slate-200 rounded-lg px-6 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-red-600/20 focus:border-red-600 transition-all" placeholder="+254 700 000 000" />
+                                                <input type="tel" name="phone" value={form.phone} onChange={handleChange} className="w-full bg-slate-50 border border-slate-200 rounded-lg px-6 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-red-600/20 focus:border-red-600 transition-all" placeholder="+353 21 496 5388" />
                                             </div>
                                             <div className="space-y-2">
                                                 <label className="text-[10px] font-black text-slate-900 uppercase tracking-[0.2em] ml-1">Subject</label>
-                                                <select className="w-full bg-slate-50 border border-slate-200 rounded-lg px-6 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-red-600/20 focus:border-red-600 transition-all appearance-none cursor-pointer">
+                                                <select name="subject" value={form.subject} onChange={handleChange} className="w-full bg-slate-50 border border-slate-200 rounded-lg px-6 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-red-600/20 focus:border-red-600 transition-all appearance-none cursor-pointer">
                                                     <option>General Inquiry</option>
                                                     <option>Service Quote</option>
                                                     <option>Feedback</option>
@@ -99,10 +127,15 @@ export default function ContactPage() {
                                         </div>
                                         <div className="space-y-2">
                                             <label className="text-[10px] font-black text-slate-900 uppercase tracking-[0.2em] ml-1">Your Message</label>
-                                            <textarea rows={6} className="w-full bg-slate-50 border border-slate-200 rounded-lg px-6 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-red-600/20 focus:border-red-600 transition-all resize-none" placeholder="How can we help you today?"></textarea>
+                                            <textarea rows={6} name="message" value={form.message} onChange={handleChange} required className="w-full bg-slate-50 border border-slate-200 rounded-lg px-6 py-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-red-600/20 focus:border-red-600 transition-all resize-none" placeholder="How can we help you today?"></textarea>
                                         </div>
-                                        <button className="w-full bg-red-600 hover:bg-red-700 text-white font-black py-5 px-10 rounded text-xs uppercase tracking-[0.2em] shadow-xl shadow-red-600/20 transition-all transform hover:-translate-y-1 flex items-center justify-center">
-                                            SEND MESSAGE <Send size={16} className="ml-2" />
+                                        {status && (
+                                            <p className={`text-xs font-bold uppercase tracking-widest px-4 py-3 rounded-lg ${status.ok ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"}`}>
+                                                {status.text}
+                                            </p>
+                                        )}
+                                        <button type="submit" disabled={sending} className="w-full bg-red-600 hover:bg-red-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-black py-5 px-10 rounded text-xs uppercase tracking-[0.2em] shadow-xl shadow-red-600/20 transition-all transform hover:-translate-y-1 flex items-center justify-center">
+                                            {sending ? "SENDING..." : <>SEND MESSAGE <Send size={16} className="ml-2" /></>}
                                         </button>
                                     </form>
                                 </motion.div>

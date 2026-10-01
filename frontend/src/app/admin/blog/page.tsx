@@ -32,7 +32,7 @@ export default function AdminBlogPage() {
     const fetchPosts = async () => {
         setLoading(true);
         try {
-            const response = await api.get("/blog?admin=true");
+            const response = await api.get("/admin/blog");
             setPosts(response.data.posts || []);
         } catch (err) {
             console.error("Failed to fetch posts", err);

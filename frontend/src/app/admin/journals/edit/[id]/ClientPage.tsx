@@ -131,7 +131,6 @@ export default function EditJournalPage() {
 
         try {
             const submitData = new FormData();
-            submitData.append("_method", "POST"); // Laravel spoofing for POST with _method=PUT natively handled by router below, or we just pass it
             submitData.append("year", formData.year);
             submitData.append("title", formData.title);
             submitData.append("description", formData.description);
@@ -142,7 +141,7 @@ export default function EditJournalPage() {
                 submitData.append("cover_image", formData.image);
             }
 
-            await api.post(`/admin/journals/${params.id}`, submitData, {
+            await api.patch(`/admin/journals/${params.id}`, submitData, {
                 headers: { "Content-Type": "multipart/form-data" }
             });
 

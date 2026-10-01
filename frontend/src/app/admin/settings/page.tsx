@@ -98,7 +98,7 @@ export default function AdminSettingsPage() {
     const fetchSettings = async () => {
         setLoading(true);
         try {
-            const res = await api.get('/settings');
+            const res = await api.get('/admin/settings');
             const data = res.data.settings;
             if (data) {
                 setFormData({

@@ -62,7 +62,7 @@ export default function ProfilePage() {
             const response = await api.post("/user/update-profile", formData);
             if (response.data.success) {
                 setSuccess(true);
-                const updatedUser = { ...user, ...response.data.user };
+                const updatedUser = { ...user, ...response.data.data };
                 localStorage.setItem("user", JSON.stringify(updatedUser));
                 setUser(updatedUser);
             }

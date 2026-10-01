@@ -86,7 +86,7 @@ export default function CreateBlogPost() {
                 payload.append('image', formData.image);
             }
 
-            await api.post("/blog", payload, {
+            await api.post("/admin/blog", payload, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
             localStorage.removeItem("blog_create_draft");

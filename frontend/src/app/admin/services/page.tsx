@@ -53,7 +53,7 @@ export default function AdminServicesPage() {
         setLoading(true);
         try {
             const response = await api.get("/services");
-            setServices(response.data.data || []);
+            setServices(response.data.services || []);
         } catch (err) {
             console.error("Failed to fetch services", err);
         } finally {
