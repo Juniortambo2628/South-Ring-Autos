@@ -1,8 +1,7 @@
 "use client";
 
+import PublicShell from "@/components/landing/PublicShell";
 import { useState, useEffect } from "react";
-import Navbar from "@/components/landing/Navbar";
-import Footer from "@/components/landing/Footer";
 import PageHero from "@/components/landing/PageHero";
 import { motion } from "framer-motion";
 import { BookOpen, Calendar, ArrowRight, Lock, ShoppingCart } from "lucide-react";
@@ -31,8 +30,7 @@ export default function JournalListPage() {
     }, []);
 
     return (
-        <div className="flex flex-col min-h-screen font-sans text-gray-800 antialiased selection:bg-red-500 selection:text-white">
-            <Navbar />
+        <PublicShell>
             <main className="flex-grow">
                 <PageHero
                     title="Annual Automotive Journals"
@@ -132,7 +130,6 @@ export default function JournalListPage() {
                     </div>
                 </section>
             </main>
-            <Footer />
-        </div>
+    </PublicShell>
     );
 }

@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Navbar from "@/components/landing/Navbar";
-import Footer from "@/components/landing/Footer";
+import PublicShell from "@/components/landing/PublicShell";
 import HeroSection from "@/components/landing/HeroSection";
 import ServiceHighlights from "@/components/landing/ServiceHighlights";
 import AboutSection from "@/components/landing/AboutSection";
@@ -87,8 +86,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen font-sans text-gray-800 antialiased selection:bg-red-600 selection:text-white">
-      <Navbar />
+    <PublicShell className="font-sans text-gray-800 antialiased selection:bg-red-600 selection:text-white">
       <main className="flex-grow">
         {sections.map((sectionConfig) => {
           if (!sectionConfig.visible) return null;
@@ -99,7 +97,6 @@ export default function HomePage() {
           return <SectionComponent key={sectionConfig.id} content={landingContent} />;
         })}
       </main>
-      <Footer />
-    </div>
+    </PublicShell>
   );
 }

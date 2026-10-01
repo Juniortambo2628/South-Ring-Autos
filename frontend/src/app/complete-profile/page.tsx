@@ -1,11 +1,10 @@
 "use client";
 
+import PublicShell from "@/components/landing/PublicShell";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Phone, MapPin, Save, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import Navbar from "@/components/landing/Navbar";
-import Footer from "@/components/landing/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -64,8 +63,7 @@ export default function CompleteProfilePage() {
     };
 
     return (
-        <div className="flex flex-col min-h-screen font-sans text-gray-800 antialiased selection:bg-red-500 selection:text-white">
-            <Navbar />
+        <PublicShell>
             <main className="flex-grow flex items-center justify-center py-20 px-4 bg-slate-50 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-96 h-96 bg-red-600/5 rounded-full blur-3xl -mr-48 -mt-48" />
                 <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-900/5 rounded-full blur-3xl -ml-48 -mb-48" />
@@ -121,7 +119,6 @@ export default function CompleteProfilePage() {
                     </div>
                 </motion.div>
             </main>
-            <Footer />
-        </div>
+    </PublicShell>
     );
 }

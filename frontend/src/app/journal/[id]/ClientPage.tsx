@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import Navbar from "@/components/landing/Navbar";
-import Footer from "@/components/landing/Footer";
+import PublicShell from "@/components/landing/PublicShell";
 import PageHero from "@/components/landing/PageHero";
 import { motion } from "framer-motion";
 import { BookOpen, Calendar, CheckCircle2, Lock, ShoppingCart, ArrowLeft, Loader2 } from "lucide-react";
@@ -135,34 +134,29 @@ export default function JournalDetailPage({ params: paramsPromise }: { params: P
 
     if (loading) {
         return (
-            <div className="flex flex-col min-h-screen">
-                <Navbar />
+            <PublicShell className="">
                 <div className="flex-grow flex items-center justify-center">
                     <Loader2 className="animate-spin text-red-600" size={48} />
                 </div>
-                <Footer />
-            </div>
+            </PublicShell>
         );
     }
 
     if (!journal) {
         return (
-            <div className="flex flex-col min-h-screen">
-                <Navbar />
+            <PublicShell className="">
                 <div className="flex-grow flex flex-col items-center justify-center py-20">
                     <h2 className="text-2xl font-black text-[#003366] mb-4">JOURNAL NOT FOUND</h2>
                     <Link href="/journal" className="text-red-600 font-bold flex items-center">
                         <ArrowLeft size={16} className="mr-2" /> Back to Journals
                     </Link>
                 </div>
-                <Footer />
-            </div>
+            </PublicShell>
         );
     }
 
     return (
-        <div className="flex flex-col min-h-screen font-sans text-gray-800 antialiased selection:bg-red-500 selection:text-white">
-            <Navbar />
+        <PublicShell className="font-sans text-gray-800 antialiased selection:bg-red-500 selection:text-white">
 
             {notification && (
                 <div className={`fixed top-24 right-6 z-[100] max-w-sm px-6 py-4 rounded-2xl shadow-2xl font-bold text-sm flex items-center gap-3 animate-in slide-in-from-right ${notification.type === "success" ? "bg-green-600 text-white" : "bg-red-600 text-white"
@@ -311,7 +305,6 @@ export default function JournalDetailPage({ params: paramsPromise }: { params: P
                     </div>
                 </section>
             </main>
-            <Footer />
-        </div>
+        </PublicShell>
     );
 }

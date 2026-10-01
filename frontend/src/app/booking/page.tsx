@@ -1,13 +1,12 @@
 "use client";
 
+import PublicShell from "@/components/landing/PublicShell";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     Calendar, Clock, Car, ChevronRight, ChevronLeft,
     CheckCircle2, AlertCircle, Wrench, User, Loader2, MoreVertical
 } from "lucide-react";
-import Navbar from "@/components/landing/Navbar";
-import Footer from "@/components/landing/Footer";
 import PageHero from "@/components/landing/PageHero";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -120,8 +119,7 @@ function BookingForm() {
     };
 
     return (
-        <div className="flex flex-col min-h-screen font-sans text-gray-800 antialiased selection:bg-red-500 selection:text-white">
-            <Navbar />
+        <PublicShell>
             <main className="flex-grow">
                 <PageHero
                     title="Book Your Appointment"
@@ -338,8 +336,7 @@ function BookingForm() {
                     </div>
                 </section>
             </main>
-            <Footer />
-        </div>
+    </PublicShell>
     );
 }
 

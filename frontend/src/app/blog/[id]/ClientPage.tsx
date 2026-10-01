@@ -1,7 +1,6 @@
 "use client";
 
-import Navbar from "@/components/landing/Navbar";
-import Footer from "@/components/landing/Footer";
+import PublicShell from "@/components/landing/PublicShell";
 import { Calendar, User, ArrowLeft, Tag } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect, use } from "react";
@@ -71,20 +70,17 @@ export default function BlogPostPage({ params }: { params: Promise<{ id: string 
 
     if (loading) {
         return (
-            <div className="flex flex-col min-h-screen">
-                <Navbar />
+            <PublicShell className="">
                 <div className="flex-grow flex items-center justify-center bg-slate-50">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
                 </div>
-                <Footer />
-            </div>
+            </PublicShell>
         );
     }
 
     if (error || !post) {
         return (
-            <div className="flex flex-col min-h-screen">
-                <Navbar />
+            <PublicShell className="">
                 <div className="flex-grow flex flex-col items-center justify-center bg-slate-50 py-32 text-center px-4">
                     {error === "Post not found" ? (
                         <>
@@ -101,14 +97,12 @@ export default function BlogPostPage({ params }: { params: Promise<{ id: string 
                         Back to the Blog
                     </Link>
                 </div>
-                <Footer />
-            </div>
+            </PublicShell>
         )
     }
 
     return (
-        <div className="flex flex-col min-h-screen bg-slate-50 font-sans text-gray-800 antialiased">
-            <Navbar />
+        <PublicShell className="bg-slate-50 font-sans text-gray-800 antialiased">
 
             <main className="flex-grow">
                 {/* Hero / Header */}
@@ -248,7 +242,6 @@ export default function BlogPostPage({ params }: { params: Promise<{ id: string 
                 </section>
 
             </main>
-            <Footer />
-        </div>
+        </PublicShell>
     );
 }

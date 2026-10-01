@@ -1,7 +1,6 @@
 "use client";
 
-import Navbar from "@/components/landing/Navbar";
-import Footer from "@/components/landing/Footer";
+import PublicShell from "@/components/landing/PublicShell";
 import PageHero from "@/components/landing/PageHero";
 import { motion } from "framer-motion";
 import { Wrench, Settings, AlertTriangle, Activity, Truck, ChevronRight, ArrowRight, ShieldCheck, CheckCircle2 } from "lucide-react";
@@ -68,8 +67,7 @@ const services = [
 
 export default function ServicesPage() {
     return (
-        <div className="flex flex-col min-h-screen font-sans text-gray-800 antialiased selection:bg-red-500 selection:text-white">
-            <Navbar />
+        <PublicShell>
             <main className="flex-grow">
                 <PageHero
                     title="Our Professional Services"
@@ -134,7 +132,6 @@ export default function ServicesPage() {
                     </div>
                 </section>
             </main>
-            <Footer />
-        </div>
+    </PublicShell>
     );
 }

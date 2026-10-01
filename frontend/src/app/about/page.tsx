@@ -1,7 +1,6 @@
 "use client";
 
-import Navbar from "@/components/landing/Navbar";
-import Footer from "@/components/landing/Footer";
+import PublicShell from "@/components/landing/PublicShell";
 import PageHero from "@/components/landing/PageHero";
 import AboutSection from "@/components/landing/AboutSection";
 import FactsSection from "@/components/landing/FactsSection";
@@ -28,8 +27,7 @@ export default function AboutPage() {
     ];
 
     return (
-        <div className="flex flex-col min-h-screen font-sans text-gray-800 antialiased selection:bg-red-500 selection:text-white">
-            <Navbar />
+        <PublicShell>
             <main className="flex-grow">
                 <PageHero
                     title="About South Ring Autos"
@@ -110,7 +108,6 @@ export default function AboutPage() {
                     </div>
                 </section>
             </main>
-            <Footer />
-        </div>
+    </PublicShell>
     );
 }

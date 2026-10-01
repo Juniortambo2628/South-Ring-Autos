@@ -1,12 +1,11 @@
 "use client";
 
+import PublicShell from "@/components/landing/PublicShell";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, Lock, LogIn, AlertCircle, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import Navbar from "@/components/landing/Navbar";
-import Footer from "@/components/landing/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -46,8 +45,7 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="flex flex-col min-h-screen font-sans text-gray-800 antialiased selection:bg-red-500 selection:text-white">
-            <Navbar />
+        <PublicShell>
             <main className="flex-grow">
                 <div className="min-h-[80vh] flex items-center justify-center py-20 px-4 bg-slate-50 relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-96 h-96 bg-red-600/5 rounded-full blur-3xl -mr-48 -mt-48" />
@@ -127,7 +125,6 @@ export default function LoginPage() {
                     </motion.div>
                 </div>
             </main>
-            <Footer />
-        </div>
+    </PublicShell>
     );
 }

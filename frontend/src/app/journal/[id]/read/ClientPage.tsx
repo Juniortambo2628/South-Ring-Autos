@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import Navbar from "@/components/landing/Navbar";
-import Footer from "@/components/landing/Footer";
+import PublicShell from "@/components/landing/PublicShell";
 import PageHero from "@/components/landing/PageHero";
 import { Loader2, ArrowLeft, BookOpen, Clock, AlertTriangle } from "lucide-react";
 import Link from "next/link";
@@ -61,21 +60,18 @@ export default function ReadJournalPage() {
 
     if (loading) {
         return (
-            <div className="flex flex-col min-h-screen">
-                <Navbar />
+            <PublicShell className="">
                 <div className="flex-grow flex items-center justify-center">
                     <Loader2 className="animate-spin text-red-600" size={48} />
                 </div>
-                <Footer />
-            </div>
+            </PublicShell>
         );
     }
 
     if (!journal) return null;
 
     return (
-        <div className="flex flex-col min-h-screen font-sans text-gray-800 antialiased selection:bg-red-500 selection:text-white">
-            <Navbar />
+        <PublicShell className="font-sans text-gray-800 antialiased selection:bg-red-500 selection:text-white">
             <main className="flex-grow">
                 {/* Minimal Header */}
                 <div className="bg-[#003366] pt-32 pb-8">
@@ -194,7 +190,6 @@ export default function ReadJournalPage() {
                     </div>
                 </section>
             </main>
-            <Footer />
-        </div>
+        </PublicShell>
     );
 }
