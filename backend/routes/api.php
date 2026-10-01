@@ -21,11 +21,10 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-// ─── Public Routes (Read-Only) ──────────────────────────────────────────────
+// â”€â”€â”€ Public Routes (Read-Only) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 // Blog (public read)
 Route::get('/blog', [BlogController::class, 'index']);
-Route::get('/blog/recent', [BlogController::class, 'latest']);
 Route::get('/blog/{id}', [BlogController::class, 'show']);
 
 // Contact (public submit only)
@@ -57,10 +56,10 @@ Route::post('/subscribe', [\App\Http\Controllers\API\SubscriberController::class
 // Bookings (public create only)
 Route::post('/bookings', [BookingController::class, 'store']);
 
-// Paystack Webhook (no auth — verified via signature)
+// Paystack Webhook (no auth â€” verified via signature)
 Route::post('/webhooks/paystack', [PaymentController::class, 'paystackWebhook']);
 
-// ─── Auth Routes ────────────────────────────────────────────────────────────
+// â”€â”€â”€ Auth Routes â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:10,1');
 Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:10,1');
@@ -72,7 +71,7 @@ Route::post('/user/complete-profile', [AuthController::class, 'completeProfile']
 // Profile Update (used by /profile page)
 Route::post('/user/update-profile', [\App\Http\Controllers\API\ClientDashboardController::class, 'updateProfile'])->middleware('auth:sanctum');
 
-// ─── Authenticated Client Routes ────────────────────────────────────────────
+// â”€â”€â”€ Authenticated Client Routes â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 Route::middleware('auth:sanctum')->group(function () {
 
@@ -95,12 +94,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Notifications
     Route::get('/notifications', [\App\Http\Controllers\API\NotificationController::class, 'index']);
-    Route::get('/notifications/unread-count', [\App\Http\Controllers\API\NotificationController::class, 'getUnreadCount']);
     Route::patch('/notifications/{id}/read', [\App\Http\Controllers\API\NotificationController::class, 'markAsRead']);
     Route::post('/notifications/mark-all-read', [\App\Http\Controllers\API\NotificationController::class, 'markAllAsRead']);
     Route::delete('/notifications/all', [\App\Http\Controllers\API\NotificationController::class, 'destroyAll']);
 
-    // Payments — Paystack
+    // Payments â€” Paystack
     Route::post('/payments/paystack/initialize', [PaymentController::class, 'initializePaystack']);
     Route::get('/payments/paystack/verify', [PaymentController::class, 'verifyPaystack']);
     Route::get('/payments/paystack/public-key', [PaymentController::class, 'getPublicKey']);
@@ -113,11 +111,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/user/deliveries', [DeliveryController::class, 'store']);
 
     // Journal Protected Routes
-    Route::get('/journals/check/{year}', [JournalController::class, 'checkAccess']);
     Route::post('/journals/purchase', [JournalController::class, 'purchase']);
 });
 
-// ─── Admin-Only Routes ──────────────────────────────────────────────────────
+// â”€â”€â”€ Admin-Only Routes â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function () {
 
@@ -197,7 +194,7 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
     Route::get('/settings', [\App\Http\Controllers\API\SettingController::class, 'adminIndex']);
     Route::post('/settings', [\App\Http\Controllers\API\SettingController::class, 'update']);
 
-    // Media Upload (admin only — CMS imagery)
+    // Media Upload (admin only â€” CMS imagery)
     Route::post('/media/upload', [MediaUploadController::class, 'upload']);
 
     // Subscribers (admin management)

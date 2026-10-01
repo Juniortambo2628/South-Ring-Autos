@@ -232,10 +232,4 @@ class BlogController extends Controller
             'message' => 'Blog post deleted successfully'
         ]);
     }
-
-    public function latest()
-    {
-        $posts = BlogPost::where('status', 'published')->latest()->limit(5)->get();
-        return response()->json(['success' => true, 'posts' => $posts]);
-    }
 }

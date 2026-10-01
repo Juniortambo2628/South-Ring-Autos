@@ -8,7 +8,6 @@ use App\Models\JournalPurchase;
 use App\Http\Resources\JournalResource;
 use App\Http\Resources\JournalPurchaseResource;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
 use Illuminate\Support\Str;
 
 class JournalController extends Controller
@@ -25,33 +24,6 @@ class JournalController extends Controller
         $journal = Journal::findOrFail($id);
         
         return (new JournalResource($journal))->additional(['success' => true]);
-    }
-
-    public function checkAccess(Request $request, $year)
-    {
-        $user = $request->user();
-        
-        if (!$user) {
-            return response()->json(['has_access' => false, 'message' => 'Login required'], 401);
-        }
-
-        // Current year is free
-        if ($year == Carbon::now()->year) {
-            return response()->json(['has_access' => true]);
-        }
-
-        // Admins automatically get access to all journals
-        if ($user->role === 'admin') {
-            return response()->json(['has_access' => true]);
-        }
-
-        // Check if user has purchased the journal for this year
-        $hasPurchased = JournalPurchase::where('user_id', $user->id)
-            ->whereHas('journal', function($query) use ($year) {
-                $query->where('year', $year);
-            })->exists();
-
-        return response()->json(['has_access' => $hasPurchased]);
     }
 
     public function purchase(Request $request)
