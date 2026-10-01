@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import AdminLayout from "@/components/admin/AdminLayout";
 import { ArrowLeft, Save, Mail, Info, Loader2, BookOpen } from "lucide-react";
 import api from "@/lib/api";
 import Link from "next/link";
@@ -66,19 +65,19 @@ export default function EditEmailTemplatePage() {
 
     if (loading) {
         return (
-            <AdminLayout>
+            <>
                 <div className="min-h-[400px] flex flex-col items-center justify-center">
                     <Loader2 className="w-10 h-10 text-red-600 animate-spin mb-4" />
                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Loading Template Editor...</p>
                 </div>
-            </AdminLayout>
+            </>
         );
     }
 
     if (!template) return null;
 
     return (
-        <AdminLayout>
+        <>
             <div className="max-w-5xl mx-auto space-y-8 pb-20">
                 <div className="flex items-center justify-between">
                     <Link href="/admin/email-templates" className="inline-flex items-center space-x-2 text-slate-400 hover:text-[#003366] transition-colors group">
@@ -201,6 +200,6 @@ export default function EditEmailTemplatePage() {
                     </div>
                 </div>
             </div>
-        </AdminLayout>
+        </>
     );
 }

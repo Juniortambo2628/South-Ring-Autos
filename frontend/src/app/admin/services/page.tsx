@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import AdminLayout from "@/components/admin/AdminLayout";
 import {
     Plus, Search, Edit2, Trash2,
     CheckCircle2, AlertCircle, Loader2, Wrench,
@@ -183,7 +182,7 @@ export default function AdminServicesPage() {
     });
 
     return (
-        <AdminLayout>
+        <>
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
                 <div>
                     <div className="flex items-center space-x-2 mb-2">
@@ -464,6 +463,6 @@ export default function AdminServicesPage() {
                     </form>
                 </DialogContent>
             </Dialog>
-        </AdminLayout>
+        </>
     );
 }

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import AdminLayout from "@/components/admin/AdminLayout";
 import {
     Search, CheckCircle2, XCircle, Clock, Loader2,
     CreditCard, FileText, Filter, ChevronRight, AlertCircle, Plus
@@ -121,7 +120,7 @@ export default function AdminPaymentsPage() {
         .reduce((sum, p) => sum + parseFloat(p.amount || 0), 0);
 
     return (
-        <AdminLayout>
+        <>
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
                 <div>
                     <div className="flex items-center space-x-2 mb-2">
@@ -403,6 +402,6 @@ export default function AdminPaymentsPage() {
                     </div>
                 </DialogContent>
             </Dialog>
-        </AdminLayout>
+        </>
     );
 }

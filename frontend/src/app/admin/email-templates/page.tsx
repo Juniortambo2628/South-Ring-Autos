@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import AdminLayout from "@/components/admin/AdminLayout";
 import { Mail, Edit2, CheckCircle, XCircle, Info, Loader2, RefreshCw } from "lucide-react";
 import api from "@/lib/api";
 import Link from "next/link";
@@ -58,7 +57,7 @@ export default function EmailTemplatesPage() {
     };
 
     return (
-        <AdminLayout>
+        <>
             <div className="space-y-8 pb-20">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
@@ -147,6 +146,6 @@ export default function EmailTemplatesPage() {
                     </div>
                 </div>
             </div>
-        </AdminLayout>
+        </>
     );
 }

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import AdminLayout from "@/components/admin/AdminLayout";
 import {
     Users, ChevronRight, Trash2, Star, Square, CheckSquare
 } from "lucide-react";
@@ -113,7 +112,7 @@ export default function AdminClientsPage() {
     const allSelected = filtered.length > 0 && selectedIds.length === filtered.length;
 
     return (
-        <AdminLayout>
+        <>
             <AdminPageHeader
                 badge="Client Directory"
                 title="All Clients"
@@ -287,6 +286,6 @@ export default function AdminClientsPage() {
                     </div>
                 </div>
             )}
-        </AdminLayout>
+        </>
     );
 }

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import AdminLayout from "@/components/admin/AdminLayout";
 import { ArrowLeft, Loader2, Save, Image as ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -135,16 +134,16 @@ export default function EditBlogPost() {
 
     if (loading) {
         return (
-            <AdminLayout>
+            <>
                 <div className="flex h-[60vh] items-center justify-center">
                     <Loader2 className="w-12 h-12 animate-spin text-red-600 mb-4" />
                 </div>
-            </AdminLayout>
+            </>
         );
     }
 
     return (
-        <AdminLayout>
+        <>
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
                 <div>
                     <Link href="/admin/blog" className="inline-flex items-center text-red-600 font-black text-[10px] uppercase tracking-[0.2em] mb-4 hover:text-[#003366] transition-colors">
@@ -276,6 +275,6 @@ export default function EditBlogPost() {
                     </div>
                 </div>
             </form>
-        </AdminLayout>
+        </>
     );
 }

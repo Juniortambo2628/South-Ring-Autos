@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import AdminLayout from "@/components/admin/AdminLayout";
 import { ArrowLeft, Upload, Loader2, Save, Image as ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -67,7 +66,7 @@ export default function CreateJournalPage() {
     };
 
     return (
-        <AdminLayout>
+        <>
             <div className="max-w-5xl mx-auto pb-24">
                 <div className="flex items-center space-x-4 mb-8">
                     <button onClick={() => router.back()} className="w-10 h-10 bg-white rounded-xl shadow-sm border border-slate-100 flex items-center justify-center text-slate-400 hover:text-[#003366] hover:border-[#003366] transition-colors">
@@ -196,6 +195,6 @@ export default function CreateJournalPage() {
                     </form>
                 </div>
             </div>
-        </AdminLayout>
+        </>
     );
 }

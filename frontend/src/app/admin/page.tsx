@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import AdminLayout from "@/components/admin/AdminLayout";
 import {
     CalendarDays, FileText, MessageSquare, TrendingUp, ChevronRight, Search, Edit2, Trash2, CheckCircle2,
     XCircle, Clock, Calendar, User, Phone, Car, ClipboardList,
@@ -60,7 +59,7 @@ export default function AdminDashboardPage() {
     const item = { hidden: { y: 20, opacity: 0 }, show: { y: 0, opacity: 1 } };
 
     return (
-        <AdminLayout>
+        <>
             <PageHeader
                 badge="Administrative Console"
                 title="System Overview"
@@ -178,6 +177,6 @@ export default function AdminDashboardPage() {
                     </div>
                 </div>
             </div>
-        </AdminLayout>
+        </>
     );
 }

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import AdminLayout from "@/components/admin/AdminLayout";
 import { Search, Loader2, Mail, Trash2, CheckCircle, XCircle, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -69,7 +68,7 @@ export default function AdminSubscribersPage() {
     );
 
     return (
-        <AdminLayout>
+        <>
             <PageHeader
                 badge="Newsletter Management"
                 title="Subscribers"
@@ -161,6 +160,6 @@ export default function AdminSubscribersPage() {
                     </div>
                 </div>
             )}
-        </AdminLayout>
+        </>
     );
 }

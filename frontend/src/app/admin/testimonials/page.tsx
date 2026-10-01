@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import AdminLayout from "@/components/admin/AdminLayout";
 import {
     Search, Loader2, Quote, Trash2, Edit2, Plus,
     CheckCircle, XCircle, Star, Image as ImageIcon,
@@ -147,7 +146,7 @@ export default function AdminTestimonialsPage() {
     );
 
     return (
-        <AdminLayout>
+        <>
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
                 <div>
                     <div className="flex items-center space-x-2 mb-2">
@@ -387,6 +386,6 @@ export default function AdminTestimonialsPage() {
                     </div>
                 )}
             </AnimatePresence>
-        </AdminLayout>
+        </>
     );
 }

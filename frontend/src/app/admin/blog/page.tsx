@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import AdminLayout from "@/components/admin/AdminLayout";
 import {
     Plus, Search, Edit2, Trash2, Calendar,
     User, Eye, Loader2, FileText, Grid, List as ListIcon, CheckSquare, Square
@@ -118,7 +117,7 @@ export default function AdminBlogPage() {
     });
 
     return (
-        <AdminLayout>
+        <>
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
                 <div>
                     <div className="flex items-center space-x-2 mb-2">
@@ -347,6 +346,6 @@ export default function AdminBlogPage() {
                     </div>
                 </div>
             )}
-        </AdminLayout>
+        </>
     );
 }

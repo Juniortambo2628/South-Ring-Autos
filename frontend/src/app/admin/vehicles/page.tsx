@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import AdminLayout from "@/components/admin/AdminLayout";
 import { Car, Trash2, User, Calendar, Fuel } from "lucide-react";
 import { motion } from "framer-motion";
 import api from "@/lib/api";
@@ -109,7 +108,7 @@ export default function AdminVehiclesPage() {
     const allSelected = filtered.length > 0 && selectedIds.length === filtered.length;
 
     return (
-        <AdminLayout>
+        <>
             <AdminPageHeader
                 badge="Fleet Registry"
                 badgeColor="blue"
@@ -257,6 +256,6 @@ export default function AdminVehiclesPage() {
                     </div>
                 </div>
             )}
-        </AdminLayout>
+        </>
     );
 }

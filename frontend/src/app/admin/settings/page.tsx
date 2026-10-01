@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import AdminLayout from "@/components/admin/AdminLayout";
 import {
     Settings, Save, Shield, Database,
     Globe, Palette, Bell, Eye, EyeOff,
@@ -196,17 +195,17 @@ export default function AdminSettingsPage() {
 
     if (loading) {
         return (
-            <AdminLayout>
+            <>
                 <div className="flex flex-col items-center justify-center h-[60vh]">
                     <Loader2 size={40} className="animate-spin text-red-600 mb-4" />
                     <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Loading Settings...</p>
                 </div>
-            </AdminLayout>
+            </>
         );
     }
 
     return (
-        <AdminLayout>
+        <>
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
                 <div>
                     <div className="flex items-center space-x-2 mb-2">
@@ -631,6 +630,6 @@ export default function AdminSettingsPage() {
                     )}
                 </div>
             </div>
-        </AdminLayout>
+        </>
     );
 }

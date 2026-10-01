@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import AdminLayout from "@/components/admin/AdminLayout";
 import { ArrowLeft, Loader2, User, Star, CreditCard, Car, Calendar, Phone, Mail, MapPin } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useParams } from "next/navigation";
@@ -43,19 +42,19 @@ export default function ClientHistoryPage() {
 
     if (loading) {
         return (
-            <AdminLayout>
+            <>
                 <div className="flex h-[60vh] items-center justify-center flex-col">
                     <Loader2 className="w-12 h-12 animate-spin text-red-600 mb-4" />
                     <p className="text-[10px] font-black text-[#003366] uppercase tracking-widest animate-pulse">Retrieving Profile...</p>
                 </div>
-            </AdminLayout>
+            </>
         );
     }
 
     if (!client) return null;
 
     return (
-        <AdminLayout>
+        <>
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
                 <div>
                     <Link href="/admin/clients" className="inline-flex items-center text-red-600 font-black text-[10px] uppercase tracking-[0.2em] mb-4 hover:text-[#003366] transition-colors">
@@ -196,6 +195,6 @@ export default function ClientHistoryPage() {
 
                 </div>
             </div>
-        </AdminLayout>
+        </>
     );
 }
