@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import PaystackButton from "@/components/dashboard/PaystackButton";
 import { motion } from "framer-motion";
 import {
@@ -97,7 +96,7 @@ function PaymentsContent() {
     );
 
     return (
-        <DashboardLayout>
+        <>
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
                 <div>
                     <h2 className="text-3xl font-black text-[#003366] uppercase tracking-tighter">Billing & Invoices</h2>
@@ -251,19 +250,19 @@ function PaymentsContent() {
                     </div>
                 )}
             </div>
-        </DashboardLayout>
+        </>
     );
 }
 
 export default function PaymentsPage() {
     return (
         <Suspense fallback={
-            <DashboardLayout>
+            <>
                 <div className="flex flex-col items-center justify-center h-[400px]">
                     <Loader2 className="w-8 h-8 text-red-600 animate-spin mb-4" />
                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Loading billing center...</p>
                 </div>
-            </DashboardLayout>
+            </>
         }>
             <PaymentsContent />
         </Suspense>

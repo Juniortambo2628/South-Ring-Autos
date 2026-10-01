@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { motion } from "framer-motion";
 import {
     Star, Gift, TrendingUp, History,
@@ -46,16 +45,16 @@ export default function LoyaltyPage() {
 
     if (loading) {
         return (
-            <DashboardLayout>
+            <>
                 <div className="flex items-center justify-center min-h-[400px]">
                     <div className="w-12 h-12 border-4 border-slate-200 border-t-red-600 rounded-full animate-spin" />
                 </div>
-            </DashboardLayout>
+            </>
         );
     }
 
     return (
-        <DashboardLayout>
+        <>
             <div className="mb-12">
                 <h2 className="text-3xl font-black text-[#003366] uppercase tracking-tighter">Loyalty Program</h2>
                 <p className="text-slate-500 font-medium italic">Your journey with South Ring Autos rewards every mile</p>
@@ -175,6 +174,6 @@ export default function LoyaltyPage() {
                     </div>
                 </div>
             </div>
-        </DashboardLayout>
+        </>
     );
 }

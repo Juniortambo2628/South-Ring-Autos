@@ -14,7 +14,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import api from "@/lib/api";
 import AddVehicleModal from "@/components/dashboard/AddVehicleModal";
@@ -51,16 +50,16 @@ export default function DashboardPage() {
 
     if (loading) {
         return (
-            <DashboardLayout>
+            <>
                 <div className="flex items-center justify-center min-h-[400px]">
                     <div className="w-12 h-12 border-4 border-slate-200 border-t-red-600 rounded-full animate-spin" />
                 </div>
-            </DashboardLayout>
+            </>
         );
     }
 
     return (
-        <DashboardLayout>
+        <>
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
                 <div>
                     <h2 className="text-3xl font-black text-[#003366] uppercase tracking-tighter">Portal Overview</h2>
@@ -217,6 +216,6 @@ export default function DashboardPage() {
                 onOpenChange={setIsAddVehicleOpen}
                 onSuccess={fetchStats}
             />
-        </DashboardLayout>
+        </>
     );
 }

@@ -8,7 +8,6 @@ import {
     Lock, Shield, Camera, Bell
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -76,7 +75,7 @@ export default function ProfilePage() {
     if (loading) return null;
 
     return (
-        <DashboardLayout>
+        <>
             <div className="max-w-4xl mx-auto">
                 <div className="mb-10">
                     <h2 className="text-3xl font-black text-[#003366] uppercase tracking-tighter">Profile Settings</h2>
@@ -194,6 +193,6 @@ export default function ProfilePage() {
                     </div>
                 </div>
             </div>
-        </DashboardLayout>
+        </>
     );
 }

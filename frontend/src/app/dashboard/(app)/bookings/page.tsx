@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     Calendar, Wrench, ChevronRight, Clock,
@@ -77,7 +76,7 @@ export default function BookingsPage() {
     };
 
     return (
-        <DashboardLayout>
+        <>
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
                 <div>
                     <h2 className="text-3xl font-black text-[#003366] uppercase tracking-tighter">My Bookings</h2>
@@ -279,6 +278,6 @@ export default function BookingsPage() {
                     </div>
                 </DialogContent>
             </Dialog>
-        </DashboardLayout>
+        </>
     );
 }
