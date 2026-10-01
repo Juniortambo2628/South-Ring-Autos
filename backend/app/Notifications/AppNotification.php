@@ -63,7 +63,9 @@ class AppNotification extends Notification implements ShouldQueue, ShouldBroadca
             'id' => $this->id,
             'title' => $this->title,
             'message' => $this->message,
-            'type' => $this->type,
+            // Not 'type': BroadcastMessage overwrites that key with the
+            // notification class name, which would hide the severity.
+            'severity' => $this->type,
             'link' => $this->link,
             'created_at' => now()->toIso8601String(),
         ]);
