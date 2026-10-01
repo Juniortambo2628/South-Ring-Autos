@@ -14,6 +14,7 @@ use App\Http\Controllers\API\AdminClientController;
 use App\Http\Controllers\API\JournalController;
 use App\Http\Controllers\API\TestimonialController;
 use App\Http\Controllers\API\CarBrandController;
+use Illuminate\Broadcasting\BroadcastController;
 use App\Http\Controllers\API\MediaUploadController;
 
 Route::get('/user', function (Request $request) {
@@ -41,6 +42,10 @@ Route::get('/testimonials', [TestimonialController::class, 'index']);
 
 // Car brands (public read only)
 Route::get('/car-brands', [CarBrandController::class, 'index']);
+
+// Websocket channel authentication (Laravel Echo posts here with a bearer token).
+// The framework's default /broadcasting/auth route only has the web guard.
+Route::post('/broadcasting/auth', [BroadcastController::class, 'authenticate'])->middleware('auth:sanctum');
 
 // Journals (public read only)
 Route::get('/journals', [JournalController::class, 'index']);
