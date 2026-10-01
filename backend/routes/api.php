@@ -27,7 +27,7 @@ Route::get('/blog/recent', [BlogController::class, 'latest']);
 Route::get('/blog/{id}', [BlogController::class, 'show']);
 
 // Contact (public submit only)
-Route::post('/contact', [ContactController::class, 'store']);
+Route::post('/contact', [ContactController::class, 'store'])->middleware('throttle:5,1');
 
 // Settings (public read only)
 Route::get('/settings', [\App\Http\Controllers\API\SettingController::class, 'index']);
@@ -43,7 +43,7 @@ Route::get('/journals', [JournalController::class, 'index']);
 Route::get('/journals/{id}', [JournalController::class, 'show']);
 
 // Subscriptions
-Route::post('/subscribe', [\App\Http\Controllers\API\SubscriberController::class, 'subscribe']);
+Route::post('/subscribe', [\App\Http\Controllers\API\SubscriberController::class, 'subscribe'])->middleware('throttle:5,1');
 
 // Bookings (public create only)
 Route::post('/bookings', [BookingController::class, 'store']);
@@ -53,10 +53,10 @@ Route::post('/webhooks/paystack', [PaymentController::class, 'paystackWebhook'])
 
 // ─── Auth Routes ────────────────────────────────────────────────────────────
 
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
-Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:10,1');
+Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:10,1');
+Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->middleware('throttle:5,1');
+Route::post('/reset-password', [AuthController::class, 'resetPassword'])->middleware('throttle:5,1');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 Route::post('/user/complete-profile', [AuthController::class, 'completeProfile'])->middleware('auth:sanctum');
 
@@ -106,9 +106,6 @@ Route::middleware('auth:sanctum')->group(function () {
     // Journal Protected Routes
     Route::get('/journals/check/{year}', [JournalController::class, 'checkAccess']);
     Route::post('/journals/purchase', [JournalController::class, 'purchase']);
-
-    // Media Upload
-    Route::post('/media/upload', [MediaUploadController::class, 'upload']);
 });
 
 // ─── Admin-Only Routes ──────────────────────────────────────────────────────
@@ -165,6 +162,7 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
     Route::patch('/testimonials/{id}/toggle', [TestimonialController::class, 'toggleStatus']);
 
     // Blog (admin CRUD)
+    Route::get('/blog', [BlogController::class, 'adminIndex']);
     Route::post('/blog', [BlogController::class, 'store']);
     Route::patch('/blog/{id}', [BlogController::class, 'update']);
     Route::delete('/blog/{id}', [BlogController::class, 'destroy']);
@@ -179,8 +177,12 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
     Route::patch('/contact/{id}/status', [ContactController::class, 'updateStatus']);
     Route::delete('/contact/{id}', [ContactController::class, 'destroy']);
 
-    // Settings (admin update)
+    // Settings (admin read + update)
+    Route::get('/settings', [\App\Http\Controllers\API\SettingController::class, 'adminIndex']);
     Route::post('/settings', [\App\Http\Controllers\API\SettingController::class, 'update']);
+
+    // Media Upload (admin only — CMS imagery)
+    Route::post('/media/upload', [MediaUploadController::class, 'upload']);
 
     // Subscribers (admin management)
     Route::get('/subscribers', [\App\Http\Controllers\API\SubscriberController::class, 'adminIndex']);

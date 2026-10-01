@@ -15,11 +15,6 @@ class JournalController extends Controller
 {
     public function index(Request $request)
     {
-        // Try to manually authenticate user for this request if a token is present
-        if ($request->bearerToken()) {
-            \auth('sanctum')->authenticate();
-        }
-
         $journals = Journal::where('is_active', true)->orderBy('year', 'desc')->get();
         
         return JournalResource::collection($journals)->additional(['success' => true]);
@@ -27,11 +22,6 @@ class JournalController extends Controller
 
     public function show(Request $request, $id)
     {
-        // Try to manually authenticate user for this request if a token is present
-        if ($request->bearerToken()) {
-            \auth('sanctum')->authenticate();
-        }
-
         $journal = Journal::findOrFail($id);
         
         return (new JournalResource($journal))->additional(['success' => true]);

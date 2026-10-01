@@ -21,14 +21,14 @@ class MediaUploadController extends Controller
             $folder = $request->get('folder', 'cms');
             
             $filename = Str::random(20) . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('public/' . $folder, $filename);
-            
-            $url = Storage::url($path);
+            $path = $file->storeAs($folder, $filename, 'public');
+
+            $url = Storage::disk('public')->url($path);
 
             return response()->json([
                 'success' => true,
                 'url' => $url,
-                'path' => 'storage/' . $folder . '/' . $filename
+                'path' => 'storage/' . $path
             ]);
         }
 

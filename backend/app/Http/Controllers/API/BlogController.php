@@ -12,16 +12,27 @@ use Illuminate\Support\Facades\Log;
 
 class BlogController extends Controller
 {
+    // Public: published posts only — never influenced by query parameters.
     public function index(Request $request)
     {
+        return $this->listPosts($request, false);
+    }
+
+    // Admin: includes drafts (auth:sanctum + admin middleware).
+    public function adminIndex(Request $request)
+    {
+        return $this->listPosts($request, true);
+    }
+
+    private function listPosts(Request $request, bool $includeUnpublished)
+    {
         $query = BlogPost::query();
-        $currentYear = now()->year;
-        
+
         if ($request->has('year')) {
             $query->whereYear('created_at', $request->year);
         }
 
-        if (!$request->has('admin')) {
+        if (!$includeUnpublished) {
             $query->where('status', 'published');
         }
 
@@ -50,13 +61,10 @@ class BlogController extends Controller
         ]);
     }
 
-    public function show(Request $request, $id) // Accept Request to manually authenticate
+    public function show(Request $request, $id)
     {
-        // Manually authenticate if token is present
-        if ($request->bearerToken()) {
-            \auth('sanctum')->authenticate();
-        }
-
+        // Public route: an optional (valid) token upgrades access, but an
+        // invalid/expired token must not turn a public read into a 401.
         $post = BlogPost::find($id);
 
         if (!$post) {
