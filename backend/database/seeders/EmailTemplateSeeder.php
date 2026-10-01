@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use App\Models\EmailTemplate;
 
 class EmailTemplateSeeder extends Seeder
@@ -13,8 +12,6 @@ class EmailTemplateSeeder extends Seeder
      */
     public function run(): void
     {
-        EmailTemplate::truncate();
-
         $templates = [
             [
                 'name' => 'Registration Welcome',
@@ -51,7 +48,7 @@ class EmailTemplateSeeder extends Seeder
         ];
 
         foreach ($templates as $template) {
-            EmailTemplate::create($template);
+            EmailTemplate::updateOrCreate(['name' => $template['name']], $template);
         }
     }
 }

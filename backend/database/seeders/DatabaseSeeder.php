@@ -17,10 +17,12 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'test@example.com'],
+            // email/name must win over the factory's random values so
+            // repeated seed runs do not create a new user each time
+            array_merge(User::factory()->raw(), ['email' => 'test@example.com', 'name' => 'Test User'])
+        );
 
         $this->call([
             AdminSeeder::class,
