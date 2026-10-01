@@ -13,6 +13,7 @@ use App\Http\Controllers\API\AdminVehicleController;
 use App\Http\Controllers\API\AdminClientController;
 use App\Http\Controllers\API\JournalController;
 use App\Http\Controllers\API\TestimonialController;
+use App\Http\Controllers\API\CarBrandController;
 use App\Http\Controllers\API\MediaUploadController;
 
 Route::get('/user', function (Request $request) {
@@ -37,6 +38,9 @@ Route::get('/services', [\App\Http\Controllers\API\ServiceController::class, 'in
 
 // Testimonials (public read only)
 Route::get('/testimonials', [TestimonialController::class, 'index']);
+
+// Car brands (public read only)
+Route::get('/car-brands', [CarBrandController::class, 'index']);
 
 // Journals (public read only)
 Route::get('/journals', [JournalController::class, 'index']);
@@ -160,6 +164,13 @@ Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function ()
     Route::patch('/testimonials/{id}', [TestimonialController::class, 'update']);
     Route::delete('/testimonials/{id}', [TestimonialController::class, 'destroy']);
     Route::patch('/testimonials/{id}/toggle', [TestimonialController::class, 'toggleStatus']);
+
+    // Car brands
+    Route::get('/car-brands', [CarBrandController::class, 'adminIndex']);
+    Route::post('/car-brands', [CarBrandController::class, 'store']);
+    Route::patch('/car-brands/{id}', [CarBrandController::class, 'update']);
+    Route::delete('/car-brands/{id}', [CarBrandController::class, 'destroy']);
+    Route::patch('/car-brands/{id}/toggle', [CarBrandController::class, 'toggleStatus']);
 
     // Blog (admin CRUD)
     Route::get('/blog', [BlogController::class, 'adminIndex']);
