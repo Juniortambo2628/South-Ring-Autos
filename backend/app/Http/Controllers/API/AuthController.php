@@ -21,6 +21,13 @@ class AuthController extends Controller
 {
     public function redirectToGoogle()
     {
+        if (!config('services.google.client_id') || !config('services.google.client_secret')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Google sign-in is not configured: set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in the backend environment.',
+            ], 503);
+        }
+
         return Socialite::driver('google')->stateless()->redirect();
     }
 
