@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import api from "@/lib/api";
+import { isAdminUser } from "@/lib/auth";
 import { User } from "@/types";
 
 interface UseAuthReturn {
@@ -68,7 +69,7 @@ export function useAuth(): UseAuthReturn {
         user,
         token,
         isAuthenticated: !!token && !!user,
-        isAdmin: user?.role === "admin",
+        isAdmin: isAdminUser(user),
         loading,
         logout,
         refreshUser,

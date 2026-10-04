@@ -3,6 +3,7 @@
 import { useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import { isAdminUser } from "@/lib/auth";
 
 function AuthCallbackContent() {
     const router = useRouter();
@@ -23,7 +24,7 @@ function AuthCallbackContent() {
                 // Success redirect logic
                 if (!user.profile_completed) {
                     router.push("/complete-profile");
-                } else if (user.role === "admin") {
+                } else if (isAdminUser(user)) {
                     router.push("/admin");
                 } else {
                     router.push("/dashboard");

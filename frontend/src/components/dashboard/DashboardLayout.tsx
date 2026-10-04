@@ -10,6 +10,7 @@ import {
     ChevronDown, Home, Star, PlusCircle, Loader2, CreditCard
 } from "lucide-react";
 import api from "@/lib/api";
+import { isAdminUser } from "@/lib/auth";
 import { NotificationProvider, useNotifications } from "@/lib/NotificationContext";
 
 const ASSET = process.env.NEXT_PUBLIC_ASSET_URL || "";
@@ -219,6 +220,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         const userStr = localStorage.getItem("user");
 
         if (!token || !userStr) {
+            router.replace("/login");
+            return;
+        }
+
+        try {
+            const user = JSON.parse(userStr);
+            if (isAdminUser(user)) {
+                router.replace("/admin");
+                return;
+            }
+        } catch {
             router.replace("/login");
             return;
         }

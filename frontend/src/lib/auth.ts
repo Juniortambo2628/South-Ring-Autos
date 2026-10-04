@@ -10,9 +10,13 @@ export type AuthPayload = {
 
 type Router = { push: (href: string) => void };
 
+export function isAdminUser(user: any): boolean {
+    return String(user?.role ?? "").toLowerCase() === "admin";
+}
+
 export function routeForUser(user: any): string {
     if (!user?.profile_completed) return "/complete-profile";
-    if (user.role === "admin") return "/admin";
+    if (isAdminUser(user)) return "/admin";
     return "/dashboard";
 }
 

@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import api from "@/lib/api";
+import { isAdminUser } from "@/lib/auth";
 
 const ASSET = process.env.NEXT_PUBLIC_ASSET_URL || "";
 
@@ -48,7 +49,7 @@ export default function CompleteProfilePage() {
                 localStorage.setItem("user", JSON.stringify({ ...user, ...response.data.user }));
 
                 setTimeout(() => {
-                    if (user.role === "admin") {
+                    if (isAdminUser(user)) {
                         router.push("/admin");
                     } else {
                         router.push("/dashboard");

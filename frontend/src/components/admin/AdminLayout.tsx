@@ -10,6 +10,7 @@ import {
     Truck, Activity, BookOpen, Mail, Quote
 } from "lucide-react";
 import api from "@/lib/api";
+import { isAdminUser } from "@/lib/auth";
 import { NotificationProvider, useNotifications } from "@/lib/NotificationContext";
 
 const menuItems = [
@@ -232,7 +233,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
         try {
             const user = JSON.parse(userStr);
-            if (user.role !== "admin") {
+            if (!isAdminUser(user)) {
                 router.replace("/dashboard");
                 return;
             }

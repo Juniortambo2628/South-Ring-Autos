@@ -6,9 +6,10 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import {
     MapPin, Phone, Facebook, Twitter, Instagram, Menu, X,
-    User, LogOut, ChevronDown, Settings, LayoutDashboard, ExternalLink
+    User, LogOut, ChevronDown, Settings, LayoutDashboard
 } from "lucide-react";
 import api from "@/lib/api";
+import { isAdminUser } from "@/lib/auth";
 
 const ASSET = process.env.NEXT_PUBLIC_ASSET_URL || "";
 
@@ -136,20 +137,18 @@ export default function Navbar() {
                                             <p className="text-xs text-slate-500 truncate">{user.email}</p>
                                         </div>
                                         <div className="py-1">
-                                            <Link href="/dashboard" onClick={() => setProfileOpen(false)} className="flex items-center space-x-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
-                                                <LayoutDashboard size={16} className="text-slate-400" /><span className="font-medium">Dashboard</span>
-                                            </Link>
+                                            {isAdminUser(user) ? (
+                                                <Link href="/admin" onClick={() => setProfileOpen(false)} className="flex items-center space-x-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
+                                                    <LayoutDashboard size={16} className="text-slate-400" /><span className="font-medium">Admin Panel</span>
+                                                </Link>
+                                            ) : (
+                                                <Link href="/dashboard" onClick={() => setProfileOpen(false)} className="flex items-center space-x-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
+                                                    <LayoutDashboard size={16} className="text-slate-400" /><span className="font-medium">Dashboard</span>
+                                                </Link>
+                                            )}
                                             <Link href="/profile" onClick={() => setProfileOpen(false)} className="flex items-center space-x-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
                                                 <Settings size={16} className="text-slate-400" /><span className="font-medium">Profile Settings</span>
                                             </Link>
-                                            {user.role === "admin" && (
-                                                <>
-                                                    <div className="my-1 border-t border-slate-100" />
-                                                    <Link href="/admin" onClick={() => setProfileOpen(false)} className="flex items-center space-x-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors">
-                                                        <ExternalLink size={16} /><span className="font-medium">Admin Panel</span>
-                                                    </Link>
-                                                </>
-                                            )}
                                             <div className="my-1 border-t border-slate-100" />
                                             <button onClick={handleLogout} className="flex items-center space-x-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors w-full">
                                                 <LogOut size={16} /><span className="font-medium">Logout</span>
@@ -196,7 +195,7 @@ export default function Navbar() {
                         {user ? (
                             <div className="flex flex-col space-y-4 pt-2">
                                 <div className="flex items-center space-x-3 text-slate-700"><User size={20} /><span>{user.name}</span></div>
-                                {user.role === "admin" && <Link href="/admin" className="text-red-600" onClick={() => setIsOpen(false)}>Admin Panel</Link>}
+                                {isAdminUser(user) && <Link href="/admin" className="text-red-600" onClick={() => setIsOpen(false)}>Admin Panel</Link>}
                                 <button onClick={handleLogout} className="flex items-center space-x-3 text-red-600"><LogOut size={20} /><span>Logout</span></button>
                             </div>
                         ) : (
