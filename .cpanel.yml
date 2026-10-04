@@ -2,5 +2,6 @@
 deployment:
   tasks:
     - php artisan migrate --force
+    - php artisan db:seed --class=EmailTemplateSeeder --force
     - php artisan config:cache
     - php artisan route:cache
