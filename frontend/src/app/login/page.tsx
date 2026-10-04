@@ -3,13 +3,15 @@
 import PublicShell from "@/components/landing/PublicShell";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, Lock, LogIn, AlertCircle, Loader2 } from "lucide-react";
+import { Mail, Lock, LogIn, AlertCircle, Loader2, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import api from "@/lib/api";
+import { completeLogin } from "@/lib/auth";
+import { createPasskey, getPasskey, isPasskeyCancelled } from "@/lib/webauthn";
 
 const ASSET = process.env.NEXT_PUBLIC_ASSET_URL || "";
 
@@ -17,6 +19,7 @@ export default function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
+    const [passkeyLoading, setPasskeyLoading] = useState(false);
     const [error, setError] = useState("");
     const router = useRouter();
 
@@ -26,21 +29,38 @@ export default function LoginPage() {
         setError("");
         try {
             const response = await api.post("/login", { email, password });
-            if (response.data.success) {
-                localStorage.setItem("auth_token", response.data.access_token);
-                localStorage.setItem("user", JSON.stringify(response.data.user));
-                if (!response.data.user.profile_completed) {
-                    router.push("/complete-profile");
-                } else if (response.data.user.role === "admin") {
-                    router.push("/admin");
-                } else {
-                    router.push("/dashboard");
-                }
+            if (!completeLogin(router, response.data)) {
+                setError(response.data.message || "Invalid login credentials");
             }
         } catch (err: any) {
             setError(err.response?.data?.message || "Invalid login credentials");
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handlePasskey = async () => {
+        if (!email) {
+            setError("Enter your email address first, then use your passkey.");
+            return;
+        }
+        setPasskeyLoading(true);
+        setError("");
+        try {
+            const options = await api.post("/passkeys/login/options", { email });
+            const assertion = await getPasskey(options.data);
+            const response = await api.post("/passkeys/login", { email, ...assertion });
+            if (!completeLogin(router, response.data)) {
+                setError(response.data.message || "Passkey sign-in failed.");
+            }
+        } catch (err: any) {
+            if (isPasskeyCancelled(err)) {
+                setError("Passkey sign-in was cancelled.");
+            } else {
+                setError(err.response?.data?.message || "Passkey sign-in failed.");
+            }
+        } finally {
+            setPasskeyLoading(false);
         }
     };
 
@@ -81,6 +101,15 @@ export default function LoginPage() {
                                     </svg>
                                     <span>Sign in with Google</span>
                                 </button>
+                                <button
+                                    type="button"
+                                    onClick={handlePasskey}
+                                    disabled={passkeyLoading}
+                                    className="mt-3 w-full flex items-center justify-center space-x-3 py-3.5 px-4 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 transition-all font-bold text-slate-700 shadow-sm disabled:opacity-60"
+                                >
+                                    {passkeyLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <ShieldCheck className="w-5 h-5 text-red-600" />}
+                                    <span>Sign in with a Passkey</span>
+                                </button>
                                 <div className="relative mt-8 text-center">
                                     <hr className="border-slate-100" />
                                     <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Or login with email</span>
@@ -115,6 +144,12 @@ export default function LoginPage() {
                                     {loading ? <Loader2 className="animate-spin mr-2" size={18} /> : <LogIn className="mr-2" size={18} />}Sign In
                                 </Button>
                             </form>
+
+                            <div className="mt-8 text-center">
+                                <Link href="/email-login" className="text-xs font-bold text-slate-500 hover:text-red-600 transition-colors uppercase tracking-widest underline decoration-2 underline-offset-4">
+                                    Sign in with a one-time email code
+                                </Link>
+                            </div>
 
                             <div className="mt-10 text-center">
                                 <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">

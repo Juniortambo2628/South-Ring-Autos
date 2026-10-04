@@ -42,6 +42,13 @@ export default function RegisterPage() {
 
         try {
             const response = await api.post("/register", formData);
+            if (response.data.status === "verification_required") {
+                setSuccess(true);
+                setTimeout(() => {
+                    router.push(`/verify-email?email=${encodeURIComponent(response.data.email)}`);
+                }, 1800);
+                return;
+            }
             if (response.data.success) {
                 setSuccess(true);
                 setTimeout(() => {
@@ -82,8 +89,8 @@ export default function RegisterPage() {
                             {success && (
                                 <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="mb-6 p-6 bg-green-50 border border-green-100 text-green-700 rounded-2xl flex flex-col items-center text-center shadow-sm">
                                     <CheckCircle2 size={40} className="mb-3 text-green-600" />
-                                    <h4 className="font-black uppercase tracking-widest text-sm mb-1">Registration Successful!</h4>
-                                    <p className="text-xs font-medium">Redirecting you to login...</p>
+                                    <h4 className="font-black uppercase tracking-widest text-sm mb-1">Check Your Email!</h4>
+                                    <p className="text-xs font-medium">We sent you a verification code. Redirecting you to enter it...</p>
                                 </motion.div>
                             )}
 
