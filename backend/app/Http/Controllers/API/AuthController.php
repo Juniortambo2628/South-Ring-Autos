@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Actions\NotifyUser;
+use App\Auth\AuthResponse;
+use App\Auth\OneTimeCode;
 use App\Http\Controllers\Controller;
 use App\Mail\AccountWelcomeMail;
 use App\Mail\CustomResetPasswordMail;
@@ -65,6 +67,11 @@ class AuthController extends Controller
                 ]);
             }
 
+            // Google verifies email ownership for us, so skip our own code challenge.
+            if (!$user->hasVerifiedEmail()) {
+                $user->forceFill(['email_verified_at' => now()])->save();
+            }
+
             $welcomePoints = (int) (Setting::where('key', 'welcome_loyalty_points')->value('value') ?? 0);
             if ($welcomePoints > 0) {
                 $user->increment('loyalty_points', $welcomePoints);
@@ -117,14 +124,18 @@ class AuthController extends Controller
             'email' => $user->email,
         ]);
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $code = OneTimeCode::issue('email_verification', $user->email);
+        NotifyUser::sendDynamicEmail($user->email, 'email_verification_code', [
+            'name' => $user->name,
+            'code' => $code,
+        ]);
 
         return response()->json([
-            'success' => true,
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-            'user' => $user,
-        ]);
+            'success' => false,
+            'status' => 'verification_required',
+            'email' => $user->email,
+            'message' => 'Your account was created. Check your email for the verification code.',
+        ], 202);
     }
 
     public function login(Request $request)
@@ -138,14 +149,7 @@ class AuthController extends Controller
 
         $user = User::where('email', $request['email'])->firstOrFail();
 
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return response()->json([
-            'success' => true,
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-            'user' => $user,
-        ]);
+        return AuthResponse::make($user);
     }
 
     public function logout(Request $request)

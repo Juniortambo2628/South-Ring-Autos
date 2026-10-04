@@ -63,6 +63,8 @@ Route::post('/webhooks/paystack', [PaymentController::class, 'paystackWebhook'])
 
 Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:10,1');
 Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:10,1');
+Route::post('/verify-email/send', [\App\Http\Controllers\API\EmailVerificationController::class, 'send'])->middleware('throttle:5,1');
+Route::post('/verify-email', [\App\Http\Controllers\API\EmailVerificationController::class, 'verify'])->middleware('throttle:10,1');
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->middleware('throttle:5,1');
 Route::post('/reset-password', [AuthController::class, 'resetPassword'])->middleware('throttle:5,1');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');

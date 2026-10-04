@@ -50,6 +50,6 @@ class SeederIdempotencyTest extends TestCase
         $this->seed(EmailTemplateSeeder::class);
 
         $this->assertSame($count, EmailTemplate::count());
-        $this->assertSame(4, $count);
+        $this->assertSame(7, $count);
     }
 }

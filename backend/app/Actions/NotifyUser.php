@@ -23,15 +23,23 @@ class NotifyUser
         }
     }
 
-    public static function sendDynamicEmail(string $email, string $templateType, array $data): void
+    public static function sendDynamicEmail(string $email, string $templateType, array $data): bool
     {
         try {
             $template = EmailTemplate::where('type', $templateType)->where('is_active', true)->first();
-            if ($template) {
-                Mail::to($email)->send(new DynamicEmail($template, $data));
+            if (!$template) {
+                Log::warning("Email template [{$templateType}] is missing or inactive; email to {$email} was not sent.");
+
+                return false;
             }
+
+            Mail::to($email)->send(new DynamicEmail($template, $data));
+
+            return true;
         } catch (\Exception $e) {
             Log::error("Failed to send {$templateType} email to {$email}: " . $e->getMessage());
+
+            return false;
         }
     }
 
