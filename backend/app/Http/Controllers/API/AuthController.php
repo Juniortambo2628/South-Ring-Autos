@@ -86,12 +86,12 @@ class AuthController extends Controller
             Auth::login($user);
             $token = $user->createToken('auth_token')->plainTextToken;
 
-            $frontendUrl = env('FRONTEND_URL', 'http://localhost:3000');
+            $frontendUrl = rtrim(config('app.frontend_url'), '/');
             return redirect($frontendUrl . '/auth/callback?token=' . $token . '&user=' . urlencode(json_encode($user)));
 
         } catch (\Exception $e) {
             Log::error("Google Auth Error: " . $e->getMessage());
-            $frontendUrl = env('FRONTEND_URL', 'http://localhost:3000');
+            $frontendUrl = rtrim(config('app.frontend_url'), '/');
             return redirect($frontendUrl . '/login?error=social_auth_failed');
         }
     }
