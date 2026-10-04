@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import SecuritySection from "@/components/profile/SecuritySection";
 import api from "@/lib/api";
 
 export default function ProfilePage() {
@@ -191,6 +192,15 @@ export default function ProfilePage() {
                             </div>
                         </form>
                     </div>
+
+                    <SecuritySection
+                        user={user}
+                        onUserUpdated={(patch) => {
+                            const updated = { ...user, ...patch };
+                            localStorage.setItem("user", JSON.stringify(updated));
+                            setUser(updated);
+                        }}
+                    />
                 </div>
             </div>
         </>
