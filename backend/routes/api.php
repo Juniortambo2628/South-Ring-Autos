@@ -72,6 +72,12 @@ Route::post('/two-factor/enable', [\App\Http\Controllers\API\TwoFactorController
 Route::post('/two-factor/confirm', [\App\Http\Controllers\API\TwoFactorController::class, 'confirm'])->middleware('auth:sanctum');
 Route::post('/two-factor/recovery-codes', [\App\Http\Controllers\API\TwoFactorController::class, 'regenerateRecoveryCodes'])->middleware('auth:sanctum');
 Route::post('/two-factor/disable', [\App\Http\Controllers\API\TwoFactorController::class, 'disable'])->middleware('auth:sanctum');
+Route::post('/passkeys/login/options', [\App\Http\Controllers\API\PasskeyController::class, 'loginOptions'])->middleware('throttle:10,1');
+Route::post('/passkeys/login', [\App\Http\Controllers\API\PasskeyController::class, 'login'])->middleware('throttle:10,1');
+Route::get('/passkeys', [\App\Http\Controllers\API\PasskeyController::class, 'index'])->middleware('auth:sanctum');
+Route::delete('/passkeys/{id}', [\App\Http\Controllers\API\PasskeyController::class, 'destroy'])->middleware('auth:sanctum');
+Route::post('/passkeys/register/options', [\App\Http\Controllers\API\PasskeyController::class, 'registerOptions'])->middleware('auth:sanctum');
+Route::post('/passkeys/register', [\App\Http\Controllers\API\PasskeyController::class, 'register'])->middleware('auth:sanctum');
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->middleware('throttle:5,1');
 Route::post('/reset-password', [AuthController::class, 'resetPassword'])->middleware('throttle:5,1');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');

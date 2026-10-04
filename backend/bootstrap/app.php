@@ -22,5 +22,10 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->renderable(function (\Laragear\WebAuthn\Exceptions\WebAuthnException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage() ?: 'The passkey request could not be processed.',
+            ], 422);
+        });
     })->create();
