@@ -67,6 +67,11 @@ Route::post('/verify-email/send', [\App\Http\Controllers\API\EmailVerificationCo
 Route::post('/verify-email', [\App\Http\Controllers\API\EmailVerificationController::class, 'verify'])->middleware('throttle:10,1');
 Route::post('/email-code/send', [\App\Http\Controllers\API\EmailCodeAuthController::class, 'send'])->middleware('throttle:5,1');
 Route::post('/email-code/login', [\App\Http\Controllers\API\EmailCodeAuthController::class, 'login'])->middleware('throttle:10,1');
+Route::post('/two-factor/challenge', [\App\Http\Controllers\API\TwoFactorController::class, 'challenge'])->middleware('throttle:10,1');
+Route::post('/two-factor/enable', [\App\Http\Controllers\API\TwoFactorController::class, 'enable'])->middleware('auth:sanctum');
+Route::post('/two-factor/confirm', [\App\Http\Controllers\API\TwoFactorController::class, 'confirm'])->middleware('auth:sanctum');
+Route::post('/two-factor/recovery-codes', [\App\Http\Controllers\API\TwoFactorController::class, 'regenerateRecoveryCodes'])->middleware('auth:sanctum');
+Route::post('/two-factor/disable', [\App\Http\Controllers\API\TwoFactorController::class, 'disable'])->middleware('auth:sanctum');
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->middleware('throttle:5,1');
 Route::post('/reset-password', [AuthController::class, 'resetPassword'])->middleware('throttle:5,1');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');

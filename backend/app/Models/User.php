@@ -100,6 +100,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasTwoFactorSecret() && filled($this->two_factor_confirmed_at);
     }
 
+    protected function getTwoFactorEnabledAttribute(): bool
+    {
+        return $this->twoFactorEnabled();
+    }
+
     public function recoveryCodes(): array
     {
         return $this->two_factor_recovery_codes ? (json_decode($this->two_factor_recovery_codes, true) ?: []) : [];
