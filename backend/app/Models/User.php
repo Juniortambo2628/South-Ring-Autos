@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasApiTokens, HasFactory, Notifiable;
@@ -69,6 +69,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'two_factor_secret',
+        'two_factor_recovery_codes',
     ];
 
     /**
@@ -82,7 +84,30 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'profile_completed' => 'boolean',
+            'two_factor_secret' => 'encrypted',
+            'two_factor_recovery_codes' => 'encrypted',
+            'two_factor_confirmed_at' => 'datetime',
         ];
+    }
+
+    public function hasTwoFactorSecret(): bool
+    {
+        return filled($this->two_factor_secret);
+    }
+
+    public function twoFactorEnabled(): bool
+    {
+        return $this->hasTwoFactorSecret() && filled($this->two_factor_confirmed_at);
+    }
+
+    public function recoveryCodes(): array
+    {
+        return $this->two_factor_recovery_codes ? (json_decode($this->two_factor_recovery_codes, true) ?: []) : [];
+    }
+
+    public function setRecoveryCodes(array $codes): void
+    {
+        $this->forceFill(['two_factor_recovery_codes' => json_encode(array_values($codes))])->save();
     }
 
     public function journalPurchases()
