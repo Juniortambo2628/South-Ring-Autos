@@ -75,6 +75,10 @@ class User extends Authenticatable implements MustVerifyEmail, WebAuthnAuthentic
         'two_factor_recovery_codes',
     ];
 
+    protected $appends = [
+        'two_factor_enabled',
+    ];
+
     /**
      * Get the attributes that should be cast.
      *
